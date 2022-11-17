@@ -1,13 +1,16 @@
 const mongoose = require('mongoose')
+const { DATABASE_URL } = require('../config')
 
-mongoose
-  .connect(process.env.DATABASE_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
+const connectDB = async () => {
+  try {
+    await mongoose.connect(DATABASE_URL, {
+      useUnifiedTopology: true,
+      useNewUrlParser: true,
+    })
     console.log('Connected to database')
-  })
-  .catch((error) => {
+  } catch (error) {
     console.log('Failed connecting to database', error)
-  })
+  }
+}
+
+module.exports = connectDB
