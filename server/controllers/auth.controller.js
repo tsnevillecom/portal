@@ -33,7 +33,6 @@ const logoutAll = async (req, res) => {
       sameSite: 'None',
       secure: SECURE_COOKIE,
     })
-    console.log('sdf')
     return res.sendStatus(401) //Unauthorized
   }
 
@@ -95,16 +94,14 @@ const logout = async (req, res) => {
 
 const login = async (req, res) => {
   const cookies = req.cookies
-  const { userName, password } = req.body
+  const { email, password } = req.body
   const userAgent = req.headers['user-agent'] || ''
 
-  if (!userName || !password) {
-    return res
-      .status(400)
-      .send({ message: 'Username and password are required.' })
+  if (!email || !password) {
+    return res.status(400).send({ message: 'Email and password are required.' })
   }
 
-  const foundUser = await User.findOne({ userName }).exec()
+  const foundUser = await User.findOne({ email }).exec()
   if (!foundUser || foundUser.deleted) {
     return res.sendStatus(401) //Unauthorized
   }

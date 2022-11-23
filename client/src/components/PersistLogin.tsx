@@ -1,5 +1,5 @@
+import React, { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
-import { useState, useEffect } from 'react'
 import useRefreshToken from '../hooks/useRefreshToken'
 import useAuth from '../hooks/useAuth'
 
@@ -21,10 +21,23 @@ const PersistLogin = () => {
       }
     }
 
+    // const checkExpiration = () => {
+    //   if (!refreshToken) return { expiring: false, expired: true }
+    //   const now = new Date()
+    //   const expiry = refreshToken.expiry
+    //   const ttl = expiry - now.getTime()
+    //   const alertTime = expiry - Config.SESSION_TIMEOUT_ALERT
+    //   const expiring = now.getTime() < expiry && now.getTime() >= alertTime
+    //   const expired = now.getTime() > expiry
+    //   return { expiring, expired, ttl }
+    // }
+
     // Avoids unwanted call to verifyRefreshToken
     !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false)
 
-    return () => (isMounted = false)
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   return (

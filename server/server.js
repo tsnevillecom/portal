@@ -31,6 +31,7 @@ app.use(express.json())
 app.use('/auth', require('./routes/auth.route'))
 app.use('/register', require('./routes/register.route'))
 app.use('/verify', require('./routes/verify.route'))
+app.use('/teams', require('./routes/teams.route'))
 
 app.listen(PORT, () => {
   console.log(`Server listening at port ${PORT}.`)

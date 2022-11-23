@@ -1,4 +1,3 @@
-const User = '../models/user'
 const jwt = require('jsonwebtoken')
 const { ACCESS_TOKEN_SECRET } = require('../config')
 

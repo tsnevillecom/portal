@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "jsx": "react",
+    "lib": ["es6", "dom"],
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "baseUrl": ".",
+    "paths": {
+      "@web/*": ["./web/*"],
+      "@admin/*": ["./admin/*"],
+      "@engage/*": ["./engage/*"],
+      "@scheduling/*": ["./scheduling/*"],
+      "@landing/*": ["./landing/*"],
+      "@mocks/*": ["./__mocks__/*"]
+    }
+  },
+  "include": ["**/*"],
+  "exclude": ["dist/**/*", "node_modules"]
+}

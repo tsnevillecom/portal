@@ -22,12 +22,6 @@ const UserSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  userName: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
   email: {
     type: String,
     required: true,
@@ -88,6 +82,18 @@ const UserSchema = new mongoose.Schema({
     required: false,
     trim: true,
   },
+  teams: [
+    {
+      team: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Team',
+      },
+      isLead: {
+        type: Boolean,
+        default: false,
+      },
+    },
+  ],
   createdAt: {
     type: Date,
     required: true,
@@ -100,7 +106,7 @@ const UserSchema = new mongoose.Schema({
   },
   roles: [
     {
-      type: 'String',
+      type: String,
     },
   ],
   passwordResetToken: String,

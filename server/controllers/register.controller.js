@@ -5,10 +5,10 @@ const crypto = require('crypto')
 const { SENDGRID_PASSWORD, SENDGRID_USERNAME } = require('../config')
 
 const register = async (req, res) => {
-  const duplicate = await User.findOne({ username: user }).exec()
-  if (duplicate) return res.sendStatus(409)
-
   const user = new User(req.body)
+
+  const duplicate = await User.findOne({ email: user.email }).exec()
+  if (duplicate) return res.sendStatus(409)
 
   user
     .save()
@@ -69,7 +69,7 @@ const register = async (req, res) => {
       if (error.name === 'MongoError' && error.code === 11000) {
         return res.status(400).send({
           success: false,
-          message: 'Username or email already exists.',
+          message: 'Email already exists.',
         })
       }
       res.status(400).send({ error })

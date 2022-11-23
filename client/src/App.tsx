@@ -1,3 +1,4 @@
+import React from 'react'
 import Register from './components/Register'
 import Login from './components/Login'
 import Home from './components/Home'
@@ -10,7 +11,7 @@ import Lounge from './components/Lounge'
 import LinkPage from './components/LinkPage'
 import RequireAuth from './components/RequireAuth'
 import PersistLogin from './components/PersistLogin'
-import { Routes, Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 
 const ROLES = {
   User: 2001,
@@ -18,7 +19,7 @@ const ROLES = {
   Admin: 5150,
 }
 
-function App() {
+const App = () => {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -34,7 +35,7 @@ function App() {
             <Route path="/" element={<Home />} />
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={[]} />}>
+          <Route element={<RequireAuth allowedRoles={['1984']} />}>
             <Route path="editor" element={<Editor />} />
           </Route>
 

@@ -2,6 +2,16 @@ import { axiosPrivate } from '../api/axios'
 import { useEffect } from 'react'
 import useRefreshToken from './useRefreshToken'
 import useAuth from './useAuth'
+import { AxiosError } from 'axios'
+
+type Headers = {
+  [key: string]: string | number | null
+}
+
+type FailedResponseQueueType = {
+  resolve: (value: unknown) => void
+  reject: (reason?: any) => void
+}
 
 const useAxiosPrivate = () => {
   const refresh = useRefreshToken()
@@ -10,7 +20,7 @@ const useAxiosPrivate = () => {
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
       (config) => {
-        if (!config.headers['Authorization']) {
+        if (config.headers && !config.headers['Authorization']) {
           const authorizationHeader = {
             Authorization: `Bearer ${auth?.accessToken}`,
           }
@@ -23,14 +33,14 @@ const useAxiosPrivate = () => {
     )
 
     let isRefreshingToken = false
-    let failedResponseQueue = []
+    let failedResponseQueue: FailedResponseQueueType[] = []
 
-    const processQueue = (error, token = null) => {
-      failedResponseQueue.forEach((prom) => {
+    const processQueue = (error: AxiosError | null, token = null) => {
+      failedResponseQueue.forEach(({ resolve, reject }) => {
         if (error) {
-          prom.reject(error)
+          reject(error)
         } else {
-          prom.resolve(token)
+          resolve(token)
         }
       })
 
