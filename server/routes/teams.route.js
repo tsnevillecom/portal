@@ -9,4 +9,7 @@ router.post('/', authenticate, teamController.createTeam)
 router.patch('/:id', authenticate, teamController.updateTeam)
 router.delete('/:id', authenticate, teamController.deleteTeam)
 
+//Team Members
+router.post('/:id/members', authenticate, teamController.addTeamMembers)
+
 module.exports = router

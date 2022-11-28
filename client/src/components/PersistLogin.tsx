@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import useRefreshToken from '../hooks/useRefreshToken'
 import useAuth from '../hooks/useAuth'
+import CONSTANTS from '../_constants'
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -26,7 +27,7 @@ const PersistLogin = () => {
     //   const now = new Date()
     //   const expiry = refreshToken.expiry
     //   const ttl = expiry - now.getTime()
-    //   const alertTime = expiry - Config.SESSION_TIMEOUT_ALERT
+    //   const alertTime = expiry - CONSTANTS.SESSION_TIMEOUT_ALERT
     //   const expiring = now.getTime() < expiry && now.getTime() >= alertTime
     //   const expired = now.getTime() > expiry
     //   return { expiring, expired, ttl }

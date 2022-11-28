@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import useRefreshToken from './useRefreshToken'
 import useAuth from './useAuth'
 import { AxiosError } from 'axios'
+import useLogout from './useLogout'
 
 type Headers = {
   [key: string]: string | number | null
@@ -14,6 +15,7 @@ type FailedResponseQueueType = {
 }
 
 const useAxiosPrivate = () => {
+  const logout = useLogout()
   const refresh = useRefreshToken()
   const { auth } = useAuth()
 
@@ -51,7 +53,9 @@ const useAxiosPrivate = () => {
       (response) => response,
       async (error) => {
         const prevRequest = error?.config
+
         if (error?.response?.status === 403 && !prevRequest?.sent) {
+          //is refreshing token
           if (isRefreshingToken) {
             return new Promise(function (resolve, reject) {
               failedResponseQueue.push({ resolve, reject })
@@ -75,28 +79,34 @@ const useAxiosPrivate = () => {
           prevRequest.sent = true
           isRefreshingToken = true
 
-          return new Promise(function (resolve, reject) {
-            refresh()
-              .then((accessToken) => {
-                const authorizationHeader = {
-                  Authorization: `Bearer ${accessToken}`,
-                }
-                prevRequest.headers = {
-                  ...prevRequest.headers,
-                  ...authorizationHeader,
-                }
+          return new Promise(async (resolve, reject) => {
+            try {
+              const accessToken = await refresh()
+              const authorizationHeader = {
+                Authorization: `Bearer ${accessToken}`,
+              }
+              prevRequest.headers = {
+                ...prevRequest.headers,
+                ...authorizationHeader,
+              }
 
-                processQueue(null, accessToken)
-                resolve(axiosPrivate(prevRequest))
-                console.log('access token refreshed')
-              })
-              .catch((err) => {
-                processQueue(err, null)
-                reject(err)
-              })
-              .finally(() => {
-                isRefreshingToken = false
-              })
+              processQueue(null, accessToken)
+              resolve(axiosPrivate(prevRequest))
+              console.log('access token refreshed')
+            } catch (error) {
+              processQueue(error, null)
+              reject(error)
+
+              if (
+                error.response.config.url === '/auth/refresh' &&
+                error.response.status === 401
+              ) {
+                console.log('access token not refreshed')
+                logout()
+              }
+            }
+
+            isRefreshingToken = false
           })
         }
         return Promise.reject(error)

@@ -2,14 +2,13 @@ const mongoose = require('mongoose')
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const CryptoJS = require('crypto-js')
 const {
   ACCESS_TOKEN_SECRET,
   REFRESH_TOKEN_SECRET,
   ACCESS_TOKEN_EXPIRY_SIGN,
   REFRESH_TOKEN_EXPIRY_SIGN,
-  SECRET,
 } = require('../config')
+const ROLES = require('../config/roles')
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -104,11 +103,11 @@ const UserSchema = new mongoose.Schema({
     required: true,
     default: Date.now,
   },
-  roles: [
-    {
-      type: String,
-    },
-  ],
+  role: {
+    type: String,
+    default: ROLES.RTM,
+    enum: [ROLES.RTM, ROLES.LEAD, ROLES.ADMIN],
+  },
   passwordResetToken: String,
   passwordResetExpires: Date,
 })
@@ -127,9 +126,9 @@ UserSchema.methods.newAccessToken = async function () {
 
 UserSchema.methods.newRefreshToken = async function () {
   const user = this
-  const cid = CryptoJS.AES.encrypt(user.id.toString(), SECRET).toString()
+  const _id = user._id
 
-  const refreshToken = jwt.sign({ cid }, REFRESH_TOKEN_SECRET, {
+  const refreshToken = jwt.sign({ _id }, REFRESH_TOKEN_SECRET, {
     expiresIn: REFRESH_TOKEN_EXPIRY_SIGN,
   })
   return refreshToken
@@ -138,12 +137,9 @@ UserSchema.methods.newRefreshToken = async function () {
 UserSchema.methods.toJSON = function () {
   const user = this
   const userObj = user.toObject()
-  delete userObj._id
   delete userObj.password
   delete userObj.refreshTokens
   delete userObj.isVerified
-  delete userObj.createdAt
-  delete userObj.updatedAt
   delete userObj.__v
   return userObj
 }
@@ -151,6 +147,7 @@ UserSchema.methods.toJSON = function () {
 //hash the plain text password before saving
 UserSchema.pre('save', async function (next) {
   const user = this
+
   if (user.isModified('password')) {
     user.password = await bcrypt.hash(user.password, 10)
   }

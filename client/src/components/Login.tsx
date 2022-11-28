@@ -2,6 +2,12 @@ import React, { FormEvent } from 'react'
 import { useRef, useState, useEffect } from 'react'
 import useAuth from '../hooks/useAuth'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
+import {
+  useGoogleLogin,
+  CredentialResponse,
+  GoogleLogin,
+  TokenResponse,
+} from '@react-oauth/google'
 
 import axios from '../api/axios'
 const LOGIN_URL = '/auth'
@@ -67,6 +73,39 @@ const Login = () => {
     setPersist(!persist)
   }
 
+  const loginGoogle = async (response: TokenResponse) => {
+    console.log(response)
+
+    const googleAccessToken = response.access_token
+    try {
+      const response = await axios.post('/google/login', {
+        googleAccessToken: googleAccessToken,
+      })
+
+      console.log(response)
+      const accessToken = response?.data?.accessToken
+      const user = response?.data?.user
+
+      setAuth({ email, accessToken, user, isAuthenticated: true })
+      setemail('')
+      setPassword('')
+      navigate(from, { replace: true })
+    } catch (err) {
+      if (!err?.response) {
+        setErrMsg('No Server Response')
+      } else if (err.response?.status === 400) {
+        setErrMsg('Missing Email or Password')
+      } else if (err.response?.status === 401) {
+        setErrMsg('Unauthorized')
+      } else {
+        setErrMsg('Login Failed')
+      }
+      if (errorRef.current) errorRef.current.focus()
+    }
+  }
+
+  const login = useGoogleLogin({ onSuccess: loginGoogle })
+
   return (
     <section>
       <div
@@ -97,7 +136,8 @@ const Login = () => {
           value={password}
           required
         />
-        <button>Sign In</button>
+        <button>Sign in</button>
+
         <div className="persistCheck">
           <input
             type="checkbox"
@@ -108,6 +148,9 @@ const Login = () => {
           <label htmlFor="persist">Trust This Device</label>
         </div>
       </form>
+
+      <button onClick={() => login()}>Sign in with Google</button>
+
       <p>
         Need an Account?
         <br />

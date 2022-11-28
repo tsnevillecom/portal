@@ -1,13 +1,10 @@
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
-const CryptoJS = require('crypto-js')
 const bcrypt = require('bcryptjs')
-
 const {
   REFRESH_TOKEN_SECRET,
   REFRESH_TOKEN_EXPIRY,
   SECURE_COOKIE,
-  SECRET,
 } = require('../config')
 
 const me = async (req, res) => {
@@ -61,8 +58,6 @@ const logout = async (req, res) => {
     'refreshTokens.refreshToken': refreshToken,
   }).exec()
 
-  console.log(refreshToken, foundUser)
-
   if (!foundUser) {
     res.clearCookie('refreshToken', {
       httpOnly: true,
@@ -76,8 +71,6 @@ const logout = async (req, res) => {
     foundUser.refreshTokens = foundUser.refreshTokens.filter((rt) => {
       return rt.refreshToken !== refreshToken
     })
-
-    console.log(foundUser.refreshTokens)
     await foundUser.save()
 
     res.clearCookie('refreshToken', {
@@ -162,7 +155,6 @@ const login = async (req, res) => {
 const refreshToken = async (req, res) => {
   const userAgent = req.headers['user-agent'] || ''
   const cookies = req.cookies
-  console.log(cookies)
   if (!cookies?.refreshToken) return res.sendStatus(401)
 
   const refreshToken = cookies.refreshToken
@@ -175,17 +167,14 @@ const refreshToken = async (req, res) => {
   const foundUser = await User.findOne({
     'refreshTokens.refreshToken': refreshToken,
   }).exec()
-
+  console.log(foundUser)
   // Detected refresh token reuse!
   if (!foundUser) {
     jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, decoded) => {
       if (err) return res.sendStatus(403) //Forbidden
       console.log('attempted refresh token reuse!')
 
-      const _id = CryptoJS.AES.decrypt(decoded.cid, SECRET).toString(
-        CryptoJS.enc.Utf8
-      )
-
+      const _id = decoded._id
       const hackedUser = await User.findOne({
         _id,
       }).exec()
@@ -209,10 +198,7 @@ const refreshToken = async (req, res) => {
       return res.sendStatus(403)
     }
 
-    const _id = CryptoJS.AES.decrypt(decoded.cid, SECRET).toString(
-      CryptoJS.enc.Utf8
-    )
-
+    const _id = decoded._id
     if (foundUser._id.toString() !== _id) return res.sendStatus(403)
 
     // Refresh token still valid
@@ -238,4 +224,11 @@ const refreshToken = async (req, res) => {
   })
 }
 
-module.exports = { logout, logoutAll, login, refreshToken, me, checkToken }
+module.exports = {
+  logout,
+  logoutAll,
+  login,
+  refreshToken,
+  me,
+  checkToken,
+}

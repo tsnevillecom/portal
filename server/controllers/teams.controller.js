@@ -15,7 +15,22 @@ const getTeam = async (req, res) => {
   const id = req.params.id
 
   try {
-    const team = await Team.find({ _id: id }).populate('createdBy').exec()
+    const team = await Team.findOne({ _id: id }).populate('createdBy').exec()
+    res.status(200).send(team)
+  } catch (error) {
+    res.status(404).send({ message: error.message })
+  }
+}
+
+const addTeamMembers = async (req, res) => {
+  const id = req.params.id
+  const members = req.body.members
+
+  try {
+    const team = await Team.findOne({ _id: id }).exec()
+    team.members = members
+    await team.save()
+    res.send(team)
     res.status(200).send(team)
   } catch (error) {
     res.status(404).send({ message: error.message })
@@ -39,7 +54,8 @@ export const updateTeam = async (req, res) => {
   const id = req.params.id
 
   try {
-    const team = await Team.findByIdAndUpdate(id, req.body)
+    const team = await Team.findOne({ _id: id })
+    team.name = req.body.name
     team.updatedAt = Date.now()
     await team.save()
     res.send(team)
@@ -69,4 +85,5 @@ module.exports = {
   deleteTeam,
   createTeam,
   updateTeam,
+  addTeamMembers,
 }

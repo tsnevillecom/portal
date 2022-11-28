@@ -6,13 +6,19 @@ const Admin = () => {
   const axiosPrivate = useAxiosPrivate()
 
   const getMe = async () => {
-    const response = await axiosPrivate('/auth/me')
-    console.log(response)
+    try {
+      await axiosPrivate('/auth/me')
+    } catch (error) {
+      // console.log(error)
+    }
   }
 
   const checktoken = async () => {
-    const response = await axiosPrivate('/auth/checktoken')
-    console.log(response)
+    try {
+      await axiosPrivate('/auth/checktoken')
+    } catch (error) {
+      // console.log(error)
+    }
   }
 
   return (
