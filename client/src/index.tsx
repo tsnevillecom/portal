@@ -1,25 +1,40 @@
+// import React from 'react'
+// import './index.scss'
+// import { createRoot } from 'react-dom/client'
+// import { BrowserRouter, Routes, Route } from 'react-router-dom'
+// import { AuthProvider } from './context/AuthProvider'
+// import App from './App'
+
+// const container = document.getElementById('root')
+// const root = createRoot(container!)
+// root.render(
+//   <React.StrictMode>
+//     <BrowserRouter>
+//       <AuthProvider>
+//         <Routes>
+//           <Route path="/*" element={<App />} />
+//         </Routes>
+//       </AuthProvider>
+//     </BrowserRouter>
+//   </React.StrictMode>
+// )
+
 import React from 'react'
-import { createRoot } from 'react-dom/client'
+import ReactDOM from 'react-dom'
 import './index.scss'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import App from './App'
 import { AuthProvider } from './context/AuthProvider'
-import { GoogleOAuthProvider } from '@react-oauth/google'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
-const container = document.getElementById('root')
-const root = createRoot(container!)
-root.render(
+ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
-      <GoogleOAuthProvider
-        clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
-      >
-        <AuthProvider>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
-        </AuthProvider>
-      </GoogleOAuthProvider>
+      <AuthProvider>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 )

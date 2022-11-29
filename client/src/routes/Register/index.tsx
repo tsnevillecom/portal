@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect, FormEvent } from 'react'
-import axios from '../api/axios'
+import axios from '../../api/axios'
 import { Link } from 'react-router-dom'
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/

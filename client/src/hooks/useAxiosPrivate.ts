@@ -95,7 +95,6 @@ const useAxiosPrivate = () => {
               console.log('access token refreshed')
             } catch (error) {
               processQueue(error, null)
-              reject(error)
 
               if (
                 error.response.config.url === '/auth/refresh' &&
@@ -104,6 +103,8 @@ const useAxiosPrivate = () => {
                 console.log('access token not refreshed')
                 logout()
               }
+
+              reject(error)
             }
 
             isRefreshingToken = false

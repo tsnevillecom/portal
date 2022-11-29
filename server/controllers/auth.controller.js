@@ -152,7 +152,7 @@ const login = async (req, res) => {
   }
 }
 
-const refreshToken = async (req, res) => {
+const refresh = async (req, res) => {
   const userAgent = req.headers['user-agent'] || ''
   const cookies = req.cookies
   if (!cookies?.refreshToken) return res.sendStatus(401)
@@ -167,7 +167,7 @@ const refreshToken = async (req, res) => {
   const foundUser = await User.findOne({
     'refreshTokens.refreshToken': refreshToken,
   }).exec()
-  console.log(foundUser)
+
   // Detected refresh token reuse!
   if (!foundUser) {
     jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, decoded) => {
@@ -180,7 +180,7 @@ const refreshToken = async (req, res) => {
       }).exec()
       hackedUser.refreshTokens = []
       const result = await hackedUser.save()
-      console.log(result)
+      console.log('hacked user', result)
     })
     return res.sendStatus(403) //Forbidden
   }
@@ -228,7 +228,7 @@ module.exports = {
   logout,
   logoutAll,
   login,
-  refreshToken,
+  refresh,
   me,
   checkToken,
 }

@@ -39,7 +39,7 @@ const login = async (req, res) => {
 
       // Detected refresh token reuse!
       if (!foundUserWithToken) {
-        console.log('attempted refresh token reuse at login!')
+        console.log('attempted refresh token reuse at login! (google)')
         newRefreshTokenArray = []
       }
 

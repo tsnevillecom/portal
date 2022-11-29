@@ -1,8 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import useAxiosPrivate from '../hooks/useAxiosPrivate'
+import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 
-const Admin = () => {
+const Profile = () => {
   const axiosPrivate = useAxiosPrivate()
 
   const getMe = async () => {
@@ -23,7 +23,7 @@ const Admin = () => {
 
   return (
     <section>
-      <h1>Admin Page</h1>
+      <h1>Profile</h1>
       <br />
 
       <a onClick={getMe}>Me</a>
@@ -36,4 +36,4 @@ const Admin = () => {
   )
 }
 
-export default Admin
+export default Profile

@@ -4,6 +4,8 @@ import useRefreshToken from '../hooks/useRefreshToken'
 import useAuth from '../hooks/useAuth'
 import CONSTANTS from '../_constants'
 
+console.log('PersistLogin')
+
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true)
   const refresh = useRefreshToken()
@@ -13,6 +15,8 @@ const PersistLogin = () => {
     let isMounted = true
 
     const verifyRefreshToken = async () => {
+      console.log('verifyRefreshToken')
+
       try {
         await refresh()
       } catch (err) {

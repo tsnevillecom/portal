@@ -5,7 +5,7 @@ const authController = require('../controllers/auth.controller')
 
 router.get('/me', authenticate, authController.me)
 router.get('/checkToken', authenticate, authController.checkToken)
-router.get('/refresh', authController.refreshToken)
+router.get('/refresh', authController.refresh)
 router.post('/logout', authController.logout)
 router.post('/logoutall', authController.logoutAll)
 router.post('/', authController.login)
