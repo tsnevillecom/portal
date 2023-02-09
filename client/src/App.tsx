@@ -11,6 +11,7 @@ import Layout from './components/Layout'
 import Unauthorized from './components/Unauthorized'
 import RequireAuth from './components/RequireAuth'
 import PersistLogin from './components/PersistLogin'
+import Register from './routes/Register'
 
 const ROLES = {
   User: 2001,
@@ -23,6 +24,7 @@ const App = () => {
     <Routes>
       <Route path="/" element={<Layout />}>
         <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
         <Route path="unauthorized" element={<Unauthorized />} />
 
         {/* we want to protect these routes */}

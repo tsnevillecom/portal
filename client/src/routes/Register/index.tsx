@@ -1,9 +1,11 @@
 import React, { useRef, useState, useEffect, FormEvent } from 'react'
 import axios from '../../api/axios'
+import './Register.scss'
 import { Link } from 'react-router-dom'
 
 const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/
+const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 const REGISTER_URL = '/register'
 
 const Register = () => {
@@ -43,6 +45,14 @@ const Register = () => {
   }, [user, pwd, matchPwd])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    // {
+    //   "password": "12345678",
+    //   "email": "tsneville@gmail.com",
+    //   "userName": "tsneville",
+    //   "lastName": "Neville",
+    //   "firstName": "Tim"
+    // }
+
     e.preventDefault()
     // if button enabled with JS hack
     const v1 = USER_REGEX.test(user)
@@ -81,7 +91,7 @@ const Register = () => {
   }
 
   return (
-    <>
+    <div id="register-route">
       {success ? (
         <section>
           <h1>Success!</h1>
@@ -91,13 +101,6 @@ const Register = () => {
         </section>
       ) : (
         <section>
-          <div
-            ref={errRef}
-            className={errMsg ? 'errmsg' : 'offscreen'}
-            aria-live="assertive"
-          >
-            {errMsg}
-          </div>
           <h1>Register</h1>
           <form onSubmit={handleSubmit}>
             <label htmlFor="username">Username:</label>
@@ -114,18 +117,6 @@ const Register = () => {
               onFocus={() => setUserFocus(true)}
               onBlur={() => setUserFocus(false)}
             />
-            <p
-              id="uidnote"
-              className={
-                userFocus && user && !validName ? 'instructions' : 'offscreen'
-              }
-            >
-              4 to 24 characters.
-              <br />
-              Must begin with a letter.
-              <br />
-              Letters, numbers, underscores, hyphens allowed.
-            </p>
 
             <label htmlFor="password">Password:</label>
             <input
@@ -192,7 +183,7 @@ const Register = () => {
           </p>
         </section>
       )}
-    </>
+    </div>
   )
 }
 
