@@ -15,7 +15,7 @@ type FailedResponseQueueType = {
 }
 
 const useAxiosPrivate = () => {
-  const logout = useLogout()
+  const { logout } = useLogout()
   const refresh = useRefreshToken()
   const { auth } = useAuth()
 
@@ -79,35 +79,41 @@ const useAxiosPrivate = () => {
           prevRequest.sent = true
           isRefreshingToken = true
 
-          return new Promise(async (resolve, reject) => {
-            try {
-              const accessToken = await refresh()
-              const authorizationHeader = {
-                Authorization: `Bearer ${accessToken}`,
-              }
-              prevRequest.headers = {
-                ...prevRequest.headers,
-                ...authorizationHeader,
+          return new Promise((resolve, reject) => {
+            const refreshToken = async () => {
+              console.log('refreshing access token')
+
+              try {
+                const accessToken = await refresh()
+                const authorizationHeader = {
+                  Authorization: `Bearer ${accessToken}`,
+                }
+                prevRequest.headers = {
+                  ...prevRequest.headers,
+                  ...authorizationHeader,
+                }
+
+                processQueue(null, accessToken)
+                resolve(axiosPrivate(prevRequest))
+                console.log('access token refreshed')
+              } catch (error) {
+                processQueue(error, null)
+
+                if (
+                  error.response.config.url === '/auth/refresh' &&
+                  error.response.status === 401
+                ) {
+                  console.log('access token not refreshed')
+                  logout()
+                }
+
+                reject(error)
               }
 
-              processQueue(null, accessToken)
-              resolve(axiosPrivate(prevRequest))
-              console.log('access token refreshed')
-            } catch (error) {
-              processQueue(error, null)
-
-              if (
-                error.response.config.url === '/auth/refresh' &&
-                error.response.status === 401
-              ) {
-                console.log('access token not refreshed')
-                logout()
-              }
-
-              reject(error)
+              isRefreshingToken = false
             }
 
-            isRefreshingToken = false
+            refreshToken()
           })
         }
         return Promise.reject(error)

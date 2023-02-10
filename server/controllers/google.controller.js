@@ -57,6 +57,8 @@ const login = async (req, res) => {
     ]
     await foundUser.save()
 
+    console.log(refreshToken)
+
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true, //accessible only by web server
       secure: SECURE_COOKIE, //https

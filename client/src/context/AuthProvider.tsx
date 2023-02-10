@@ -23,7 +23,7 @@ export const DEFAULT_AUTH_STATE = {
   isAuthenticated: false,
 }
 
-export interface IAuthProvider extends PropsWithChildren {}
+// export interface IAuthProvider extends PropsWithChildren {}
 
 export interface IAuthContext {
   auth: Auth
@@ -39,7 +39,7 @@ export const AuthContext = createContext<IAuthContext>({
   setPersist: noop,
 })
 
-export const AuthProvider: React.FC<IAuthProvider> = ({ children }) => {
+export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [auth, setAuth] = useState<Auth>(DEFAULT_AUTH_STATE)
   const [persist, setPersist] = useLocalStorage<boolean>('persist', true)
 

@@ -9,8 +9,13 @@ import {
   GoogleOAuthProvider,
 } from '@react-oauth/google'
 
-import axios from '../../api/axios'
+import { axiosPrivate } from '../../api/axios'
 const LOGIN_URL = '/auth'
+
+interface IHandleLogin {
+  tokenResponse?: TokenResponse
+  event?: FormEvent<HTMLFormElement>
+}
 
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth()
@@ -34,55 +39,32 @@ const Login = () => {
     setErrMsg('')
   }, [email, password])
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    try {
-      const response = await axios.post(
-        LOGIN_URL,
-        JSON.stringify({ email, password }),
-        {
-          headers: { 'Content-Type': 'application/json' },
-          withCredentials: true,
-        }
-      )
-
-      const accessToken = response?.data?.accessToken
-      const user = response?.data?.user
-
-      setAuth({ email, accessToken, user, isAuthenticated: true })
-      setemail('')
-      setPassword('')
-      navigate(from, { replace: true })
-    } catch (err) {
-      if (!err?.response) {
-        setErrMsg('No Server Response')
-      } else if (err.response?.status === 400) {
-        setErrMsg('Missing Email or Password')
-      } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized')
-      } else {
-        setErrMsg('Login Failed')
-      }
-      if (errorRef.current) errorRef.current.focus()
-    }
-  }
-
   const togglePersist = () => {
     setPersist(!persist)
   }
 
-  const loginGoogle = async (response: TokenResponse) => {
-    console.log(response)
+  const googleLogin = useGoogleLogin({
+    onSuccess: (tokenResponse: TokenResponse) => handleLogin({ tokenResponse }),
+  })
 
-    const googleAccessToken = response.access_token
+  const handleLogin = async ({ event, tokenResponse }: IHandleLogin) => {
+    if (event) event.preventDefault()
+
     try {
-      const response = await axios.post('/google/login', {
-        googleAccessToken: googleAccessToken,
-      })
+      let response
+      if (tokenResponse) {
+        response = await axiosPrivate.post('/google/login', {
+          googleAccessToken: tokenResponse.access_token,
+        })
+      } else {
+        response = await axiosPrivate.post(
+          LOGIN_URL,
+          JSON.stringify({ email, password })
+        )
+      }
 
-      const accessToken = response?.data?.accessToken
-      const user = response?.data?.user
+      const accessToken = response.data?.accessToken
+      const user = response.data?.user
 
       setAuth({ email, accessToken, user, isAuthenticated: true })
       setemail('')
@@ -101,8 +83,6 @@ const Login = () => {
       if (errorRef.current) errorRef.current.focus()
     }
   }
-
-  const login = useGoogleLogin({ onSuccess: loginGoogle })
 
   return (
     <div id="login-route">
@@ -115,7 +95,7 @@ const Login = () => {
           {errMsg}
         </div>
         <h1>Sign In</h1>
-        <form onSubmit={handleSubmit} noValidate>
+        <form onSubmit={(event) => handleLogin({ event })} noValidate>
           <label htmlFor="email">Email:</label>
           <input
             type="text"
@@ -148,7 +128,7 @@ const Login = () => {
           </div>
         </form>
 
-        <button onClick={() => login()}>Sign in with Google</button>
+        <button onClick={() => googleLogin()}>Sign in with Google</button>
 
         <p>
           Need an Account?

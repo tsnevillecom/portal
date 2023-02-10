@@ -6,7 +6,7 @@ import './Header.scss'
 
 const Header = () => {
   const { auth } = useAuth()
-  const logout = useLogout()
+  const { logout } = useLogout()
 
   if (!auth.isAuthenticated) return null
 

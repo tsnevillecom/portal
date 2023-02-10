@@ -27,7 +27,7 @@ const App = () => {
         <Route path="register" element={<Register />} />
         <Route path="unauthorized" element={<Unauthorized />} />
 
-        {/* we want to protect these routes */}
+        {/* Protected Routes */}
         <Route element={<PersistLogin />}>
           <Route element={<RequireAuth allowedRoles={[]} />}>
             <Route path="/" element={<Home />} />
@@ -42,7 +42,7 @@ const App = () => {
           </Route>
         </Route>
 
-        {/* catch all */}
+        {/* Catch-all */}
         <Route path="*" element={<Missing />} />
       </Route>
     </Routes>

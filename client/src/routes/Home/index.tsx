@@ -1,10 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
-import useLogout from '../../hooks/useLogout'
-
-console.log('home')
 
 const Home = () => {
+  console.log('home')
+
   return (
     <div id="home-route">
       <h1>Home</h1>

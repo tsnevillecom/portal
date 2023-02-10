@@ -6,16 +6,24 @@ const useLogout = () => {
   const { setAuth } = useAuth()
 
   const logout = async () => {
-    setAuth(DEFAULT_AUTH_STATE)
-
     try {
       await axiosPrivate.post('/auth/logout')
+      setAuth(DEFAULT_AUTH_STATE)
     } catch (err) {
       console.error(err)
     }
   }
 
-  return logout
+  const logoutall = async () => {
+    try {
+      await axiosPrivate.post('/auth/logoutall')
+      setAuth(DEFAULT_AUTH_STATE)
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  return { logout, logoutall }
 }
 
 export default useLogout
