@@ -1,4 +1,4 @@
-const { PORT } = require('./config')
+const { PORT, HOST } = require('./config')
 const bodyParser = require('body-parser')
 const express = require('express')
 const corsOptions = require('./config/corsOptions')
@@ -28,6 +28,6 @@ app.use('/verify', require('./routes/verify.route'))
 app.use('/teams', require('./routes/teams.route'))
 app.use('/google', require('./routes/google.route'))
 
-app.listen(PORT, () => {
-  console.log(`Server listening at port ${PORT}.`)
+app.listen(PORT, HOST, function () {
+  console.log(`App listening on http://${HOST}:${PORT}`)
 })

@@ -1,5 +1,8 @@
 import axios from 'axios'
-const BASE_URL = 'http://localhost:3333'
+const BASE_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_PROD_URL
+    : process.env.REACT_APP_DEV_URL
 
 export default axios.create({
   baseURL: BASE_URL,

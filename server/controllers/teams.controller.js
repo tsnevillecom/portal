@@ -37,7 +37,7 @@ const addTeamMembers = async (req, res) => {
   }
 }
 
-export const createTeam = async (req, res) => {
+const createTeam = async (req, res) => {
   const team = new Team(req.body)
 
   try {
@@ -50,7 +50,7 @@ export const createTeam = async (req, res) => {
   }
 }
 
-export const updateTeam = async (req, res) => {
+const updateTeam = async (req, res) => {
   const id = req.params.id
 
   try {
@@ -64,7 +64,7 @@ export const updateTeam = async (req, res) => {
   }
 }
 
-export const deleteTeam = async (req, res) => {
+const deleteTeam = async (req, res) => {
   const id = req.params.id
   try {
     if (!ObjectId.isValid(id)) {
