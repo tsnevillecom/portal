@@ -1,6 +1,7 @@
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const validator = require('validator')
 const {
   REFRESH_TOKEN_SECRET,
   REFRESH_TOKEN_EXPIRY,
@@ -92,6 +93,10 @@ const login = async (req, res) => {
 
   if (!email || !password) {
     return res.status(400).send({ message: 'Email and password are required.' })
+  }
+
+  if (!validator.isEmail(email)) {
+    return res.status(403).send({ message: 'Valid email address required.' })
   }
 
   const foundUser = await User.findOne({ email }).exec()

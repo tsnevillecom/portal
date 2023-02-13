@@ -1,7 +1,9 @@
 const ROLES = {
   ADMIN: 'admin',
-  LEAD: 'lead',
-  RTM: 'rtm',
+  FAN: 'fan',
+  ARTIST: 'artist',
+  INDUSTRY: 'industry',
+  VENUE: 'venue',
 }
 
 module.exports = ROLES

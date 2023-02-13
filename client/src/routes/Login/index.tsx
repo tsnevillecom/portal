@@ -72,11 +72,13 @@ const Login = () => {
       navigate(from, { replace: true })
     } catch (err) {
       if (!err?.response) {
-        setErrMsg('No Server Response')
+        setErrMsg('No server eesponse')
       } else if (err.response?.status === 400) {
-        setErrMsg('Missing Email or Password')
+        setErrMsg('Missing email or password')
       } else if (err.response?.status === 401) {
         setErrMsg('Unauthorized')
+      } else if (err.response?.status === 403) {
+        setErrMsg('Valid email address required')
       } else {
         setErrMsg('Login Failed')
       }

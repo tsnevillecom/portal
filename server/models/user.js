@@ -81,18 +81,6 @@ const UserSchema = new mongoose.Schema({
     required: false,
     trim: true,
   },
-  teams: [
-    {
-      team: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Team',
-      },
-      isLead: {
-        type: Boolean,
-        default: false,
-      },
-    },
-  ],
   createdAt: {
     type: Date,
     required: true,
@@ -105,8 +93,8 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    default: ROLES.RTM,
-    enum: [ROLES.RTM, ROLES.LEAD, ROLES.ADMIN],
+    default: ROLES.FAN,
+    enum: [ROLES.ADMIN, ROLES.FAN, ROLES.ARTIST, ROLES.LABEL],
   },
   passwordResetToken: String,
   passwordResetExpires: Date,

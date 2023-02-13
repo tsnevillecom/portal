@@ -3,7 +3,7 @@ const EmailToken = require('../models/emailToken')
 
 const verifyToken = async (req, res) => {
   const token = req.params.token
-  debugger
+
   EmailToken.findOne({ token }, (err, token) => {
     if (!token)
       return res.status(400).send({
