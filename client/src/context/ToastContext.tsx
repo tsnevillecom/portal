@@ -6,14 +6,14 @@ import React, {
 } from 'react'
 
 import { generateUuid } from '../_utils/generateUuid.util'
-import { Toast, ToastType } from '../_types/toast'
+import { IToast, IToastType } from '../_types/toast'
 
 interface ToastContextData {
-  toasts: Toast[]
+  toasts: IToast[]
   removeToast: (id: string) => void
   addToast: (
     message: string,
-    type?: ToastType,
+    type?: IToastType,
     dismissable?: boolean,
     time?: number,
     title?: string | null
@@ -27,13 +27,13 @@ const toastContextDefaultValue: ToastContextData = {
 }
 
 const useToastContextValue = (): ToastContextData => {
-  const [toasts, setToasts] = useState<Toast[]>([])
+  const [toasts, setToasts] = useState<IToast[]>([])
   const toastRef = useRef(toasts)
   toastRef.current = toasts
 
   const addToast = (
     message: string,
-    type: ToastType = 'danger',
+    type: IToastType = 'danger',
     dismissable = true,
     time = 0,
     title = null

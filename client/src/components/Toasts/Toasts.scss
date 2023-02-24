@@ -1,4 +1,4 @@
-// @import '@web/css/_variables';
+@import '../../styles/variables';
 
 #toasts {
   display: flex;
@@ -7,7 +7,7 @@
   position: fixed;
   width: 100%;
   top: $header-height;
-  padding: $spacing-sm;
+  padding: 8px;
   z-index: $zindex-toast;
   pointer-events: none;
   touch-action: none;
@@ -16,10 +16,10 @@
 .toast {
   position: relative;
   width: 50%;
-  margin: $spacing-xs;
-  border-radius: $border-radius-base;
+  margin: 4px;
+  border-radius: 8px;
   box-shadow: 0px 0px 15px rgba($black, 0.12);
-  padding: $spacing-md 44px;
+  padding: 16px 44px;
   pointer-events: auto;
   touch-action: auto;
 
@@ -28,21 +28,21 @@
   }
 
   &.toast-success {
-    background: $success-light;
+    background: $success;
     border: 1px solid $success;
-    color: $success;
+    color: $white;
   }
 
   &.toast-danger {
-    background: $error-light;
+    background: $error;
     border: 1px solid $error;
-    color: $error;
+    color: $white;
   }
 
   &.toast-info {
-    background: $info-light;
+    background: $info;
     border: 1px solid $info;
-    color: $info;
+    color: $white;
 
     .toast--details--icon {
       transform: rotate(180deg);
@@ -50,9 +50,9 @@
   }
 
   &.toast-warning {
-    background: $warning-light;
+    background: $warning;
     border: 1px solid $warning;
-    color: $black;
+    color: $white;
 
     .toast--details--icon {
       transform: rotate(180deg);
@@ -63,8 +63,8 @@
     height: 20px;
     width: 20px;
     position: absolute;
-    top: $spacing-md;
-    left: $spacing-md;
+    top: 16px;
+    left: 16px;
 
     svg {
       height: 20px;
@@ -78,7 +78,7 @@
   }
 
   .toast--details--message {
-    margin-left: $spacing-xs;
+    margin-left: 4px;
     vertical-align: top;
   }
 

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;700;900&display=swap');
+@import '../src/styles/variables';
 
 $blue: rgb(10, 143, 252);
 
@@ -16,10 +17,9 @@ html {
 
 body {
   position: relative;
-  height: 100%;
-  width: 100%;
-  background: #fff;
-
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
   background-image: linear-gradient(to right top, #182026, #172739, #232b4c, #3d2b58, #5c255c);
 }
 
@@ -29,16 +29,17 @@ h1 {
   font-weight: 400;
 }
 
-main#app {
+#root {
   position: relative;
-  display: flex;
-  flex-direction: column;
   height: 100vh;
   width: 100vw;
+  overflow-y: auto;
+  overflow-x: hidden;
 
-  #app-body {
-    height: 100%;
+  main {
+    min-height: 100%;
     width: 100%;
+    padding: calc($header-height + 24px) 24px 24px;
   }
 }
 

@@ -22,32 +22,35 @@ const ROLES = {
 
 const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route path="login" element={<Login />} />
-        <Route path="register" element={<Register />} />
-        <Route path="unauthorized" element={<Unauthorized />} />
+    <>
+      <Routes>
+        <Route path="/" element={<Layout />}>
+          <Route path="login" element={<Login />} />
+          <Route path="register" element={<Register />} />
+          <Route path="unauthorized" element={<Unauthorized />} />
 
-        {/* Protected Routes */}
-        <Route element={<PersistLogin />}>
-          <Route element={<RequireAuth allowedRoles={[]} />}>
-            <Route path="/" element={<Home />} />
+          {/* Protected Routes */}
+          <Route element={<PersistLogin />}>
+            <Route element={<RequireAuth allowedRoles={[]} />}>
+              <Route path="/" element={<Home />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[]} />}>
+              <Route path="admin" element={<Admin />} />
+            </Route>
+
+            <Route element={<RequireAuth allowedRoles={[]} />}>
+              <Route path="profile" element={<Profile />} />
+            </Route>
           </Route>
 
-          <Route element={<RequireAuth allowedRoles={[]} />}>
-            <Route path="admin" element={<Admin />} />
-          </Route>
-
-          <Route element={<RequireAuth allowedRoles={[]} />}>
-            <Route path="profile" element={<Profile />} />
-          </Route>
+          {/* Catch-all */}
+          <Route path="*" element={<Missing />} />
         </Route>
+      </Routes>
 
-        {/* Catch-all */}
-        <Route path="*" element={<Missing />} />
-      </Route>
       <Toasts />
-    </Routes>
+    </>
   )
 }
 

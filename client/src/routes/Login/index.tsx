@@ -31,14 +31,13 @@ const Login = () => {
 
   const [email, setemail] = useState('')
   const [password, setPassword] = useState('')
-  const [errMsg, setErrMsg] = useState('')
 
   useEffect(() => {
     if (emailRef.current) emailRef.current.focus()
   }, [])
 
   useEffect(() => {
-    setErrMsg('')
+    //clear inline errors
   }, [email, password])
 
   const togglePersist = () => {
@@ -74,16 +73,15 @@ const Login = () => {
       navigate(from, { replace: true })
     } catch (err) {
       if (!err?.response) {
-        setErrMsg('No server eesponse')
+        addToast('No server eesponse')
       } else if (err.response?.status === 400) {
-        setErrMsg('Missing email or password')
         addToast('Missing email or password')
       } else if (err.response?.status === 401) {
-        setErrMsg('Unauthorized')
+        addToast('Unauthorized')
       } else if (err.response?.status === 403) {
-        setErrMsg('Valid email address required')
+        addToast('Valid email address required')
       } else {
-        setErrMsg('Login Failed')
+        addToast('Login Failed')
       }
       if (errorRef.current) errorRef.current.focus()
     }
@@ -92,14 +90,6 @@ const Login = () => {
   return (
     <div id="login-route">
       <section className="floating">
-        <div
-          ref={errorRef}
-          className={errMsg ? 'errmsg' : 'offscreen'}
-          aria-live="assertive"
-        >
-          {errMsg}
-        </div>
-
         <h1>Sign In</h1>
         <form onSubmit={(event) => handleLogin({ event })} noValidate>
           <div className="form-input">

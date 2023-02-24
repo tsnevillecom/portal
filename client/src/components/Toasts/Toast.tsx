@@ -1,13 +1,13 @@
 import React, { useContext } from 'react'
 import './Toasts.scss'
 import { classNames } from '../../_utils/classNames.util'
-import { Toast } from '../../_types/toast'
+import { IToast } from '../../_types/toast'
 import { ToastContext } from 'src/context/ToastContext'
 import { AiOutlineCheckCircle } from 'react-icons/ai'
 import { BiErrorCircle } from 'react-icons/bi'
 
 interface ToastProps {
-  toast: Toast
+  toast: IToast
   dismiss?: () => void
 }
 

@@ -1,10 +1,10 @@
-export type Toast = {
+export type IToast = {
   id: string
   message: string
-  type: ToastType
+  type: IToastType
   dismissable: boolean
   time: number
   title?: string | null
 }
 
-export type ToastType = 'success' | 'danger' | 'warning' | 'info'
+export type IToastType = 'success' | 'danger' | 'warning' | 'info'

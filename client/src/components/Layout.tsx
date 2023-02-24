@@ -4,12 +4,12 @@ import Header from './Header'
 
 const Layout = () => {
   return (
-    <main id="app">
+    <>
       <Header />
-      <div id="app-body">
+      <main>
         <Outlet />
-      </div>
-    </main>
+      </main>
+    </>
   )
 }
 

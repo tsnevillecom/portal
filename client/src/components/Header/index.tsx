@@ -11,7 +11,7 @@ const Header = () => {
   if (!auth.isAuthenticated) return null
 
   return (
-    <div id="header">
+    <header>
       <div id="logo">Logo</div>
       <nav>
         <Link to="/">Home</Link>
@@ -24,7 +24,7 @@ const Header = () => {
       </div>
 
       <button onClick={logout}>Sign Out</button>
-    </div>
+    </header>
   )
 }
 
