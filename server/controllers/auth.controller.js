@@ -204,38 +204,42 @@ const refresh = async (req, res) => {
 
   // evaluate jwt
   jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, decoded) => {
-    if (err) {
-      console.log('expired refresh token')
-      foundUser.refreshTokens = [...newRefreshTokenArray]
-      const result = await foundUser.save()
+    try {
+      if (err) {
+        console.log('expired refresh token')
+        foundUser.refreshTokens = [...newRefreshTokenArray]
+        await foundUser.save()
+        return res.status(403).send({ message: ERRORS.FORBIDDEN })
+      }
+
+      if (foundUser._id.toString() !== decoded._id) {
+        return res.status(403).send({ message: ERRORS.FORBIDDEN })
+      }
+
+      // Refresh token still valid
+      const accessToken = await foundUser.newAccessToken()
+      const newRefreshToken = await foundUser.newRefreshToken()
+
+      // Saving refreshToken on current user
+      foundUser.refreshTokens = [
+        ...newRefreshTokenArray,
+        { refreshToken: newRefreshToken, userAgent },
+      ]
+      await foundUser.save()
+
+      // Creates Secure Cookie with refresh token
+      res.cookie('refreshToken', newRefreshToken, {
+        httpOnly: true, //accessible only by web server
+        secure: SECURE_COOKIE, //https
+        sameSite: 'None', //cross-site cookie
+        maxAge: REFRESH_TOKEN_EXPIRY, //cookie expiry: set to match rT
+      })
+
+      res.send({ user: foundUser, accessToken })
+    } catch (error) {
+      console.log(error)
       return res.status(403).send({ message: ERRORS.FORBIDDEN })
     }
-
-    const _id = decoded._id
-    if (foundUser._id.toString() !== _id) {
-      return res.status(403).send({ message: ERRORS.FORBIDDEN })
-    }
-
-    // Refresh token still valid
-    const accessToken = await foundUser.newAccessToken()
-    const newRefreshToken = await foundUser.newRefreshToken()
-
-    // Saving refreshToken on current user
-    foundUser.refreshTokens = [
-      ...newRefreshTokenArray,
-      { refreshToken: newRefreshToken, userAgent },
-    ]
-    await foundUser.save()
-
-    // Creates Secure Cookie with refresh token
-    res.cookie('refreshToken', newRefreshToken, {
-      httpOnly: true, //accessible only by web server
-      secure: SECURE_COOKIE, //https
-      sameSite: 'None', //cross-site cookie
-      maxAge: REFRESH_TOKEN_EXPIRY, //cookie expiry: set to match rT
-    })
-
-    res.send({ user: foundUser, accessToken })
   })
 }
 

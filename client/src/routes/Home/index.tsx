@@ -1,10 +1,8 @@
 import React from 'react'
 
 const Home = () => {
-  console.log('home')
-
   return (
-    <div id="home-route">
+    <section id="home-route">
       <h1>Home</h1>
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac nulla
@@ -156,7 +154,7 @@ const Home = () => {
         pharetra tellus nec, faucibus sapien. In facilisis sit amet lorem quis
         tristique. Suspendisse vel elementum nisl.
       </p>
-    </div>
+    </section>
   )
 }
 

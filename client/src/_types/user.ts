@@ -4,5 +4,5 @@ export type User = {
   email: string
   active: boolean
   deleted: boolean
-  roles: string[]
+  role: string
 }

@@ -5,17 +5,17 @@ import useLogout from 'src/hooks/useLogout'
 import './Header.scss'
 
 const Header = () => {
-  const { auth } = useAuth()
+  const { auth, isAdmin } = useAuth()
   const { logout } = useLogout()
 
   if (!auth.isAuthenticated) return null
 
   return (
     <header>
-      <div id="logo">Logo</div>
+      <div id="logo">LOGO</div>
       <nav>
         <Link to="/">Home</Link>
-        <Link to="/admin">Admin</Link>
+        {isAdmin && <Link to="/admin">Admin</Link>}
       </nav>
       <div id="user-menu">
         <Link to="/profile">
@@ -23,7 +23,9 @@ const Header = () => {
         </Link>
       </div>
 
-      <button onClick={logout}>Sign Out</button>
+      <button className="btn-link" onClick={logout}>
+        Sign Out
+      </button>
     </header>
   )
 }

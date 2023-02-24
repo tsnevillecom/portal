@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom'
 import './Profile.scss'
 import useAxiosPrivate from '../../hooks/useAxiosPrivate'
 import useLogout from 'src/hooks/useLogout'
+import useRefreshToken from 'src/hooks/useRefreshToken'
 
 const Profile = () => {
   const axiosPrivate = useAxiosPrivate()
   const { logoutall } = useLogout()
+  const refresh = useRefreshToken()
 
   const getMe = async () => {
     try {
@@ -33,6 +35,8 @@ const Profile = () => {
       <a onClick={checktoken}>Check Token</a>
 
       <a onClick={logoutall}>Logout All</a>
+
+      <a onClick={refresh}>Refresh</a>
 
       <div className="flexGrow">
         <Link to="/">Home</Link>

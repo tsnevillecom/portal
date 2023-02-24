@@ -13,6 +13,10 @@
   touch-action: none;
 }
 
+main.unauthenticated + #toasts {
+  top: 0;
+}
+
 .toast {
   position: relative;
   width: 50%;

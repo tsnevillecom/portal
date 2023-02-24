@@ -8,7 +8,6 @@ import { User } from '../_types/user'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 type Auth = {
-  email: string | null
   accessToken: string | null
   user: User | null
   isAuthenticated: boolean
@@ -17,7 +16,6 @@ type Auth = {
 const noop = () => null
 
 export const DEFAULT_AUTH_STATE = {
-  email: null,
   accessToken: null,
   user: null,
   isAuthenticated: false,
@@ -30,6 +28,7 @@ export interface IAuthContext {
   setAuth: (auth: Auth | ((auth: Auth) => Auth)) => void
   persist: boolean | null
   setPersist: (shouldPersist: boolean) => void
+  isAdmin: boolean
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -37,11 +36,14 @@ export const AuthContext = createContext<IAuthContext>({
   setAuth: noop,
   persist: true,
   setPersist: noop,
+  isAdmin: false,
 })
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [auth, setAuth] = useState<Auth>(DEFAULT_AUTH_STATE)
   const [persist, setPersist] = useLocalStorage<boolean>('persist', true)
+
+  const isAdmin = useMemo(() => auth.user?.role === 'admin', [auth])
 
   const contextValue = useMemo(
     () => ({
@@ -49,6 +51,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       setAuth,
       persist,
       setPersist,
+      isAdmin,
     }),
     [auth, persist]
   )

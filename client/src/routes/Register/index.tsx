@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
 import './Register.scss'
 
 function RegistrationForm() {
@@ -40,8 +41,8 @@ function RegistrationForm() {
   }
 
   return (
-    <div id="register-route">
-      <section className="floating">
+    <section id="register-route">
+      <div className="floating">
         <h1>Register</h1>
         <form onSubmit={handleSubmit}>
           <div className="form-input">
@@ -62,7 +63,7 @@ function RegistrationForm() {
               id="lastName"
               value={lastName}
               onChange={(e) => handleInputChange(e)}
-              placeholder="LastName"
+              placeholder="Last Name"
             />
           </div>
           <div className="form-input">
@@ -109,8 +110,14 @@ function RegistrationForm() {
 
           <button type="submit">Register</button>
         </form>
-      </section>
-    </div>
+
+        <p>
+          Already have an Account?
+          <br />
+          <Link to="/login">Login</Link>
+        </p>
+      </div>
+    </section>
   )
 }
 

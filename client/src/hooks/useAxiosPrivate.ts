@@ -5,10 +5,6 @@ import useAuth from './useAuth'
 import { AxiosError } from 'axios'
 import useLogout from './useLogout'
 
-type Headers = {
-  [key: string]: string | number | null
-}
-
 type FailedResponseQueueType = {
   resolve: (value: unknown) => void
   reject: (reason?: any) => void

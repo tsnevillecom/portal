@@ -2,7 +2,7 @@ import React, { FormEvent, useContext } from 'react'
 import './Login.scss'
 import { useRef, useState, useEffect } from 'react'
 import useAuth from '../../hooks/useAuth'
-import { Link, useNavigate, useLocation } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import {
   useGoogleLogin,
   TokenResponse,
@@ -21,15 +21,12 @@ interface IHandleLogin {
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth()
   const { addToast } = useContext(ToastContext)
-
   const navigate = useNavigate()
-  const location = useLocation()
-  const from = location.state?.from?.pathname || '/'
 
   const emailRef = useRef<HTMLInputElement>(null)
   const errorRef = useRef<HTMLDivElement>(null)
 
-  const [email, setemail] = useState('')
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   useEffect(() => {
@@ -67,10 +64,10 @@ const Login = () => {
       const accessToken = response.data?.accessToken
       const user = response.data?.user
 
-      setAuth({ email, accessToken, user, isAuthenticated: true })
-      setemail('')
+      setAuth({ accessToken, user, isAuthenticated: true })
+      setEmail('')
       setPassword('')
-      navigate(from, { replace: true })
+      navigate('/', { replace: true })
     } catch (err) {
       if (!err?.response) {
         addToast('No server eesponse')
@@ -88,8 +85,8 @@ const Login = () => {
   }
 
   return (
-    <div id="login-route">
-      <section className="floating">
+    <section id="login-route">
+      <div className="floating">
         <h1>Sign In</h1>
         <form onSubmit={(event) => handleLogin({ event })} noValidate>
           <div className="form-input">
@@ -99,8 +96,9 @@ const Login = () => {
               id="email"
               ref={emailRef}
               autoComplete="off"
-              onChange={(e) => setemail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               value={email}
+              placeholder="Email"
               required
             />
           </div>
@@ -112,6 +110,7 @@ const Login = () => {
               id="password"
               onChange={(e) => setPassword(e.target.value)}
               value={password}
+              placeholder="Password"
               required
             />
           </div>
@@ -134,12 +133,10 @@ const Login = () => {
         <p>
           Need an Account?
           <br />
-          <span className="line">
-            <Link to="/register">Sign Up</Link>
-          </span>
+          <Link to="/register">Sign Up</Link>
         </p>
-      </section>
-    </div>
+      </div>
+    </section>
   )
 }
 

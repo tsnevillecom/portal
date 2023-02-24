@@ -17,8 +17,10 @@ const useRefreshToken = () => {
         isAuthenticated: true,
       }
     })
+
     return response.data.accessToken
   }
+
   return refresh
 }
 

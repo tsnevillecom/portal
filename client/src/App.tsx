@@ -7,44 +7,44 @@ import Home from './routes/Home'
 import Admin from './routes/Admin'
 import Profile from './routes/Profile'
 
-import Layout from './components/Layout'
-import Unauthorized from './components/Unauthorized'
-import RequireAuth from './components/RequireAuth'
-import PersistLogin from './components/PersistLogin'
+import MainLayout from './layouts/Main.layout'
+import UnauthenticatedLayout from './layouts/Unauthenticated.layout'
+import Unauthorized from './routes/Unauthorized'
+import UnauthenticatedRoute from './routes/UnauthenticatedRoute'
+import AuthenticatedRoute from './routes/AuthenticatedRoute'
+import PersistLogin from './routes/PersistLogin'
 import Register from './routes/Register'
 import Toasts from './components/Toasts'
-
-const ROLES = {
-  User: 2001,
-  Editor: 1984,
-  Admin: 5150,
-}
+import useAuth from './hooks/useAuth'
 
 const App = () => {
+  const { auth } = useAuth()
+
   return (
     <>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />
-          <Route path="unauthorized" element={<Unauthorized />} />
+        <Route
+          path="/"
+          element={auth.user ? <MainLayout /> : <UnauthenticatedLayout />}
+        >
+          <Route element={<UnauthenticatedRoute />}>
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Route>
 
           {/* Protected Routes */}
           <Route element={<PersistLogin />}>
-            <Route element={<RequireAuth allowedRoles={[]} />}>
+            <Route element={<AuthenticatedRoute allowedRoles={[]} />}>
               <Route path="/" element={<Home />} />
-            </Route>
-
-            <Route element={<RequireAuth allowedRoles={[]} />}>
-              <Route path="admin" element={<Admin />} />
-            </Route>
-
-            <Route element={<RequireAuth allowedRoles={[]} />}>
               <Route path="profile" element={<Profile />} />
+            </Route>
+
+            <Route element={<AuthenticatedRoute allowedRoles={['admin']} />}>
+              <Route path="admin" element={<Admin />} />
             </Route>
           </Route>
 
-          {/* Catch-all */}
+          <Route path="unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<Missing />} />
         </Route>
       </Routes>

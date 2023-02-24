@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;500;700;900&display=swap');
 @import '../src/styles/variables';
+@import '../src/styles/buttons';
 
 $blue: rgb(10, 143, 252);
 
@@ -20,7 +21,6 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-  background-image: linear-gradient(to right top, #182026, #172739, #232b4c, #3d2b58, #5c255c);
 }
 
 h1 {
@@ -29,21 +29,67 @@ h1 {
   font-weight: 400;
 }
 
+a {
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
 #root {
   position: relative;
   height: 100vh;
   width: 100vw;
-  overflow-y: auto;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 
   main {
-    min-height: 100%;
-    width: 100%;
-    padding: calc($header-height + 24px) 24px 24px;
+    display: flex;
+    width: 100vw;
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    a,
+    a:visited {
+      color: $blue;
+    }
+
+    > section {
+      flex: 1;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 24px;
+    }
+
+    &.authenticated {
+      aside {
+        width: 300px;
+        background: #eee;
+        padding: 24px;
+      }
+    }
+
+    &.unauthenticated {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      > section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+    }
   }
 }
 
-section.floating {
+.floating {
   background-color: #fff;
   border-radius: 16px;
   border: 1px solid #ccc;
@@ -53,11 +99,6 @@ section.floating {
   max-width: 450px;
   padding: 16px;
   width: 100%;
-}
-
-a,
-a:visited {
-  color: $blue;
 }
 
 form {
@@ -83,13 +124,23 @@ form {
       font-family: 'Roboto', sans-serif;
       font-size: 16px;
       outline: none;
-      padding: 6px 12px;
+      padding: 8px 10px;
       transition: all 0.3s ease-in-out;
       width: 100%;
 
       &:focus {
         box-shadow: 0 0 5px $blue;
         border: 1px solid $blue;
+      }
+
+      &::placeholder {
+        color: #aaa;
+        font-weight: 400;
+        transition: color 0.2s ease-in;
+      }
+
+      &:focus::placeholder {
+        color: rgba(#aaa, 0);
       }
     }
   }
@@ -114,23 +165,6 @@ form {
 
   button {
     margin-bottom: 12px;
-  }
-}
-
-button {
-  border-radius: 5px;
-  border: 1px solid #dddddd;
-  cursor: pointer;
-  font-family: 'Roboto', sans-serif;
-  font-size: 16px;
-  outline: none;
-  padding: 4px 8px;
-  transition: all 0.3s ease-in-out;
-  width: 100%;
-
-  &:focus {
-    box-shadow: 0 0 5px $blue;
-    border: 1px solid $blue;
   }
 }
 

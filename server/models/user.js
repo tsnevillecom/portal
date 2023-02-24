@@ -99,7 +99,7 @@ const UserSchema = new mongoose.Schema({
   role: {
     type: String,
     default: ROLES.FAN,
-    enum: [ROLES.ADMIN, ROLES.FAN, ROLES.ARTIST, ROLES.LABEL],
+    enum: [ROLES.ADMIN, ROLES.FAN, ROLES.ARTIST, ROLES.INDUSTRY, ROLES.VENUE],
   },
   passwordResetToken: String,
   passwordResetExpires: Date,
@@ -133,6 +133,8 @@ UserSchema.methods.toJSON = function () {
   delete userObj.password
   delete userObj.refreshTokens
   delete userObj.isVerified
+  delete userObj.__id
+  delete userObj.__v
   return userObj
 }
 
