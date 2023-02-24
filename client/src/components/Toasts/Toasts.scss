@@ -1,0 +1,97 @@
+// @import '@web/css/_variables';
+
+#toasts {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: $header-height;
+  padding: $spacing-sm;
+  z-index: $zindex-toast;
+  pointer-events: none;
+  touch-action: none;
+}
+
+.toast {
+  position: relative;
+  width: 50%;
+  margin: $spacing-xs;
+  border-radius: $border-radius-base;
+  box-shadow: 0px 0px 15px rgba($black, 0.12);
+  padding: $spacing-md 44px;
+  pointer-events: auto;
+  touch-action: auto;
+
+  .toast--details {
+    flex: 1;
+  }
+
+  &.toast-success {
+    background: $success-light;
+    border: 1px solid $success;
+    color: $success;
+  }
+
+  &.toast-danger {
+    background: $error-light;
+    border: 1px solid $error;
+    color: $error;
+  }
+
+  &.toast-info {
+    background: $info-light;
+    border: 1px solid $info;
+    color: $info;
+
+    .toast--details--icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  &.toast-warning {
+    background: $warning-light;
+    border: 1px solid $warning;
+    color: $black;
+
+    .toast--details--icon {
+      transform: rotate(180deg);
+    }
+  }
+
+  .toast--details--icon {
+    height: 20px;
+    width: 20px;
+    position: absolute;
+    top: $spacing-md;
+    left: $spacing-md;
+
+    svg {
+      height: 20px;
+      width: 20px;
+    }
+  }
+
+  .toast--details--title {
+    font-weight: 600;
+    vertical-align: top;
+  }
+
+  .toast--details--message {
+    margin-left: $spacing-xs;
+    vertical-align: top;
+  }
+
+  .toast--close {
+    color: rgba($black, 0.3);
+    cursor: pointer;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    height: 24px;
+
+    &:hover {
+      color: rgba($black, 0.5);
+    }
+  }
+}

@@ -10,15 +10,11 @@ const EmailTokenSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  userAgent: {
-    type: String,
-    required: true,
-  },
   createdAt: {
     type: Date,
     required: true,
     default: Date.now,
-    expires: 43200,
+    index: { expires: '1d' },
   },
 })
 

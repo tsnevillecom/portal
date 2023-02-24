@@ -7,6 +7,7 @@ const {
   REFRESH_TOKEN_EXPIRY,
   SECURE_COOKIE,
 } = require('../config')
+const { ERRORS } = require('../_constants')
 
 const me = async (req, res) => {
   res.send(req.user)
@@ -18,7 +19,9 @@ const checkToken = async (req, res) => {
 
 const logoutAll = async (req, res) => {
   const cookies = req.cookies
-  if (!cookies?.refreshToken) return res.sendStatus(401) //Unauthorized
+  if (!cookies?.refreshToken) {
+    return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
+  }
 
   const refreshToken = cookies.refreshToken
   const foundUser = await User.findOne({
@@ -31,7 +34,8 @@ const logoutAll = async (req, res) => {
       sameSite: 'None',
       secure: SECURE_COOKIE,
     })
-    return res.sendStatus(401) //Unauthorized
+
+    return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
   }
 
   try {
@@ -46,7 +50,7 @@ const logoutAll = async (req, res) => {
 
     res.sendStatus(204)
   } catch (error) {
-    res.status(500).send({ error })
+    res.status(500).send({ error, message: ERRORS.INTERNAL_ERROR })
   }
 }
 
@@ -82,7 +86,7 @@ const logout = async (req, res) => {
     res.sendStatus(204)
   } catch (error) {
     console.log(error)
-    res.status(500).send({ error })
+    res.status(500).send({ error, message: ERRORS.INTERNAL_ERROR })
   }
 }
 
@@ -92,21 +96,21 @@ const login = async (req, res) => {
   const userAgent = req.headers['user-agent'] || ''
 
   if (!email || !password) {
-    return res.status(400).send({ message: 'Email and password are required.' })
+    return res.status(400).send({ message: ERRORS.EMAIL_PASSWORD_REQUIRED })
   }
 
   if (!validator.isEmail(email)) {
-    return res.status(403).send({ message: 'Valid email address required.' })
+    return res.status(403).send({ message: ERRORS.INVALID_EMAIL })
   }
 
   const foundUser = await User.findOne({ email }).exec()
   if (!foundUser || foundUser.deleted) {
-    return res.sendStatus(401) //Unauthorized
+    return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
   }
 
   const isMatch = await bcrypt.compare(password, foundUser.password)
   if (!isMatch) {
-    return res.sendStatus(401) //Unauthorized
+    return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
   }
 
   let newRefreshTokenArray = !cookies?.refreshToken
@@ -153,14 +157,16 @@ const login = async (req, res) => {
     res.send({ user: foundUser, accessToken })
   } catch (error) {
     console.log(error)
-    res.status(500).send({ meesage: 'Internal server error' })
+    res.status(500).send({ error, message: ERRORS.INTERNAL_ERROR })
   }
 }
 
 const refresh = async (req, res) => {
   const userAgent = req.headers['user-agent'] || ''
   const cookies = req.cookies
-  if (!cookies?.refreshToken) return res.sendStatus(401)
+  if (!cookies?.refreshToken) {
+    return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
+  }
 
   const refreshToken = cookies.refreshToken
   res.clearCookie('refreshToken', {
@@ -176,9 +182,11 @@ const refresh = async (req, res) => {
   // Detected refresh token reuse!
   if (!foundUser) {
     jwt.verify(refreshToken, REFRESH_TOKEN_SECRET, async (err, decoded) => {
-      if (err) return res.sendStatus(403) //Forbidden
-      console.log('attempted refresh token reuse!')
+      if (err) {
+        return res.status(403).send({ message: ERRORS.FORBIDDEN })
+      }
 
+      console.log('attempted refresh token reuse!')
       const _id = decoded._id
       const hackedUser = await User.findOne({
         _id,
@@ -187,7 +195,7 @@ const refresh = async (req, res) => {
       const result = await hackedUser.save()
       console.log('hacked user', result)
     })
-    return res.sendStatus(403) //Forbidden
+    return res.status(403).send({ message: ERRORS.FORBIDDEN })
   }
 
   const newRefreshTokenArray = foundUser.refreshTokens.filter(
@@ -200,11 +208,13 @@ const refresh = async (req, res) => {
       console.log('expired refresh token')
       foundUser.refreshTokens = [...newRefreshTokenArray]
       const result = await foundUser.save()
-      return res.sendStatus(403)
+      return res.status(403).send({ message: ERRORS.FORBIDDEN })
     }
 
     const _id = decoded._id
-    if (foundUser._id.toString() !== _id) return res.sendStatus(403)
+    if (foundUser._id.toString() !== _id) {
+      return res.status(403).send({ message: ERRORS.FORBIDDEN })
+    }
 
     // Refresh token still valid
     const accessToken = await foundUser.newAccessToken()

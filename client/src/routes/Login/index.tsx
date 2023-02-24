@@ -1,4 +1,4 @@
-import React, { FormEvent } from 'react'
+import React, { FormEvent, useContext } from 'react'
 import './Login.scss'
 import { useRef, useState, useEffect } from 'react'
 import useAuth from '../../hooks/useAuth'
@@ -10,6 +10,7 @@ import {
 } from '@react-oauth/google'
 
 import { axiosPrivate } from '../../api/axios'
+import { ToastContext } from 'src/context/ToastContext'
 const LOGIN_URL = '/auth'
 
 interface IHandleLogin {
@@ -19,6 +20,7 @@ interface IHandleLogin {
 
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth()
+  const { addToast } = useContext(ToastContext)
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -75,6 +77,7 @@ const Login = () => {
         setErrMsg('No server eesponse')
       } else if (err.response?.status === 400) {
         setErrMsg('Missing email or password')
+        addToast('Missing email or password')
       } else if (err.response?.status === 401) {
         setErrMsg('Unauthorized')
       } else if (err.response?.status === 403) {
@@ -88,7 +91,7 @@ const Login = () => {
 
   return (
     <div id="login-route">
-      <section>
+      <section className="floating">
         <div
           ref={errorRef}
           className={errMsg ? 'errmsg' : 'offscreen'}
@@ -96,30 +99,36 @@ const Login = () => {
         >
           {errMsg}
         </div>
+
         <h1>Sign In</h1>
         <form onSubmit={(event) => handleLogin({ event })} noValidate>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="text"
-            id="email"
-            ref={emailRef}
-            autoComplete="off"
-            onChange={(e) => setemail(e.target.value)}
-            value={email}
-            required
-          />
+          <div className="form-input">
+            <label htmlFor="email">Email</label>
+            <input
+              type="text"
+              id="email"
+              ref={emailRef}
+              autoComplete="off"
+              onChange={(e) => setemail(e.target.value)}
+              value={email}
+              required
+            />
+          </div>
 
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            required
-          />
-          <button>Sign in</button>
+          <div className="form-input">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+            />
+          </div>
 
-          <div className="persistCheck">
+          <button type="submit">Sign in</button>
+
+          <div className="form-input--checkbox">
             <input
               type="checkbox"
               id="persist"

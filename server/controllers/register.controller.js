@@ -1,14 +1,19 @@
 const User = require('../models/user')
 const nodemailer = require('nodemailer')
+const mailgun = require('nodemailer-mailgun-transport')
 const EmailToken = require('../models/emailToken')
 const crypto = require('crypto')
-const { SENDGRID_PASSWORD, SENDGRID_USERNAME } = require('../config')
+const { MAILGUN_API_KEY, MAILGUN_DOMAIN } = require('../config')
+const { ERRORS } = require('../_constants')
 
 const register = async (req, res) => {
   const user = new User(req.body)
 
   const duplicate = await User.findOne({ email: user.email }).exec()
-  if (duplicate) return res.sendStatus(409)
+  if (duplicate)
+    return res.status(409).send({
+      message: ERRORS.REGISTRATION_FAILED,
+    })
 
   user
     .save()
@@ -21,13 +26,14 @@ const register = async (req, res) => {
       emailToken
         .save()
         .then((token) => {
-          const transporter = nodemailer.createTransport({
-            service: 'Sendgrid',
+          const auth = {
             auth: {
-              user: SENDGRID_USERNAME,
-              pass: SENDGRID_PASSWORD,
+              api_key: MAILGUN_API_KEY,
+              domain: MAILGUN_DOMAIN,
             },
-          })
+          }
+
+          const transporter = nodemailer.createTransport(mailgun(auth))
 
           const mailOptions = {
             from: 'tsneville@gmail.com',
@@ -43,36 +49,32 @@ const register = async (req, res) => {
           }
 
           transporter.sendMail(mailOptions, (err, info) => {
+            console.log(err, info)
+
             if (err) {
               return res.status(409).send({
                 user,
-                error: 'Could not send verification email. ' + err.message,
+                error: err,
+                message: ERRORS.REGISTRATION_FAILED,
               })
             }
 
             res.status(200).send({
               user,
               token: token.token,
-              success:
-                'A verification email has been sent to ' + user.email + '.',
             })
           })
         })
         .catch((error) => {
+          console.log(error)
           res.status(409).send({
             user,
-            message: 'Could not send verification email.',
+            message: ERRORS.SEND_EMAIL_FAILED,
           })
         })
     })
     .catch((error) => {
-      if (error.name === 'MongoError' && error.code === 11000) {
-        return res.status(400).send({
-          success: false,
-          message: 'Email already exists.',
-        })
-      }
-      res.status(400).send({ error })
+      res.status(400).send({ error, message: ERRORS.REGISTRATION_FAILED })
     })
 }
 

@@ -12,6 +12,7 @@ import Unauthorized from './components/Unauthorized'
 import RequireAuth from './components/RequireAuth'
 import PersistLogin from './components/PersistLogin'
 import Register from './routes/Register'
+import Toasts from './components/Toasts'
 
 const ROLES = {
   User: 2001,
@@ -45,6 +46,7 @@ const App = () => {
         {/* Catch-all */}
         <Route path="*" element={<Missing />} />
       </Route>
+      <Toasts />
     </Routes>
   )
 }

@@ -22,7 +22,7 @@ const login = async (req, res) => {
     const email = userInfo.data.email
     const foundUser = await User.findOne({ email }).exec()
     if (!foundUser || foundUser.deleted) {
-      return res.sendStatus(401) //Unauthorized
+      return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
     }
 
     let newRefreshTokenArray = !cookies?.refreshToken
@@ -55,9 +55,8 @@ const login = async (req, res) => {
       ...newRefreshTokenArray,
       { refreshToken, userAgent },
     ]
-    await foundUser.save()
 
-    console.log(refreshToken)
+    await foundUser.save()
 
     res.cookie('refreshToken', refreshToken, {
       httpOnly: true, //accessible only by web server
@@ -69,8 +68,7 @@ const login = async (req, res) => {
     const accessToken = await foundUser.newAccessToken()
     res.send({ user: foundUser, accessToken })
   } catch (error) {
-    console.log(error)
-    res.status(401)
+    return res.status(401).send({ error, message: ERRORS.UNAUTHORIZED })
   }
 }
 
