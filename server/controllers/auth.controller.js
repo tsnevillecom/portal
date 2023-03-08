@@ -105,7 +105,7 @@ const login = async (req, res) => {
 
   const foundUser = await User.findOne({ email }).exec()
   if (!foundUser || foundUser.deleted) {
-    return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
+    return res.status(404).send({ message: ERRORS.NOT_FOUND })
   }
 
   const isMatch = await bcrypt.compare(password, foundUser.password)

@@ -24,15 +24,24 @@ body {
 }
 
 h1 {
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   font-size: 24px;
   font-weight: 400;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #ddd;
 }
 
 a {
   text-decoration: none;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+}
+
+hr {
+  height: 1px;
+  background-color: #ddd;
+  border: none;
+  margin: 16px 0;
 }
 
 #root {
@@ -105,66 +114,66 @@ form {
   display: flex;
   flex-direction: column;
 
-  .form-input {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 12px;
-
-    label {
-      margin-bottom: 6px;
-      font-weight: 500;
-    }
-
-    input[type='text'],
-    input[type='password'],
-    input[type='email'],
-    textarea {
-      border-radius: 5px;
-      border: 1px solid #dddddd;
-      font-family: 'Roboto', sans-serif;
-      font-size: 16px;
-      outline: none;
-      padding: 8px 10px;
-      transition: all 0.3s ease-in-out;
-      width: 100%;
-
-      &:focus {
-        box-shadow: 0 0 5px $blue;
-        border: 1px solid $blue;
-      }
-
-      &::placeholder {
-        color: #aaa;
-        font-weight: 400;
-        transition: color 0.2s ease-in;
-      }
-
-      &:focus::placeholder {
-        color: rgba(#aaa, 0);
-      }
-    }
-  }
-
-  .form-input--checkbox {
-    font-size: 16px;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    padding: 2px;
-
-    [type='checkbox'] {
-      height: 16px;
-      width: 16px;
-      margin-right: 8px;
-    }
-
-    label {
-      margin: 0;
-    }
-  }
-
   button {
     margin-bottom: 12px;
+  }
+}
+
+.form-input {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+
+  label {
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  input[type='text'],
+  input[type='password'],
+  input[type='email'],
+  textarea {
+    border-radius: 5px;
+    border: 1px solid #dddddd;
+    font-family: 'Roboto', sans-serif;
+    font-size: 16px;
+    outline: none;
+    padding: 8px 10px;
+    transition: all 0.3s ease-in-out;
+    width: 100%;
+
+    &:focus {
+      box-shadow: 0 0 5px $blue;
+      border: 1px solid $blue;
+    }
+
+    &::placeholder {
+      color: #aaa;
+      font-weight: 400;
+      transition: color 0.2s ease-in;
+    }
+
+    &:focus::placeholder {
+      color: rgba(#aaa, 0);
+    }
+  }
+}
+
+.form-input--checkbox {
+  font-size: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  padding: 2px;
+
+  [type='checkbox'] {
+    height: 16px;
+    width: 16px;
+    margin-right: 8px;
+  }
+
+  label {
+    margin: 0;
   }
 }
 

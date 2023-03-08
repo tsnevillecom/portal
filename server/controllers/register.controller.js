@@ -21,10 +21,7 @@ const register = async (req, res) => {
     })
     const token = await emailToken.save()
     await sendVerificationEmail(req, newUser.email, token.token)
-    res.status(200).send({
-      user,
-      token: token.token,
-    })
+    res.status(200).send({ user })
   } catch (error) {
     console.log(error)
     if (error.message === ERRORS.SEND_EMAIL_FAILED) {

@@ -77,6 +77,8 @@ const Login = () => {
         addToast('Unauthorized')
       } else if (err.response?.status === 403) {
         addToast('Valid email address required')
+      } else if (err.response?.status === 404) {
+        addToast('User not found')
       } else {
         addToast('Login Failed')
       }
@@ -129,6 +131,8 @@ const Login = () => {
         </form>
 
         <button onClick={() => googleLogin()}>Sign in with Google</button>
+
+        <hr />
 
         <p>
           Need an Account?

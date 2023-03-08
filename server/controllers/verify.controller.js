@@ -16,7 +16,7 @@ const verifyToken = async (req, res) => {
     const user = await User.findOne({ _id: foundToken._userId })
     if (!user) {
       return res.status(400).send({
-        message: ERRORS.USER_NOT_FOUND,
+        message: ERRORS.NOT_FOUND,
       })
     }
 
@@ -29,9 +29,7 @@ const verifyToken = async (req, res) => {
     user.isVerified = true
     await user.save()
     foundToken.remove()
-    res.status(200).send({
-      user,
-    })
+    res.status(200).send({ user })
   } catch (error) {
     res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
   }

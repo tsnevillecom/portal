@@ -1,7 +1,26 @@
 #register-route {
   p {
     font-size: 14px;
-    margin-top: 20px;
     text-align: center;
+    margin-top: 16px;
+  }
+
+  #register-thrid-party {
+    padding: 16px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: #f6f6f6;
+
+    #register-with-title {
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .thrid-party {
+      cursor: pointer;
+    }
   }
 }

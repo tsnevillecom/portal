@@ -1,5 +1,5 @@
-import React, { useContext, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState, useEffect, useRef } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import './Register.scss'
 import {
   GoogleOAuthProvider,
@@ -8,15 +8,28 @@ import {
 } from '@react-oauth/google'
 import { axiosPrivate } from 'src/api/axios'
 import { ToastContext } from 'src/context/ToastContext'
+import useAuth from 'src/hooks/useAuth'
+import { FcGoogle } from 'react-icons/fc'
 
 function RegistrationForm() {
+  const { setAuth, persist, setPersist } = useAuth()
+  const navigate = useNavigate()
   const { addToast } = useContext(ToastContext)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  const [domain, setDomain] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+
+  const firstNameRef = useRef<HTMLInputElement>(null)
+
+  useEffect(() => {
+    if (firstNameRef.current) firstNameRef.current.focus()
+  }, [])
+
+  const togglePersist = () => {
+    setPersist(!persist)
+  }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
@@ -30,9 +43,6 @@ function RegistrationForm() {
         break
       case 'email':
         setEmail(value)
-        break
-      case 'domain':
-        setDomain(value)
         break
       case 'password':
         setPassword(value)
@@ -59,11 +69,14 @@ function RegistrationForm() {
         googleAccessToken: tokenResponse.access_token,
       })
 
-      const userInfo = response.data.userInfo
-      setFirstName(userInfo.given_name)
-      setLastName(userInfo.family_name)
-      setEmail(userInfo.email)
-    } catch (err) {
+      const accessToken = response.data?.accessToken
+      const user = response.data?.user
+
+      setAuth({ accessToken, user, isAuthenticated: true })
+      navigate('/', { replace: true })
+    } catch (error) {
+      console.log(error)
+
       addToast('Google Error')
     }
   }
@@ -72,6 +85,17 @@ function RegistrationForm() {
     <section id="register-route">
       <div className="floating">
         <h1>Register</h1>
+
+        <div id="register-thrid-party">
+          <div id="register-with-title">Register with Google</div>
+
+          <div className="thrid-party" onClick={() => googleRegister()}>
+            <FcGoogle size={50} />
+          </div>
+        </div>
+
+        <hr />
+
         <form onSubmit={handleSubmit}>
           <div className="form-input">
             <label htmlFor="firstName">First Name</label>
@@ -80,6 +104,7 @@ function RegistrationForm() {
               value={firstName}
               onChange={(e) => handleInputChange(e)}
               id="firstName"
+              ref={firstNameRef}
               placeholder="First Name"
             />
           </div>
@@ -92,17 +117,6 @@ function RegistrationForm() {
               value={lastName}
               onChange={(e) => handleInputChange(e)}
               placeholder="Last Name"
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="domain">Domain</label>
-            <input
-              type="text"
-              name=""
-              id="domain"
-              value={domain}
-              onChange={(e) => handleInputChange(e)}
-              placeholder="Domain"
             />
           </div>
           <div className="form-input">
@@ -139,7 +153,17 @@ function RegistrationForm() {
           <button type="submit">Register</button>
         </form>
 
-        <button onClick={() => googleRegister()}>Register with Google</button>
+        <div className="form-input--checkbox">
+          <input
+            type="checkbox"
+            id="persist"
+            onChange={togglePersist}
+            checked={!!persist}
+          />
+          <label htmlFor="persist">Trust This Device</label>
+        </div>
+
+        <hr />
 
         <p>
           Already have an Account?
