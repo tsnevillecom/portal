@@ -16,6 +16,7 @@ import PersistLogin from './routes/PersistLogin'
 import Register from './routes/Register'
 import Toasts from './components/Toasts'
 import useAuth from './hooks/useAuth'
+import Verify from './routes/Verify'
 
 const App = () => {
   const { auth } = useAuth()
@@ -30,6 +31,7 @@ const App = () => {
           <Route element={<UnauthenticatedRoute />}>
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="verify/:token" element={<Verify />} />
           </Route>
 
           {/* Protected Routes */}

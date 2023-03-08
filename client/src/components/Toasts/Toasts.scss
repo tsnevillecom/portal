@@ -87,15 +87,20 @@ main.unauthenticated + #toasts {
   }
 
   .toast--close {
-    color: rgba($black, 0.3);
+    color: rgba($white, 0.8);
     cursor: pointer;
     position: absolute;
     top: 14px;
     right: 14px;
     height: 24px;
 
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
     &:hover {
-      color: rgba($black, 0.5);
+      color: $white;
     }
   }
 }

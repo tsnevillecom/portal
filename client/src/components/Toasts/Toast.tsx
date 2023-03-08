@@ -5,6 +5,7 @@ import { IToast } from '../../_types/toast'
 import { ToastContext } from 'src/context/ToastContext'
 import { AiOutlineCheckCircle } from 'react-icons/ai'
 import { BiErrorCircle } from 'react-icons/bi'
+import { IoMdClose } from 'react-icons/io'
 
 interface ToastProps {
   toast: IToast
@@ -53,7 +54,7 @@ const Toast: React.FC<ToastProps> = ({ toast, dismiss }) => {
       </div>
       {toast.dismissable && (
         <div className="toast--close" onClick={closeToast}>
-          X
+          <IoMdClose />
         </div>
       )}
     </div>

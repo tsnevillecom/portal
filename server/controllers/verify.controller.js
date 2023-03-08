@@ -4,7 +4,7 @@ const { ERRORS } = require('../_constants')
 
 const verifyToken = async (req, res) => {
   const token = req.params.token
-
+  console.log(token)
   try {
     const foundToken = await EmailToken.findOne({ token })
     if (!foundToken) {
@@ -33,7 +33,7 @@ const verifyToken = async (req, res) => {
       user,
     })
   } catch (error) {
-    res.status(500).send({ error, message: ERRORS.INTERNAL_ERROR })
+    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
   }
 }
 

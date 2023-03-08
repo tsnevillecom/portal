@@ -50,7 +50,7 @@ const logoutAll = async (req, res) => {
 
     res.sendStatus(204)
   } catch (error) {
-    res.status(500).send({ error, message: ERRORS.INTERNAL_ERROR })
+    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
   }
 }
 
@@ -86,7 +86,7 @@ const logout = async (req, res) => {
     res.sendStatus(204)
   } catch (error) {
     console.log(error)
-    res.status(500).send({ error, message: ERRORS.INTERNAL_ERROR })
+    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
   }
 }
 
@@ -157,7 +157,7 @@ const login = async (req, res) => {
     res.send({ user: foundUser, accessToken })
   } catch (error) {
     console.log(error)
-    res.status(500).send({ error, message: ERRORS.INTERNAL_ERROR })
+    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
   }
 }
 

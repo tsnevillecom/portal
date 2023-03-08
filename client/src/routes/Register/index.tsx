@@ -1,8 +1,16 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import './Register.scss'
+import {
+  GoogleOAuthProvider,
+  TokenResponse,
+  useGoogleLogin,
+} from '@react-oauth/google'
+import { axiosPrivate } from 'src/api/axios'
+import { ToastContext } from 'src/context/ToastContext'
 
 function RegistrationForm() {
+  const { addToast } = useContext(ToastContext)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [domain, setDomain] = useState('')
@@ -38,6 +46,26 @@ function RegistrationForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log(firstName, lastName, email, password, confirmPassword)
+  }
+
+  const googleRegister = useGoogleLogin({
+    onSuccess: (tokenResponse: TokenResponse) =>
+      handleGoogleRegister(tokenResponse),
+  })
+
+  const handleGoogleRegister = async (tokenResponse: TokenResponse) => {
+    try {
+      const response = await axiosPrivate.post('/google/register', {
+        googleAccessToken: tokenResponse.access_token,
+      })
+
+      const userInfo = response.data.userInfo
+      setFirstName(userInfo.given_name)
+      setLastName(userInfo.family_name)
+      setEmail(userInfo.email)
+    } catch (err) {
+      addToast('Google Error')
+    }
   }
 
   return (
@@ -111,6 +139,8 @@ function RegistrationForm() {
           <button type="submit">Register</button>
         </form>
 
+        <button onClick={() => googleRegister()}>Register with Google</button>
+
         <p>
           Already have an Account?
           <br />
@@ -121,4 +151,14 @@ function RegistrationForm() {
   )
 }
 
-export default RegistrationForm
+const GoogleRegister = () => {
+  return (
+    <GoogleOAuthProvider
+      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
+    >
+      <RegistrationForm />
+    </GoogleOAuthProvider>
+  )
+}
+
+export default GoogleRegister

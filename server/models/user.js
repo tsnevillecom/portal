@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
   },
   domain: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
   },
   email: {
@@ -39,18 +39,9 @@ const UserSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
+    required: false,
     trim: true,
     minlength: 8,
-    validate(value) {
-      if (validator.isEmpty(value)) {
-        throw new Error('Please enter your password!')
-      } else if (validator.equals(value.toLowerCase(), 'password')) {
-        throw new Error('Password is invalid!')
-      } else if (validator.contains(value.toLowerCase(), 'password')) {
-        throw new Error('Password should not contain password!')
-      }
-    },
   },
   refreshTokens: [
     {
