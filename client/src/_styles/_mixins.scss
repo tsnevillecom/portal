@@ -1,0 +1,21 @@
+@import './_variables';
+
+// z-index
+$z-index: (
+  toast: 1000,
+  media-player: 200,
+  navigation: 100,
+  footer: 90,
+  default: 1,
+  base: 0,
+  below: -1,
+  bottomless-pit: -9000,
+);
+
+@function z-index($key) {
+  @return map-get($z-index, $key);
+}
+
+@mixin z-index($key) {
+  z-index: z-index($key);
+}

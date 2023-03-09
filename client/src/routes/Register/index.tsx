@@ -150,7 +150,9 @@ function RegistrationForm() {
             />
           </div>
 
-          <button type="submit">Register</button>
+          <button className="btn btn-primary" type="submit">
+            Register
+          </button>
         </form>
 
         <div className="form-input--checkbox">

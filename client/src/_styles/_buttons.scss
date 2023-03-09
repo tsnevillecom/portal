@@ -1,0 +1,53 @@
+.btn {
+  border-radius: 8px;
+  border: 1px solid #dddddd;
+  background-color: #eee;
+  cursor: pointer;
+  font-family: 'Roboto', sans-serif;
+  font-size: $base-font-size;
+  outline: 0;
+  padding: 8px 12px;
+  transition: all $time ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: darken(#eee, 5%);
+  }
+
+  &.btn-primary {
+    background-color: $blue;
+    color: $white;
+    border-color: $blue;
+
+    &:hover {
+      background-color: darken($blue, 5%);
+    }
+  }
+
+  &:focus {
+    box-shadow: 0 0 5px $blue;
+    border: 1px solid $blue;
+  }
+
+  svg {
+    margin-right: 8px;
+  }
+}
+
+.btn-link {
+  width: auto;
+  background: none;
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  outline: none;
+  font-size: $base-font-size;
+
+  &:focus {
+    outline: none;
+    border: none;
+    box-shadow: none;
+  }
+}

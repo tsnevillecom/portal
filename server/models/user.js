@@ -21,11 +21,6 @@ const UserSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  domain: {
-    type: String,
-    required: false,
-    trim: true,
-  },
   email: {
     type: String,
     required: true,

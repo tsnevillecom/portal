@@ -108,6 +108,10 @@ const login = async (req, res) => {
     return res.status(404).send({ message: ERRORS.NOT_FOUND })
   }
 
+  if (!foundUser.password) {
+    return res.status(409).send({ message: ERRORS.UPDATE_PASSWORD })
+  }
+
   const isMatch = await bcrypt.compare(password, foundUser.password)
   if (!isMatch) {
     return res.status(401).send({ message: ERRORS.UNAUTHORIZED })

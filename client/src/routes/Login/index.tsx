@@ -8,7 +8,7 @@ import {
   TokenResponse,
   GoogleOAuthProvider,
 } from '@react-oauth/google'
-
+import { FcGoogle } from 'react-icons/fc'
 import { axiosPrivate } from '../../api/axios'
 import { ToastContext } from 'src/context/ToastContext'
 const LOGIN_URL = '/auth'
@@ -70,7 +70,7 @@ const Login = () => {
       navigate('/', { replace: true })
     } catch (err) {
       if (!err?.response) {
-        addToast('No server eesponse')
+        addToast('No server response')
       } else if (err.response?.status === 400) {
         addToast('Missing email or password')
       } else if (err.response?.status === 401) {
@@ -79,6 +79,8 @@ const Login = () => {
         addToast('Valid email address required')
       } else if (err.response?.status === 404) {
         addToast('User not found')
+      } else if (err.response?.status === 409) {
+        addToast('Account requires password')
       } else {
         addToast('Login Failed')
       }
@@ -117,7 +119,9 @@ const Login = () => {
             />
           </div>
 
-          <button type="submit">Sign in</button>
+          <button className="btn btn-primary" type="submit">
+            Sign in
+          </button>
 
           <div className="form-input--checkbox">
             <input
@@ -130,7 +134,10 @@ const Login = () => {
           </div>
         </form>
 
-        <button onClick={() => googleLogin()}>Sign in with Google</button>
+        <button className="btn" onClick={() => googleLogin()}>
+          <FcGoogle size={16} />
+          Sign in with Google
+        </button>
 
         <hr />
 
