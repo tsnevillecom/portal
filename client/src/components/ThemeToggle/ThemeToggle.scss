@@ -1,0 +1,33 @@
+@import '@styles/variables';
+
+#theme-toggle {
+  display: inline-block;
+  height: 32px;
+  width: 60px;
+  padding: 4px;
+  border-radius: 16px;
+  background-color: $black;
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  cursor: pointer;
+
+  #theme-toggle-dot {
+    position: absolute;
+    top: 4px;
+    height: 24px;
+    width: 24px;
+    border-radius: 12px;
+    transition: left $time ease-in-out;
+
+    &.light {
+      left: 4px;
+      background-color: $slate-100;
+    }
+
+    &.dark {
+      left: 32px;
+      background-color: $slate-500;
+    }
+  }
+}

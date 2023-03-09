@@ -1,7 +1,7 @@
 import React, { FormEvent, useContext } from 'react'
 import './Login.scss'
 import { useRef, useState, useEffect } from 'react'
-import useAuth from '../../hooks/useAuth'
+import useAuth from '@hooks/useAuth'
 import { Link, useNavigate } from 'react-router-dom'
 import {
   useGoogleLogin,
@@ -9,8 +9,8 @@ import {
   GoogleOAuthProvider,
 } from '@react-oauth/google'
 import { FcGoogle } from 'react-icons/fc'
-import { axiosPrivate } from '../../api/axios'
-import { ToastContext } from 'src/context/ToastContext'
+import { axiosPrivate } from '@api/axios'
+import { ToastContext } from '@context/ToastContext'
 const LOGIN_URL = '/auth'
 
 interface IHandleLogin {
@@ -64,7 +64,7 @@ const Login = () => {
       const accessToken = response.data?.accessToken
       const user = response.data?.user
 
-      setAuth({ accessToken, user, isAuthenticated: true })
+      setAuth({ accessToken, user, isAuthenticated: user.isVerified })
       setEmail('')
       setPassword('')
       navigate('/', { replace: true })
@@ -119,6 +119,10 @@ const Login = () => {
             />
           </div>
 
+          <Link id="forget-password" to="/forget-password" replace>
+            Forgot password?
+          </Link>
+
           <button className="btn btn-primary" type="submit">
             Sign in
           </button>
@@ -144,7 +148,9 @@ const Login = () => {
         <p>
           Need an Account?
           <br />
-          <Link to="/register">Sign Up</Link>
+          <Link to="/register" replace>
+            Sign Up
+          </Link>
         </p>
       </div>
     </section>

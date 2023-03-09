@@ -1,9 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import './Profile.scss'
-import useAxiosPrivate from '../../hooks/useAxiosPrivate'
-import useLogout from 'src/hooks/useLogout'
-import useRefreshToken from 'src/hooks/useRefreshToken'
+import useAxiosPrivate from '@hooks/useAxiosPrivate'
+import useLogout from '@hooks/useLogout'
+import useRefreshToken from '@hooks/useRefreshToken'
 
 const Profile = () => {
   const axiosPrivate = useAxiosPrivate()

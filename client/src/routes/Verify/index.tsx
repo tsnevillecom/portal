@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import './Verify.scss'
-import axios from 'src/api/axios'
+import axios from '@api/axios'
 
 const Verify = () => {
   const params = useParams()
@@ -31,11 +31,21 @@ const Verify = () => {
 
   return (
     <section id="verify-route">
-      <div className="floating">
-        <h1>Verify</h1>
-        {hasError ? <p>You are not verified</p> : <p>You are verified</p>}
-        <Link to="/">Home</Link>
-      </div>
+      {hasError && (
+        <div>
+          <h1>Verification Failed</h1>
+          <p>Something went wrong during verifcation.</p>
+          <Link to="/register">Try to register again</Link>
+        </div>
+      )}
+
+      {!hasError && (
+        <div>
+          <h1>You are verified!</h1>
+          <p>Log into your new account!</p>
+          <Link to="/login">Login</Link>
+        </div>
+      )}
     </section>
   )
 }

@@ -5,8 +5,11 @@ const { ERRORS } = require('../_constants')
 const verifyToken = async (req, res) => {
   const token = req.params.token
   console.log(token)
+
   try {
     const foundToken = await EmailToken.findOne({ token })
+
+    console.log(foundToken)
     if (!foundToken) {
       return res.status(400).send({
         message: ERRORS.EXPIRED_TOKEN,

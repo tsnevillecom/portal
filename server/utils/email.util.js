@@ -8,7 +8,25 @@ const {
 } = require('../config')
 const { ERRORS } = require('../_constants')
 
-const sendVerificationEmail = async (req, email, token) => {
+const sendVerificationEmail = async (email, token) => {
+  const mailOptions = {
+    from: 'tsneville@gmail.com',
+    to: email,
+    subject: 'Account Verification Token',
+    text:
+      'Hello,\n\n' +
+      'Please verify your account by clicking the link: \nhttp://' +
+      HOST +
+      ':' +
+      CLIENT_PORT +
+      '/verify/' +
+      token +
+      '.\n',
+  }
+  await sendEmail(mailOptions)
+}
+
+const sendEmail = async (mailOptions) => {
   try {
     const auth = {
       auth: {
@@ -17,20 +35,6 @@ const sendVerificationEmail = async (req, email, token) => {
       },
     }
     const transporter = nodemailer.createTransport(mailgun(auth))
-    const mailOptions = {
-      from: 'tsneville@gmail.com',
-      to: email,
-      subject: 'Account Verification Token',
-      text:
-        'Hello,\n\n' +
-        'Please verify your account by clicking the link: \nhttp://' +
-        HOST +
-        ':' +
-        CLIENT_PORT +
-        '/verify/' +
-        token +
-        '.\n',
-    }
     await transporter.sendMail(mailOptions)
   } catch (error) {
     console.log(error)

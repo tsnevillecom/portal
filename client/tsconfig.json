@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.paths.json",
   "compilerOptions": {
     "module": "commonjs",
     "noImplicitAny": true,
@@ -10,17 +11,7 @@
     "jsx": "react",
     "lib": ["es6", "dom"],
     "noImplicitThis": true,
-    "strictNullChecks": true,
-    "baseUrl": ".",
-    "paths": {
-      "@web/*": ["./web/*"],
-      "@admin/*": ["./admin/*"],
-      "@engage/*": ["./engage/*"],
-      "@scheduling/*": ["./scheduling/*"],
-      "@landing/*": ["./landing/*"],
-      "@mocks/*": ["./__mocks__/*"]
-    }
+    "strictNullChecks": true
   },
-  "include": ["**/*"],
-  "exclude": ["dist/**/*", "node_modules"]
+  "include": ["src"]
 }

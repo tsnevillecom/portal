@@ -1,14 +1,14 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import './Register.scss'
 import {
   GoogleOAuthProvider,
   TokenResponse,
   useGoogleLogin,
 } from '@react-oauth/google'
-import { axiosPrivate } from 'src/api/axios'
-import { ToastContext } from 'src/context/ToastContext'
-import useAuth from 'src/hooks/useAuth'
+import axios, { axiosPrivate } from '@api/axios'
+import { ToastContext } from '@context/ToastContext'
+import useAuth from '@hooks/useAuth'
 import { FcGoogle } from 'react-icons/fc'
 
 function RegistrationForm() {
@@ -53,9 +53,22 @@ function RegistrationForm() {
     }
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(firstName, lastName, email, password, confirmPassword)
+
+    const data = { password, email, lastName, firstName }
+
+    try {
+      const response = await axios.post('/register', data, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      })
+      console.log(response.data)
+
+      navigate('/email-sent', { replace: true, state: { email } })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const googleRegister = useGoogleLogin({
@@ -76,7 +89,6 @@ function RegistrationForm() {
       navigate('/', { replace: true })
     } catch (error) {
       console.log(error)
-
       addToast('Google Error')
     }
   }
@@ -170,7 +182,9 @@ function RegistrationForm() {
         <p>
           Already have an Account?
           <br />
-          <Link to="/login">Login</Link>
+          <Link to="/login" replace>
+            Login
+          </Link>
         </p>
       </div>
     </section>

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import useAuth from 'src/hooks/useAuth'
-import useLogout from 'src/hooks/useLogout'
+import useAuth from '@hooks/useAuth'
+import useLogout from '@hooks/useLogout'
 import './Header.scss'
 
 const Header = () => {

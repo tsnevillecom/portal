@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
 import './Toasts.scss'
 import Toast from './Toast'
-import { ToastContext } from 'src/context/ToastContext'
+import { ToastContext } from '@context/ToastContext'
 
 const Toasts: React.FC = () => {
   const { toasts } = useContext(ToastContext)

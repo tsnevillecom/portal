@@ -90,6 +90,36 @@ const logout = async (req, res) => {
   }
 }
 
+const resetPassword = async (req, res) => {
+  const token = req.body.token
+  const password = req.body.password
+
+  try {
+    const foundToken = await EmailToken.findOne({ token })
+    if (!foundToken) {
+      return res.status(400).send({
+        message: ERRORS.EXPIRED_TOKEN,
+      })
+    }
+
+    const user = await User.findOne({ _id: foundToken._userId })
+    if (!user) {
+      return res.status(400).send({ message: ERRORS.NOT_FOUND })
+    }
+
+    if (!user.isVerified) {
+      return res.status(400).send({ message: ERRORS.USER_NOT_VERIFIED })
+    }
+
+    user.password = password
+    await user.save()
+    foundToken.remove()
+    res.status(200).send({ user })
+  } catch (error) {
+    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
+  }
+}
+
 const login = async (req, res) => {
   const cookies = req.cookies
   const { email, password } = req.body
@@ -254,4 +284,5 @@ module.exports = {
   refresh,
   me,
   checkToken,
+  resetPassword,
 }

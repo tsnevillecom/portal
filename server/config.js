@@ -21,6 +21,7 @@ const environmentalVars = {
     REFRESH_TOKEN_EXPIRY: 7 * 24 * 60 * 60 * 1000, //7 days
     REFRESH_TOKEN_EXPIRY_SIGN: '7d',
     SECURE_COOKIE: true,
+    CLIENT_PORT: 3000,
   },
   ...result.parsed,
 }
