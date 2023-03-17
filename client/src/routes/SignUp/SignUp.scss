@@ -1,3 +1,5 @@
+@import '@styles/variables';
+
 #register-route {
   p {
     font-size: 14px;
@@ -12,7 +14,7 @@
     align-items: center;
     flex-direction: column;
     justify-content: center;
-    background-color: #f6f6f6;
+    background-color: rgba($black, 0.2);
 
     #register-with-title {
       font-weight: 500;
@@ -21,6 +23,12 @@
 
     .thrid-party {
       cursor: pointer;
+    }
+  }
+
+  .light & {
+    #register-thrid-party {
+      background-color: rgba($black, 0.05);
     }
   }
 }

@@ -35,7 +35,7 @@ const Verify = () => {
         <div>
           <h1>Verification Failed</h1>
           <p>Something went wrong during verifcation.</p>
-          <Link to="/register">Try to register again</Link>
+          <Link to="/sign-up">Try to sign up again</Link>
         </div>
       )}
 

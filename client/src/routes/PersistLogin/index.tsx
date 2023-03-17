@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import useRefreshToken from '@hooks/useRefreshToken'
 import useAuth from '@hooks/useAuth'
+import Spinner from '@components/Spinner'
+import _ from 'lodash'
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true)
@@ -18,19 +20,23 @@ const PersistLogin = () => {
       try {
         await refresh()
       } catch (error) {
-        console.error(error)
+        if (error.response?.status === 401) {
+          console.log('No refresh token. Login.')
+        } else {
+          console.error(error)
+        }
       } finally {
-        setIsLoading(false)
+        debounceLoadingFalse()
       }
     }
 
     // Avoids unwanted call to verifyRefreshToken
-    !auth.accessToken && persist ? verifyRefreshToken() : setIsLoading(false)
+    !auth.accessToken && persist ? verifyRefreshToken() : debounceLoadingFalse()
   }, [])
 
-  if (persist && isLoading) {
-    return <p>Loading...</p>
-  }
+  const debounceLoadingFalse = _.debounce(() => setIsLoading(false), 500)
+
+  if (persist && isLoading) return <Spinner />
 
   return <Outlet />
 }

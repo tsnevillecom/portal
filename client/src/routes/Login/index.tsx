@@ -90,8 +90,8 @@ const Login = () => {
 
   return (
     <section id="login-route">
-      <div className="floating">
-        <h1>Sign In</h1>
+      <div className="container-slim">
+        <h1>Login</h1>
         <form onSubmit={(event) => handleLogin({ event })} noValidate>
           <div className="form-input">
             <label htmlFor="email">Email</label>
@@ -119,12 +119,12 @@ const Login = () => {
             />
           </div>
 
-          <Link id="forget-password" to="/forget-password" replace>
+          <Link id="reset-password" to="/reset-password">
             Forgot password?
           </Link>
 
           <button className="btn btn-primary" type="submit">
-            Sign in
+            Login
           </button>
 
           <div className="form-input--checkbox">
@@ -140,7 +140,7 @@ const Login = () => {
 
         <button className="btn" onClick={() => googleLogin()}>
           <FcGoogle size={16} />
-          Sign in with Google
+          Login with Google
         </button>
 
         <hr />
@@ -148,9 +148,15 @@ const Login = () => {
         <p>
           Need an Account?
           <br />
-          <Link to="/register" replace>
+          <Link to="/sign-up" replace>
             Sign Up
           </Link>
+        </p>
+
+        <p>
+          By continuing, you agree to our
+          <br />
+          <a>User Agreement</a> and <a>Privacy Policy</a>.
         </p>
       </div>
     </section>

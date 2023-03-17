@@ -7,7 +7,6 @@ const authenticate = async (req, res, next) => {
 
   const accessToken = authHeader.split(' ')[1]
   jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, decoded) => {
-    console.log(decoded)
     if (err) return res.sendStatus(403) //invalid token
     req.user = decoded.user
     req.accessToken = accessToken

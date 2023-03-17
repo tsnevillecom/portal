@@ -50,7 +50,7 @@ const ResetPassword = () => {
 
   return (
     <section id="reset-password-route">
-      <div className="floating">
+      <div className="container-slim">
         <h1>Reset Password</h1>
 
         <ul id="instructions">

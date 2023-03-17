@@ -13,40 +13,30 @@ import Unauthorized from '@routes/Unauthorized'
 import UnauthenticatedRoute from '@routes/UnauthenticatedRoute'
 import AuthenticatedRoute from '@routes/AuthenticatedRoute'
 import PersistLogin from '@routes/PersistLogin'
-import Register from '@routes/Register'
+import SignUp from '@routes/SignUp'
 import Toasts from '@components/Toasts'
-import useAuth from './hooks/useAuth'
 import Verify from '@routes/Verify'
 import ThemeToggle from '@components/ThemeToggle'
 import ResetPassword from '@routes/ResetPassword'
 import EmailSent from '@routes/EmailSent'
 
 const App = () => {
-  const { auth } = useAuth()
-
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={
-            auth.user && auth.isAuthenticated ? (
-              <MainLayout />
-            ) : (
-              <UnauthenticatedLayout />
-            )
-          }
-        >
-          <Route element={<UnauthenticatedRoute />}>
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-            <Route path="verify/:token" element={<Verify />} />
-            <Route path="reset-password/:token" element={<ResetPassword />} />
-            <Route path="email-sent" element={<EmailSent />} />
+        <Route element={<PersistLogin />}>
+          <Route element={<UnauthenticatedLayout />}>
+            <Route element={<UnauthenticatedRoute />}>
+              <Route path="login" element={<Login />} />
+              <Route path="sign-up" element={<SignUp />} />
+              <Route path="verify/:token" element={<Verify />} />
+              <Route path="reset-password/:token" element={<ResetPassword />} />
+              <Route path="email-sent" element={<EmailSent />} />
+            </Route>
           </Route>
 
           {/* Protected Routes */}
-          <Route element={<PersistLogin />}>
+          <Route element={<MainLayout />}>
             <Route element={<AuthenticatedRoute allowedRoles={[]} />}>
               <Route path="/" element={<Home />} />
               <Route path="profile" element={<Profile />} />
@@ -57,7 +47,9 @@ const App = () => {
               <Route path="admin" element={<Admin />} />
             </Route>
           </Route>
+        </Route>
 
+        <Route element={<UnauthenticatedLayout />}>
           <Route path="unauthorized" element={<Unauthorized />} />
           <Route path="*" element={<Missing />} />
         </Route>

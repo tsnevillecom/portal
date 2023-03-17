@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect, useRef } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
-import './Register.scss'
+import { Link, useNavigate } from 'react-router-dom'
+import './SignUp.scss'
 import {
   GoogleOAuthProvider,
   TokenResponse,
@@ -11,7 +11,7 @@ import { ToastContext } from '@context/ToastContext'
 import useAuth from '@hooks/useAuth'
 import { FcGoogle } from 'react-icons/fc'
 
-function RegistrationForm() {
+const SignUpForm = () => {
   const { setAuth, persist, setPersist } = useAuth()
   const navigate = useNavigate()
   const { addToast } = useContext(ToastContext)
@@ -95,11 +95,11 @@ function RegistrationForm() {
 
   return (
     <section id="register-route">
-      <div className="floating">
-        <h1>Register</h1>
+      <div className="container-slim">
+        <h1>Sign Up</h1>
 
         <div id="register-thrid-party">
-          <div id="register-with-title">Register with Google</div>
+          <div id="register-with-title">Sign up with Google</div>
 
           <div className="thrid-party" onClick={() => googleRegister()}>
             <FcGoogle size={50} />
@@ -163,7 +163,7 @@ function RegistrationForm() {
           </div>
 
           <button className="btn btn-primary" type="submit">
-            Register
+            Sign Up
           </button>
         </form>
 
@@ -196,7 +196,7 @@ const GoogleRegister = () => {
     <GoogleOAuthProvider
       clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}
     >
-      <RegistrationForm />
+      <SignUpForm />
     </GoogleOAuthProvider>
   )
 }

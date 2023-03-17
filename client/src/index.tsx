@@ -8,18 +8,29 @@ import { ToastProvider } from './context/ToastContext'
 
 const container = document.getElementById('root')
 const root = createRoot(container as Element)
-root.render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ToastProvider>
-        <AuthProvider>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
-        </AuthProvider>
-      </ToastProvider>
-    </BrowserRouter>
-  </React.StrictMode>
-)
+// root.render(
+//   <React.StrictMode>
+//     <BrowserRouter>
+//       <ToastProvider>
+//         <AuthProvider>
+//           <Routes>
+//             <Route path="/*" element={<App />} />
+//           </Routes>
+//         </AuthProvider>
+//       </ToastProvider>
+//     </BrowserRouter>
+//   </React.StrictMode>
+// )
 
-//<React.StrictMode>
+//remove StrictMode
+root.render(
+  <BrowserRouter>
+    <ToastProvider>
+      <AuthProvider>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </AuthProvider>
+    </ToastProvider>
+  </BrowserRouter>
+)

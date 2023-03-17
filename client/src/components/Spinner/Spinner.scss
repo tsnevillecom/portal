@@ -1,0 +1,90 @@
+@use 'sass:math';
+@import '@styles/variables';
+
+@mixin spinner-rotation($rotation) {
+  -webkit-animation: spinner-rotate #{$rotation}ms linear infinite;
+  -moz-animation: spinner-rotate #{$rotation}ms linear infinite;
+  -ms-animation: spinner-rotate #{$rotation}ms linear infinite;
+  -o-animation: spinner-rotate #{$rotation}ms linear infinite;
+  animation: spinner-rotate #{$rotation}ms linear infinite;
+}
+
+#spinner {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  transition: width 300ms ease;
+
+  #spinner-message {
+    text-align: center;
+    padding: 20px 0 0;
+    font-size: 12px;
+    text-transform: uppercase;
+    font-weight: 500;
+    opacity: 0.3;
+  }
+
+  #spinner-wrapper {
+    position: relative;
+
+    .spinner {
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      border-style: solid;
+      border-right-color: rgba($black, 0.1);
+      border-top-color: rgba($black, 0.1);
+      border-bottom-color: rgba($black, 0.1);
+    }
+
+    #spinner-sm {
+      border-left-color: $teal;
+      @include spinner-rotation(math.div(1000, 2));
+    }
+
+    #spinner-md {
+      border-left-color: $blue;
+      @include spinner-rotation(math.div(1000, 1.5));
+    }
+
+    #spinner-lg {
+      border-left-color: $violet;
+      @include spinner-rotation(1000);
+    }
+  }
+
+  @keyframes spinner-rotate {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  @-o-keyframes spinner-rotate {
+    100% {
+      -o-transform: rotate(360deg);
+    }
+  }
+  @-ms-keyframes spinner-rotate {
+    100% {
+      -ms-transform: rotate(360deg);
+    }
+  }
+  @-webkit-keyframes spinner-rotate {
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+  @-moz-keyframes spinner-rotate {
+    100% {
+      -moz-transform: rotate(360deg);
+    }
+  }
+}
