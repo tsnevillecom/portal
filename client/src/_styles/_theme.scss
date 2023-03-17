@@ -71,6 +71,7 @@ form {
 }
 
 .form-input {
+  position: relative;
   display: flex;
   flex-direction: column;
   margin-bottom: 12px;
@@ -78,6 +79,15 @@ form {
   label {
     margin-bottom: 6px;
     font-weight: 500;
+    user-select: none;
+  }
+
+  #viewPassword {
+    font-size: 22px;
+    position: absolute;
+    top: 33px;
+    right: 10px;
+    cursor: pointer;
   }
 
   input[type='text'],
@@ -211,6 +221,10 @@ body {
             color: rgba($white, 0.8);
           }
 
+          #viewPassword {
+            color: rgba($white, 0.4);
+          }
+
           input[type='text'],
           input[type='password'],
           input[type='email'],
@@ -268,6 +282,10 @@ body {
         }
 
         .form-input {
+          #viewPassword {
+            color: rgba($black, 0.5);
+          }
+
           input[type='text'],
           input[type='password'],
           input[type='email'],

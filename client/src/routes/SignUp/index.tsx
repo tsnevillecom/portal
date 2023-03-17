@@ -10,6 +10,8 @@ import axios, { axiosPrivate } from '@api/axios'
 import { ToastContext } from '@context/ToastContext'
 import useAuth from '@hooks/useAuth'
 import { FcGoogle } from 'react-icons/fc'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import PasswordMeter from '@components/PasswordMeter'
 
 const SignUpForm = () => {
   const { setAuth, persist, setPersist } = useAuth()
@@ -19,7 +21,7 @@ const SignUpForm = () => {
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
+  const [viewPassword, setViewPassword] = useState(false)
 
   const firstNameRef = useRef<HTMLInputElement>(null)
 
@@ -46,9 +48,6 @@ const SignUpForm = () => {
         break
       case 'password':
         setPassword(value)
-        break
-      case 'confirmPassword':
-        setConfirmPassword(value)
         break
     }
   }
@@ -114,7 +113,7 @@ const SignUpForm = () => {
             <input
               type="text"
               value={firstName}
-              onChange={(e) => handleInputChange(e)}
+              onChange={handleInputChange}
               id="firstName"
               ref={firstNameRef}
               placeholder="First Name"
@@ -127,7 +126,7 @@ const SignUpForm = () => {
               name=""
               id="lastName"
               value={lastName}
-              onChange={(e) => handleInputChange(e)}
+              onChange={handleInputChange}
               placeholder="Last Name"
             />
           </div>
@@ -137,30 +136,31 @@ const SignUpForm = () => {
               type="email"
               id="email"
               value={email}
-              onChange={(e) => handleInputChange(e)}
+              onChange={handleInputChange}
               placeholder="Email"
             />
           </div>
+
           <div className="form-input">
             <label htmlFor="password">Password</label>
+
+            <div
+              id="viewPassword"
+              onClick={() => setViewPassword(!viewPassword)}
+            >
+              {viewPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+
             <input
-              type="password"
+              type={viewPassword ? 'text' : 'password'}
               id="password"
               value={password}
-              onChange={(e) => handleInputChange(e)}
+              onChange={handleInputChange}
               placeholder="Password"
             />
           </div>
-          <div className="form-input">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={(e) => handleInputChange(e)}
-              placeholder="Confirm Password"
-            />
-          </div>
+
+          <PasswordMeter password={password} />
 
           <button className="btn btn-primary" type="submit">
             Sign Up

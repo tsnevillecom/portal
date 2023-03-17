@@ -88,6 +88,19 @@ const Login = () => {
     }
   }
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target
+
+    switch (id) {
+      case 'email':
+        setEmail(value)
+        break
+      case 'password':
+        setPassword(value)
+        break
+    }
+  }
+
   return (
     <section id="login-route">
       <div className="container-slim">
@@ -100,7 +113,7 @@ const Login = () => {
               id="email"
               ref={emailRef}
               autoComplete="off"
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={handleInputChange}
               value={email}
               placeholder="Email"
               required
@@ -112,7 +125,7 @@ const Login = () => {
             <input
               type="password"
               id="password"
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={handleInputChange}
               value={password}
               placeholder="Password"
               required

@@ -4,7 +4,7 @@ import React, {
   useState,
   PropsWithChildren,
 } from 'react'
-import { User } from '../_types/user'
+import { User } from '../_types'
 import { useLocalStorage } from '../hooks/useLocalStorage'
 
 type Auth = {

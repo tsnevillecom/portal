@@ -6,7 +6,7 @@ import React, {
 } from 'react'
 
 import { generateUuid } from '../_utils/generateUuid.util'
-import { IToast, IToastType } from '../_types/toast'
+import { IToast, IToastType } from '../_types'
 
 interface ToastContextData {
   toasts: IToast[]
