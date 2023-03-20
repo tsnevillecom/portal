@@ -1,4 +1,4 @@
-import { Errors, FormFieldValue, Rules } from '../_types'
+import { Errors, FormFieldValue, Rules } from '@types'
 import _ from 'lodash'
 
 export const validateForm = (fields: FormFieldValue, rules: Rules): Errors => {

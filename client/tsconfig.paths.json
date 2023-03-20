@@ -5,9 +5,10 @@
       "@api/*": ["./src/api/*"],
       "@styles/*": ["./src/_styles/*"],
       "@constants/*": ["./src/_constants/*"],
-      "@types/*": ["./src/_types/*"],
+      "@types": ["./src/_types"],
       "@hooks/*": ["./src/hooks/*"],
       "@routes/*": ["./src/routes/*"],
+      "@utils/*": ["./src/_utils/*"],
       "@context/*": ["./src/context/*"],
       "@components/*": ["./src/components/*"]
     }

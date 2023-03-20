@@ -5,8 +5,8 @@ import React, {
   PropsWithChildren,
 } from 'react'
 
-import { generateUuid } from '../_utils/generateUuid.util'
-import { IToast, IToastType } from '../_types'
+import { generateUuid } from '@utils/generateUuid.util'
+import { IToast, IToastType } from '@types'
 
 interface ToastContextData {
   toasts: IToast[]

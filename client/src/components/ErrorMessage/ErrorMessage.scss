@@ -1,0 +1,28 @@
+@import '@styles/variables';
+
+.error-message {
+  padding: 8px;
+  border-radius: 8px;
+  background-color: rgba($black, 0.2);
+  font-size: 14px;
+  margin-bottom: 16px;
+  display: flex;
+  border: 2px solid rgba($red, 0.6);
+
+  .error-message-icon {
+    color: $red;
+  }
+
+  .error-message-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    line-height: 1.4;
+    margin-left: 16px;
+  }
+
+  .light & {
+    background-color: rgba($red, 0.1);
+  }
+}

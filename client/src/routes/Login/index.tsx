@@ -10,7 +10,8 @@ import {
 } from '@react-oauth/google'
 import { BsGoogle } from 'react-icons/bs'
 import { axiosPrivate } from '@api/axios'
-import { ToastContext } from '@context/ToastContext'
+import FormControl from '@components/FormControl'
+import ErrorMessage from '@components/ErrorMessage'
 const LOGIN_URL = '/auth'
 
 interface IHandleLogin {
@@ -20,12 +21,12 @@ interface IHandleLogin {
 
 const Login = () => {
   const { setAuth, persist, setPersist } = useAuth()
-  const { addToast } = useContext(ToastContext)
   const navigate = useNavigate()
 
   const emailRef = useRef<HTMLInputElement>(null)
   const errorRef = useRef<HTMLDivElement>(null)
 
+  const [error, setError] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -70,28 +71,29 @@ const Login = () => {
       navigate('/', { replace: true })
     } catch (err) {
       if (!err?.response) {
-        addToast('No server response')
-      } else if (err.response?.status === 400) {
-        addToast('Missing email or password')
-      } else if (err.response?.status === 401) {
-        addToast('Unauthorized')
-      } else if (err.response?.status === 403) {
-        addToast('Valid email address required')
-      } else if (err.response?.status === 404) {
-        addToast('User not found')
-      } else if (err.response?.status === 409) {
-        addToast('Account requires password')
+        setError('No server response')
+      } else if (err.response.status === 400) {
+        setError('Missing email or password')
+      } else if (err.response.status === 401) {
+        setError('Unauthorized')
+      } else if (err.response.status === 403) {
+        setError('Valid email address required')
+      } else if (err.response.status === 404) {
+        setError('User not found')
+      } else if (err.response.status === 409) {
+        setError('Account requires password')
       } else {
-        addToast('Login Failed')
+        setError('Login Failed')
       }
       if (errorRef.current) errorRef.current.focus()
     }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target
+    const { name, value } = e.target
+    if (error) setError(null)
 
-    switch (id) {
+    switch (name) {
       case 'email':
         setEmail(value)
         break
@@ -106,6 +108,8 @@ const Login = () => {
       <div className="container-slim">
         <h1>Login</h1>
 
+        {!!error && <ErrorMessage>{error}</ErrorMessage>}
+
         <button className="btn btn-secondary" onClick={() => googleLogin()}>
           <BsGoogle size={16} />
           Continue with Google
@@ -118,31 +122,21 @@ const Login = () => {
         </div>
 
         <form onSubmit={(event) => handleLogin({ event })} noValidate>
-          <div className="form-input">
-            <label htmlFor="email">Email</label>
-            <input
-              type="text"
-              id="email"
-              ref={emailRef}
-              autoComplete="off"
-              onChange={handleInputChange}
-              value={email}
-              placeholder="Email"
-              required
-            />
-          </div>
+          <FormControl
+            label="Email"
+            forRef={emailRef}
+            name="email"
+            value={email}
+            onChange={handleInputChange}
+          />
 
-          <div className="form-input">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              onChange={handleInputChange}
-              value={password}
-              placeholder="Password"
-              required
-            />
-          </div>
+          <FormControl
+            label="Password"
+            name="password"
+            type="password"
+            value={password}
+            onChange={handleInputChange}
+          />
 
           <Link id="reset-password" className="right" to="/reset-password">
             Forgot password?
@@ -152,7 +146,7 @@ const Login = () => {
             Login
           </button>
 
-          <div className="form-input--checkbox">
+          <div className="form-control--checkbox">
             <input
               type="checkbox"
               id="persist"
@@ -173,9 +167,9 @@ const Login = () => {
         </p>
 
         <p className="footer">
-          By continuing, you agree to our
+          <span>By continuing, you agree to our</span>
           <br />
-          <a>User Agreement</a> and <a>Privacy Policy</a>.
+          <a>User Agreement</a> <span>and</span> <a>Privacy Policy</a>.
         </p>
       </div>
     </section>

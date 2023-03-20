@@ -91,7 +91,7 @@ const register = async (req, res) => {
     const googleUser = await getGoogleUser(req, res)
     const existingUser = await User.findOne({ email: googleUser.email })
     if (existingUser) {
-      return res.status(400).send({
+      return res.status(409).send({
         message: ERRORS.USER_EXISTS,
       })
     }
@@ -118,7 +118,7 @@ const register = async (req, res) => {
     const accessToken = await newUser.newAccessToken()
     res.status(200).send({ user: newUser, accessToken })
   } catch (error) {
-    return res.status(401).send({ error, message: ERRORS.REGISTRATION_FAILED })
+    return res.status(400).send({ error, message: ERRORS.REGISTRATION_FAILED })
   }
 }
 

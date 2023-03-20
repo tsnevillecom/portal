@@ -9,7 +9,7 @@ const register = async (req, res) => {
   const duplicate = await User.findOne({ email: user.email }).exec()
   if (duplicate) {
     return res.status(409).send({
-      message: ERRORS.REGISTRATION_FAILED,
+      message: ERRORS.USER_EXISTS,
     })
   }
 

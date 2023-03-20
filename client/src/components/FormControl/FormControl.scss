@@ -1,0 +1,117 @@
+@import '@styles/variables';
+
+.form-control {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+
+  label {
+    margin-bottom: 6px;
+    font-weight: 500;
+    user-select: none;
+
+    span {
+      margin-left: 2px;
+      opacity: 0.4;
+    }
+  }
+
+  #viewPassword {
+    font-size: 22px;
+    position: absolute;
+    top: 33px;
+    right: 10px;
+    cursor: pointer;
+  }
+
+  input[type='text'],
+  input[type='password'],
+  input[type='email'],
+  textarea {
+    border-radius: 8px;
+    font-size: $base-font-size;
+    outline: none;
+    padding: 8px 10px;
+    width: 100%;
+
+    &::placeholder {
+      font-weight: 400;
+    }
+  }
+
+  .dark & {
+    label {
+      color: rgba($white, 0.8);
+    }
+
+    #viewPassword {
+      color: rgba($white, 0.4);
+    }
+
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    textarea {
+      border: 1px solid rgba($black, 0.5);
+      background-color: rgba($white, 0.1);
+      color: $white;
+
+      &:focus {
+        box-shadow: 0 0 5px rgba($blue-400, 0.5);
+        border: 1px solid rgba($blue-400, 1);
+      }
+
+      &::placeholder {
+        color: rgba($white, 0.5);
+      }
+    }
+  }
+
+  .light & {
+    #viewPassword {
+      color: rgba($black, 0.5);
+    }
+
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    textarea {
+      border: 1px solid $gray-300;
+      background-color: $white;
+
+      &:focus {
+        box-shadow: 0 0 5px rgba($blue, 0.5);
+        border: 1px solid rgba($blue, 1);
+      }
+
+      &::placeholder {
+        color: $gray-400;
+      }
+    }
+  }
+
+  &.error {
+    .dark & {
+      label {
+        color: $yellow;
+      }
+      input,
+      input:focus {
+        border: 1px solid $yellow;
+        box-shadow: 0 0 5px rgba($yellow, 0.5);
+      }
+    }
+
+    .light & {
+      label {
+        color: $red;
+      }
+      input,
+      input:focus {
+        border: 1px solid $red;
+        box-shadow: none;
+      }
+    }
+  }
+}

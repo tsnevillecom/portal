@@ -3,6 +3,8 @@ import './VerifyEmail.scss'
 import { FaCheckCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
+import FormControl from '@components/FormControl'
+import SuccessMessage from '@components/SuccessMessage'
 
 const VerifyEmail = () => {
   const [hasError, setHasError] = useState(false)
@@ -15,9 +17,9 @@ const VerifyEmail = () => {
   }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target
+    const { name, value } = e.target
 
-    switch (id) {
+    switch (name) {
       case 'email':
         setEmail(value)
         break
@@ -36,25 +38,22 @@ const VerifyEmail = () => {
         <h1>Verify Email</h1>
 
         <p className="instructions">
+          <strong>Your account has not been verified.</strong>
+        </p>
+        <p className="instructions">
           <span>
-            To reset your password, enter your email below and submit. An email
-            will be sent to you with instructions about how to complete the
-            process.
+            Enter your email below and submit. An email will be sent to you with
+            instructions about how to complete the process.
           </span>
         </p>
 
         {success && (
           <>
-            <div className="success-message">
-              <div className="success-message-icon">
-                <FaCheckCircle size={32} />
-              </div>
-              <div className="success-message-text">
-                An email was sent to <strong>{email}</strong>. Please check your
-                inbox for a link to complete verification. The link will expire
-                in 30 minutes.
-              </div>
-            </div>
+            <SuccessMessage>
+              An email was sent to <strong>{email}</strong>. Please check your
+              inbox for a link to complete verification. The link will expire in
+              30 minutes.
+            </SuccessMessage>
 
             <p>
               <span>
@@ -68,17 +67,13 @@ const VerifyEmail = () => {
 
         {!success && (
           <form onSubmit={handleSubmit} noValidate>
-            <div className="form-input">
-              <label htmlFor="email">Email</label>
-              <input
-                ref={emailRef}
-                type="text"
-                id="email"
-                value={email}
-                onChange={handleInputChange}
-                placeholder="Email"
-              />
-            </div>
+            <FormControl
+              label="Email"
+              forRef={emailRef}
+              name="email"
+              value={email}
+              onChange={handleInputChange}
+            />
 
             <button className="btn btn-primary" type="submit">
               Send Email

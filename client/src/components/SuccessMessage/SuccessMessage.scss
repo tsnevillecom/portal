@@ -1,0 +1,27 @@
+@import '@styles/variables';
+
+.success-message {
+  padding: 16px;
+  border-radius: 8px;
+  background-color: rgba($black, 0.2);
+  font-size: 14px;
+  margin-bottom: 16px;
+  display: flex;
+
+  .success-message-icon {
+    color: $green;
+  }
+
+  .success-message-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    line-height: 1.4;
+    margin-left: 16px;
+  }
+
+  .light & {
+    background-color: rgba($green, 0.1);
+  }
+}

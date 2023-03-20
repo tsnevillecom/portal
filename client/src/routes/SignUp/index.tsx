@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './SignUp.scss'
 import {
@@ -7,21 +7,26 @@ import {
   useGoogleLogin,
 } from '@react-oauth/google'
 import axios, { axiosPrivate } from '@api/axios'
-import { ToastContext } from '@context/ToastContext'
 import useAuth from '@hooks/useAuth'
 import { BsGoogle } from 'react-icons/bs'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import PasswordMeter from '@components/PasswordMeter'
+import SuccessMessage from '@components/SuccessMessage'
+import ErrorMessage from '@components/ErrorMessage'
+import FormControl from '@components/FormControl'
+import { Errors, Rules } from '@types'
+import { validateForm } from '@utils/validateForm'
+import _ from 'lodash'
 
 const SignUpForm = () => {
   const { setAuth, persist, setPersist } = useAuth()
   const navigate = useNavigate()
-  const { addToast } = useContext(ToastContext)
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [viewPassword, setViewPassword] = useState(false)
+  const [success, setSuccess] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [errors, setErrors] = useState<Errors>({})
 
   const firstNameRef = useRef<HTMLInputElement>(null)
 
@@ -35,6 +40,7 @@ const SignUpForm = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
+    if (error) setError(null)
 
     switch (id) {
       case 'firstName':
@@ -55,18 +61,48 @@ const SignUpForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const data = { password, email, lastName, firstName }
+    const data = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      email: email.trim(),
+      password: password,
+    }
+
+    const rules: Rules = {
+      firstName: {
+        required: true,
+      },
+      lastName: {
+        required: true,
+      },
+      email: {
+        required: true,
+      },
+      password: {
+        required: true,
+      },
+    }
+
+    const errors = validateForm(data, rules)
+    setErrors(errors)
+    if (!_.isEmpty(errors)) return
+
+    // const data = { password, email, lastName, firstName }
 
     try {
-      const response = await axios.post('/register', data, {
+      await axios.post('/register', data, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
       })
-      console.log(response.data)
-
-      navigate('/email-sent', { replace: true, state: { email } })
-    } catch (err) {
-      console.log(err)
+      setSuccess(true)
+    } catch (error) {
+      if (error.response.status === 401) {
+        setError('Could not send verification email')
+      } else if (error.response.status === 409) {
+        setError('User already exists')
+      } else {
+        setError('Registration failed. Try again.')
+      }
     }
   }
 
@@ -88,105 +124,119 @@ const SignUpForm = () => {
       navigate('/', { replace: true })
     } catch (error) {
       console.log(error)
-      addToast('Google Error')
+      if (error.response.status === 401) {
+        setError('Could not retrieve Google account')
+      } else if (error.response.status === 409) {
+        setError('User already exists')
+      } else {
+        setError('Registration failed. Try again.')
+      }
     }
+  }
+
+  const resendEmail = () => {
+    console.log('resendEmail')
   }
 
   return (
     <section id="register-route">
       <div className="container-slim">
-        <h1>Sign Up</h1>
+        {success && (
+          <>
+            <h1>Verify Account</h1>
 
-        <button className="btn btn-secondary" onClick={() => googleRegister()}>
-          <BsGoogle size={16} />
-          Continue with Google
-        </button>
+            <SuccessMessage>
+              An email was sent to <strong>{email}</strong>. Please check your
+              inbox for a link to verify your account. The link will expire in
+              30 minutes.
+            </SuccessMessage>
 
-        <div className="or">
-          <hr />
-          <div>OR</div>
-          <hr />
-        </div>
+            <p>
+              <span>
+                Didn&apos;t receive an email? Check your spam folder or click{' '}
+              </span>
+              <a onClick={resendEmail}>here</a>
+              <span> to resend.</span>
+            </p>
+          </>
+        )}
 
-        <form onSubmit={handleSubmit}>
-          <div id="required">* required</div>
+        {!success && (
+          <>
+            <h1>Sign Up</h1>
 
-          <div className="form-input">
-            <label htmlFor="firstName">
-              First Name<span>*</span>
-            </label>
-            <input
-              type="text"
-              value={firstName}
-              onChange={handleInputChange}
-              id="firstName"
-              ref={firstNameRef}
-              placeholder="First Name"
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="lastName">
-              Last Name<span>*</span>
-            </label>
-            <input
-              type="text"
-              name=""
-              id="lastName"
-              value={lastName}
-              onChange={handleInputChange}
-              placeholder="Last Name"
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="email">
-              Email<span>*</span>
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={handleInputChange}
-              placeholder="Email"
-            />
-          </div>
+            {!!error && <ErrorMessage>{error}</ErrorMessage>}
 
-          <div className="form-input">
-            <label htmlFor="password">
-              Password<span>*</span>
-            </label>
-
-            <div
-              id="viewPassword"
-              onClick={() => setViewPassword(!viewPassword)}
+            <button
+              className="btn btn-secondary"
+              onClick={() => googleRegister()}
             >
-              {viewPassword ? <FaEyeSlash /> : <FaEye />}
+              <BsGoogle size={16} />
+              Continue with Google
+            </button>
+
+            <div className="or">
+              <hr />
+              <div>OR</div>
+              <hr />
             </div>
 
-            <input
-              type={viewPassword ? 'text' : 'password'}
-              id="password"
-              value={password}
-              onChange={handleInputChange}
-              placeholder="Password"
-            />
-          </div>
+            <form onSubmit={handleSubmit}>
+              <div id="required">* required</div>
 
-          <PasswordMeter password={password} />
+              <FormControl
+                label="First Name"
+                forRef={firstNameRef}
+                name="firstName"
+                value={firstName}
+                error={errors.firstName}
+                onChange={handleInputChange}
+              />
 
-          <button className="btn btn-primary" type="submit">
-            Sign Up
-          </button>
-        </form>
+              <FormControl
+                label="Last Name"
+                name="lastName"
+                value={lastName}
+                error={errors.lastName}
+                onChange={handleInputChange}
+              />
 
-        <div className="form-input--checkbox">
-          <input
-            type="checkbox"
-            id="persist"
-            onChange={togglePersist}
-            checked={!!persist}
-          />
-          <label htmlFor="persist">Trust This Device</label>
-        </div>
+              <FormControl
+                label="Email"
+                name="email"
+                value={email}
+                error={errors.email}
+                onChange={handleInputChange}
+              />
+
+              <FormControl
+                label="Password"
+                name="password"
+                type="password"
+                togglePassword={true}
+                value={password}
+                error={errors.password}
+                onChange={handleInputChange}
+              />
+
+              <PasswordMeter password={password} />
+
+              <button className="btn btn-primary" type="submit">
+                Sign Up
+              </button>
+            </form>
+
+            <div className="form-control--checkbox">
+              <input
+                type="checkbox"
+                id="persist"
+                onChange={togglePersist}
+                checked={!!persist}
+              />
+              <label htmlFor="persist">Trust This Device</label>
+            </div>
+          </>
+        )}
 
         <hr />
 

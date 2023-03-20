@@ -1,0 +1,23 @@
+@import '@styles/variables';
+
+#verify-email-route {
+  p {
+    &.instructions {
+      margin-bottom: 16px;
+    }
+
+    a {
+      opacity: 1;
+    }
+  }
+
+  .back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+      margin-right: 4px;
+    }
+  }
+}

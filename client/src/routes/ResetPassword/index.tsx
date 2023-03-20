@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import './ResetPassword.scss'
-import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import PasswordMeter from '@components/PasswordMeter'
+import FormControl from '@components/FormControl'
+import { Errors } from '@types'
 
 const ResetPassword = () => {
   const params = useParams()
   const [hasError, setHasError] = useState(false)
+  const [errors, setErrors] = useState<Errors>({})
   const [isLoading, setIsLoading] = useState(true)
-  const [viewPassword, setViewPassword] = useState(false)
-
   const [password, setPassword] = useState('')
-  const [confirmPassword, setConfirmPassword] = useState('')
 
   const passwordRef = useRef<HTMLInputElement>(null)
 
@@ -20,21 +19,24 @@ const ResetPassword = () => {
   }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target
+    const { name, value } = e.target
 
-    switch (id) {
+    switch (name) {
       case 'password':
+        setErrors({ password: '' })
         setPassword(value)
-        break
-      case 'confirmPassword':
-        setConfirmPassword(value)
         break
     }
   }
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log(password, confirmPassword)
+    if (!password) {
+      setErrors({ password: 'This field is required' })
+      return
+    }
+
+    console.log(password)
 
     try {
       if (params.token) {
@@ -56,25 +58,15 @@ const ResetPassword = () => {
         <h1>Reset your password</h1>
 
         <form onSubmit={handleSubmit} noValidate>
-          <div className="form-input">
-            <label htmlFor="password">Password</label>
-
-            <div
-              id="viewPassword"
-              onClick={() => setViewPassword(!viewPassword)}
-            >
-              {viewPassword ? <FaEyeSlash /> : <FaEye />}
-            </div>
-
-            <input
-              ref={passwordRef}
-              type={viewPassword ? 'text' : 'password'}
-              id="password"
-              value={password}
-              onChange={handleInputChange}
-              placeholder="Password"
-            />
-          </div>
+          <FormControl
+            label="Password"
+            name="password"
+            type="password"
+            togglePassword={true}
+            value={password}
+            error={errors.password}
+            onChange={handleInputChange}
+          />
 
           <PasswordMeter password={password} />
 

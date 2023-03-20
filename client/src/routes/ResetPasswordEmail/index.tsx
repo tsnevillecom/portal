@@ -3,6 +3,8 @@ import './ResetPasswordEmail.scss'
 import { FaCheckCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
+import FormControl from '@components/FormControl'
+import SuccessMessage from '@components/SuccessMessage'
 
 const ResetPasswordEmail = () => {
   const [hasError, setHasError] = useState(false)
@@ -15,9 +17,9 @@ const ResetPasswordEmail = () => {
   }, [])
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target
+    const { name, value } = e.target
 
-    switch (id) {
+    switch (name) {
       case 'email':
         setEmail(value)
         break
@@ -45,16 +47,11 @@ const ResetPasswordEmail = () => {
 
         {success && (
           <>
-            <div className="success-message">
-              <div className="success-message-icon">
-                <FaCheckCircle size={32} />
-              </div>
-              <div className="success-message-text">
-                An email was sent to <strong>{email}</strong>. Please check your
-                inbox for a link to complete the password reset. The link will
-                expire in 30 minutes.
-              </div>
-            </div>
+            <SuccessMessage>
+              An email was sent to <strong>{email}</strong>. Please check your
+              inbox for a link to complete the password reset. The link will
+              expire in 30 minutes.
+            </SuccessMessage>
 
             <p>
               <span>
@@ -68,17 +65,13 @@ const ResetPasswordEmail = () => {
 
         {!success && (
           <form onSubmit={handleSubmit} noValidate>
-            <div className="form-input">
-              <label htmlFor="email">Email</label>
-              <input
-                ref={emailRef}
-                type="text"
-                id="email"
-                value={email}
-                onChange={handleInputChange}
-                placeholder="Email"
-              />
-            </div>
+            <FormControl
+              label="Email"
+              forRef={emailRef}
+              name="email"
+              value={email}
+              onChange={handleInputChange}
+            />
 
             <button className="btn btn-primary" type="submit">
               Send Email
