@@ -25,7 +25,7 @@ const SignUpForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [success, setSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [errors, setErrors] = useState<Errors>({})
 
   const firstNameRef = useRef<HTMLInputElement>(null)
@@ -39,10 +39,11 @@ const SignUpForm = () => {
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { id, value } = e.target
-    if (error) setError(null)
+    const { name, value } = e.target
+    if (submitError) setSubmitError(null)
+    if (errors[name]) setErrors(_.omit(errors, name))
 
-    switch (id) {
+    switch (name) {
       case 'firstName':
         setFirstName(value)
         break
@@ -60,7 +61,6 @@ const SignUpForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-
     const data = {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
@@ -97,11 +97,11 @@ const SignUpForm = () => {
       setSuccess(true)
     } catch (error) {
       if (error.response.status === 401) {
-        setError('Could not send verification email')
+        setSubmitError('Could not send verification email')
       } else if (error.response.status === 409) {
-        setError('User already exists')
+        setSubmitError('User already exists')
       } else {
-        setError('Registration failed. Try again.')
+        setSubmitError('Registration failed. Try again.')
       }
     }
   }
@@ -125,11 +125,11 @@ const SignUpForm = () => {
     } catch (error) {
       console.log(error)
       if (error.response.status === 401) {
-        setError('Could not retrieve Google account')
+        setSubmitError('Could not retrieve Google account')
       } else if (error.response.status === 409) {
-        setError('User already exists')
+        setSubmitError('User already exists')
       } else {
-        setError('Registration failed. Try again.')
+        setSubmitError('Registration failed. Try again.')
       }
     }
   }
@@ -165,7 +165,7 @@ const SignUpForm = () => {
           <>
             <h1>Sign Up</h1>
 
-            {!!error && <ErrorMessage>{error}</ErrorMessage>}
+            {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
             <button
               className="btn btn-secondary"

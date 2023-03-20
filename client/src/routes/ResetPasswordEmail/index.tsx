@@ -5,12 +5,16 @@ import { Link } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
 import FormControl from '@components/FormControl'
 import SuccessMessage from '@components/SuccessMessage'
+import { Errors, Rules } from '@types'
+import { validateForm } from '@utils/validateForm'
+import _ from 'lodash'
 
 const ResetPasswordEmail = () => {
   const [hasError, setHasError] = useState(false)
   const [email, setEmail] = useState('')
   const [success, setSuccess] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
+  const [errors, setErrors] = useState<Errors>({})
 
   useEffect(() => {
     if (emailRef.current) emailRef.current.focus()
@@ -18,6 +22,7 @@ const ResetPasswordEmail = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    if (errors[name]) setErrors(_.omit(errors, name))
 
     switch (name) {
       case 'email':
@@ -28,6 +33,17 @@ const ResetPasswordEmail = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const data = { email: email.trim() }
+    const rules: Rules = {
+      email: {
+        required: true,
+      },
+    }
+
+    const errors = validateForm(data, rules)
+    setErrors(errors)
+    if (!_.isEmpty(errors)) return
+
     console.log(email)
     setSuccess(true)
   }
@@ -70,6 +86,7 @@ const ResetPasswordEmail = () => {
               forRef={emailRef}
               name="email"
               value={email}
+              error={errors.email}
               onChange={handleInputChange}
             />
 

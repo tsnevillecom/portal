@@ -26,17 +26,13 @@ const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null)
   const errorRef = useRef<HTMLDivElement>(null)
 
-  const [error, setError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   useEffect(() => {
     if (emailRef.current) emailRef.current.focus()
   }, [])
-
-  useEffect(() => {
-    //clear inline errors
-  }, [email, password])
 
   const togglePersist = () => {
     setPersist(!persist)
@@ -71,19 +67,19 @@ const Login = () => {
       navigate('/', { replace: true })
     } catch (err) {
       if (!err?.response) {
-        setError('No server response')
+        setSubmitError('No server response')
       } else if (err.response.status === 400) {
-        setError('Missing email or password')
+        setSubmitError('Missing email or password')
       } else if (err.response.status === 401) {
-        setError('Unauthorized')
+        setSubmitError('Unauthorized')
       } else if (err.response.status === 403) {
-        setError('Valid email address required')
+        setSubmitError('Valid email address required')
       } else if (err.response.status === 404) {
-        setError('User not found')
+        setSubmitError('User not found')
       } else if (err.response.status === 409) {
-        setError('Account requires password')
+        setSubmitError('Account requires password')
       } else {
-        setError('Login Failed')
+        setSubmitError('Login Failed')
       }
       if (errorRef.current) errorRef.current.focus()
     }
@@ -91,7 +87,7 @@ const Login = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    if (error) setError(null)
+    if (submitError) setSubmitError(null)
 
     switch (name) {
       case 'email':
@@ -108,7 +104,7 @@ const Login = () => {
       <div className="container-slim">
         <h1>Login</h1>
 
-        {!!error && <ErrorMessage>{error}</ErrorMessage>}
+        {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
         <button className="btn btn-secondary" onClick={() => googleLogin()}>
           <BsGoogle size={16} />

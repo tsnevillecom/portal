@@ -3,14 +3,16 @@ import { useParams } from 'react-router-dom'
 import './ResetPassword.scss'
 import PasswordMeter from '@components/PasswordMeter'
 import FormControl from '@components/FormControl'
-import { Errors } from '@types'
+import { Errors, Rules } from '@types'
+import _ from 'lodash'
+import { validateForm } from '@utils/validateForm'
 
 const ResetPassword = () => {
   const params = useParams()
   const [hasError, setHasError] = useState(false)
-  const [errors, setErrors] = useState<Errors>({})
   const [isLoading, setIsLoading] = useState(true)
   const [password, setPassword] = useState('')
+  const [errors, setErrors] = useState<Errors>({})
 
   const passwordRef = useRef<HTMLInputElement>(null)
 
@@ -20,10 +22,10 @@ const ResetPassword = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    if (errors[name]) setErrors(_.omit(errors, name))
 
     switch (name) {
       case 'password':
-        setErrors({ password: '' })
         setPassword(value)
         break
     }
@@ -31,10 +33,16 @@ const ResetPassword = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    if (!password) {
-      setErrors({ password: 'This field is required' })
-      return
+    const data = { password }
+    const rules: Rules = {
+      password: {
+        required: true,
+      },
     }
+
+    const errors = validateForm(data, rules)
+    setErrors(errors)
+    if (!_.isEmpty(errors)) return
 
     console.log(password)
 
