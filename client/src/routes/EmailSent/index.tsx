@@ -13,8 +13,7 @@ const EmailSent = () => {
         <div>
           <h1>Verify your email</h1>
           <p>
-            An email was sent to your email address:{' '}
-            <strong>{state.email}</strong>.
+            An email was sent to <strong>{state.email}</strong>.
           </p>
           <p>Please check your email to verify your account.</p>
         </div>

@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import './ResetPassword.scss'
-import axios from '@api/axios'
+import { FaEye, FaEyeSlash } from 'react-icons/fa'
+import PasswordMeter from '@components/PasswordMeter'
 
 const ResetPassword = () => {
   const params = useParams()
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [viewPassword, setViewPassword] = useState(false)
 
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
@@ -51,47 +53,30 @@ const ResetPassword = () => {
   return (
     <section id="reset-password-route">
       <div className="container-slim">
-        <h1>Reset Password</h1>
-
-        <ul id="instructions">
-          <li>8 to 24 characters.</li>
-          <li>
-            {' '}
-            Must include uppercase and lowercase letters, a number and a special
-            character.
-          </li>
-          <li>
-            Allowed special characters:{' '}
-            <span aria-label="exclamation mark">!</span>{' '}
-            <span aria-label="at symbol">@</span>{' '}
-            <span aria-label="hashtag">#</span>{' '}
-            <span aria-label="dollar sign">$</span>{' '}
-            <span aria-label="percent">%</span>
-          </li>
-        </ul>
+        <h1>Reset your password</h1>
 
         <form onSubmit={handleSubmit} noValidate>
           <div className="form-input">
             <label htmlFor="password">Password</label>
+
+            <div
+              id="viewPassword"
+              onClick={() => setViewPassword(!viewPassword)}
+            >
+              {viewPassword ? <FaEyeSlash /> : <FaEye />}
+            </div>
+
             <input
               ref={passwordRef}
-              type="password"
+              type={viewPassword ? 'text' : 'password'}
               id="password"
               value={password}
               onChange={handleInputChange}
               placeholder="Password"
             />
           </div>
-          <div className="form-input">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={confirmPassword}
-              onChange={handleInputChange}
-              placeholder="Confirm Password"
-            />
-          </div>
+
+          <PasswordMeter password={password} />
 
           <button className="btn btn-primary" type="submit">
             Reset Password

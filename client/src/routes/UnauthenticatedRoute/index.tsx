@@ -5,7 +5,7 @@ import useAuth from '@hooks/useAuth'
 const UnauthenticatedRoute = () => {
   const { auth } = useAuth()
 
-  if (auth.user && auth.isAuthenticated) {
+  if (auth.user && auth.user.isVerified && auth.isAuthenticated) {
     return <Navigate to="/" replace />
   }
 

@@ -9,7 +9,7 @@ import {
 import axios, { axiosPrivate } from '@api/axios'
 import { ToastContext } from '@context/ToastContext'
 import useAuth from '@hooks/useAuth'
-import { FcGoogle } from 'react-icons/fc'
+import { BsGoogle } from 'react-icons/bs'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import PasswordMeter from '@components/PasswordMeter'
 
@@ -97,19 +97,24 @@ const SignUpForm = () => {
       <div className="container-slim">
         <h1>Sign Up</h1>
 
-        <div id="register-thrid-party">
-          <div id="register-with-title">Sign up with Google</div>
+        <button className="btn btn-secondary" onClick={() => googleRegister()}>
+          <BsGoogle size={16} />
+          Continue with Google
+        </button>
 
-          <div className="thrid-party" onClick={() => googleRegister()}>
-            <FcGoogle size={50} />
-          </div>
+        <div className="or">
+          <hr />
+          <div>OR</div>
+          <hr />
         </div>
 
-        <hr />
-
         <form onSubmit={handleSubmit}>
+          <div id="required">* required</div>
+
           <div className="form-input">
-            <label htmlFor="firstName">First Name</label>
+            <label htmlFor="firstName">
+              First Name<span>*</span>
+            </label>
             <input
               type="text"
               value={firstName}
@@ -120,7 +125,9 @@ const SignUpForm = () => {
             />
           </div>
           <div className="form-input">
-            <label htmlFor="lastName">Last Name</label>
+            <label htmlFor="lastName">
+              Last Name<span>*</span>
+            </label>
             <input
               type="text"
               name=""
@@ -131,7 +138,9 @@ const SignUpForm = () => {
             />
           </div>
           <div className="form-input">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="email">
+              Email<span>*</span>
+            </label>
             <input
               type="email"
               id="email"
@@ -142,7 +151,9 @@ const SignUpForm = () => {
           </div>
 
           <div className="form-input">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">
+              Password<span>*</span>
+            </label>
 
             <div
               id="viewPassword"
@@ -179,9 +190,8 @@ const SignUpForm = () => {
 
         <hr />
 
-        <p>
-          Already have an Account?
-          <br />
+        <p className="footer">
+          Already have an Account?{' '}
           <Link to="/login" replace>
             Login
           </Link>

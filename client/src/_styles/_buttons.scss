@@ -1,4 +1,4 @@
-@import './variables';
+@import '@styles/variables';
 
 .btn {
   border-radius: 8px;
@@ -6,7 +6,6 @@
   background-color: $gray-500;
   color: $white;
   cursor: pointer;
-  font-family: 'Roboto', sans-serif;
   font-size: $base-font-size;
   outline: 0;
   padding: 8px 12px;
@@ -36,6 +35,36 @@
 
     &:hover {
       background-color: darken($blue, 5%);
+    }
+  }
+
+  &.btn-secondary {
+    background-color: $black;
+    color: $white;
+    border-color: $black;
+
+    &:hover {
+      background-color: $black;
+    }
+  }
+
+  &.btn-success {
+    background-color: $green;
+    color: $white;
+    border-color: $green;
+
+    &:hover {
+      background-color: darken($green, 5%);
+    }
+  }
+
+  &.btn-danger {
+    background-color: $red;
+    color: $white;
+    border-color: $red;
+
+    &:hover {
+      background-color: darken($red, 5%);
     }
   }
 

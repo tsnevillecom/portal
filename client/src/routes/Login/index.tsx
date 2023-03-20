@@ -8,7 +8,7 @@ import {
   TokenResponse,
   GoogleOAuthProvider,
 } from '@react-oauth/google'
-import { FcGoogle } from 'react-icons/fc'
+import { BsGoogle } from 'react-icons/bs'
 import { axiosPrivate } from '@api/axios'
 import { ToastContext } from '@context/ToastContext'
 const LOGIN_URL = '/auth'
@@ -105,6 +105,18 @@ const Login = () => {
     <section id="login-route">
       <div className="container-slim">
         <h1>Login</h1>
+
+        <button className="btn btn-secondary" onClick={() => googleLogin()}>
+          <BsGoogle size={16} />
+          Continue with Google
+        </button>
+
+        <div className="or">
+          <hr />
+          <div>OR</div>
+          <hr />
+        </div>
+
         <form onSubmit={(event) => handleLogin({ event })} noValidate>
           <div className="form-input">
             <label htmlFor="email">Email</label>
@@ -132,7 +144,7 @@ const Login = () => {
             />
           </div>
 
-          <Link id="reset-password" to="/reset-password">
+          <Link id="reset-password" className="right" to="/reset-password">
             Forgot password?
           </Link>
 
@@ -151,22 +163,16 @@ const Login = () => {
           </div>
         </form>
 
-        <button className="btn" onClick={() => googleLogin()}>
-          <FcGoogle size={16} />
-          Login with Google
-        </button>
-
         <hr />
 
-        <p>
-          Need an Account?
-          <br />
+        <p className="footer">
+          Don&apos;t have an account?{' '}
           <Link to="/sign-up" replace>
             Sign Up
           </Link>
         </p>
 
-        <p>
+        <p className="footer">
           By continuing, you agree to our
           <br />
           <a>User Agreement</a> and <a>Privacy Policy</a>.

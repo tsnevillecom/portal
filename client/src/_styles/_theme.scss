@@ -1,4 +1,4 @@
-@import './variables';
+@import '@styles/variables';
 
 * {
   margin: 0;
@@ -33,7 +33,7 @@ a {
 hr {
   height: 1px;
   border: none;
-  margin: 16px 0;
+  margin: 8px 0;
 }
 
 ul {
@@ -64,9 +64,29 @@ ul {
 form {
   display: flex;
   flex-direction: column;
+  position: relative;
 
   button {
     margin-bottom: 12px;
+  }
+}
+
+.or {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+
+  div {
+    padding: 0 8px;
+    text-transform: uppercase;
+    font-size: 14px;
+    opacity: 0.6;
+  }
+
+  hr {
+    flex: 1;
+    margin: 16px 0;
   }
 }
 
@@ -80,6 +100,11 @@ form {
     margin-bottom: 6px;
     font-weight: 500;
     user-select: none;
+
+    span {
+      margin-left: 2px;
+      opacity: 0.4;
+    }
   }
 
   #viewPassword {
@@ -95,7 +120,6 @@ form {
   input[type='email'],
   textarea {
     border-radius: 5px;
-    font-family: 'Roboto', sans-serif;
     font-size: $base-font-size;
     outline: none;
     padding: 8px 10px;
@@ -115,6 +139,7 @@ form {
   padding: 2px;
 
   [type='checkbox'] {
+    accent-color: $blue;
     height: 16px;
     width: 16px;
     margin-right: 8px;
@@ -123,6 +148,14 @@ form {
   label {
     margin: 0;
   }
+}
+
+.center {
+  text-align: center;
+}
+
+.right {
+  text-align: right;
 }
 
 #root {
@@ -141,8 +174,18 @@ form {
     position: relative;
 
     p {
-      margin-bottom: 16px;
+      font-size: 14px;
+      margin-bottom: 8px;
       line-height: 1.4;
+
+      span {
+        opacity: 0.6;
+      }
+
+      &.footer {
+        text-align: center;
+        margin: 8px 0;
+      }
     }
 
     > section {
@@ -167,6 +210,7 @@ form {
 
       > section {
         display: flex;
+        flex-direction: column;
         align-items: center;
         justify-content: center;
       }

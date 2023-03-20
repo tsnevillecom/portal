@@ -1,10 +1,11 @@
 @import '@styles/variables';
 
 #register-route {
-  p {
-    font-size: 14px;
-    text-align: center;
-    margin-top: 16px;
+  #required {
+    position: absolute;
+    right: 0;
+    font-size: 13px;
+    opacity: 0.4;
   }
 
   #register-thrid-party {
