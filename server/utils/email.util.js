@@ -12,16 +12,17 @@ const sendVerificationEmail = async (email, token) => {
   const mailOptions = {
     from: 'tsneville@gmail.com',
     to: email,
-    subject: 'Account Verification Token',
+    subject: 'Account Verification',
     text:
       'Hello,\n\n' +
-      'Please verify your account by clicking the link: \nhttp://' +
+      'Please verify your account by clicking the following link: \n\nhttp://' +
       HOST +
       ':' +
       CLIENT_PORT +
       '/verify/' +
       token +
-      '.\n',
+      '.\n\n' +
+      'This link will self-destruct in 1 day.\n\n',
   }
   await sendEmail(mailOptions)
 }
@@ -33,7 +34,7 @@ const sendPasswordResetEmail = async (email, token) => {
     subject: 'Password Reset',
     text:
       'Hello,\n\n' +
-      'Click this link to finish resetting your password: \nhttp://' +
+      'Click this link to finish resetting your password: \n\nhttp://' +
       HOST +
       ':' +
       CLIENT_PORT +

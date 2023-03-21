@@ -27,6 +27,7 @@ const ResetPasswordVerify = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
 
     switch (name) {
@@ -54,8 +55,6 @@ const ResetPasswordVerify = () => {
     const errors = validateForm(data, rules)
     setErrors(errors)
     if (!_.isEmpty(errors)) return
-
-    console.log(password)
 
     try {
       await axios.post('/reset/password/verify', data, {

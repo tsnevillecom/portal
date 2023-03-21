@@ -13,9 +13,7 @@ const AuthenticatedRoute: React.FC<IAuthenticatedRouteProps> = ({
   const location = useLocation()
 
   if (auth.user) {
-    if (!auth.user.isVerified) {
-      return <Navigate to="/verify" state={{ from: location }} replace />
-    } else if (!allowedRoles.length || allowedRoles.includes(auth.user.role)) {
+    if (!allowedRoles.length || allowedRoles.includes(auth.user.role)) {
       return <Outlet />
     } else {
       return <Navigate to="/unauthorized" state={{ from: location }} replace />

@@ -1,4 +1,4 @@
-import React, { FormEvent, useContext } from 'react'
+import React, { FormEvent, ReactNode, useContext } from 'react'
 import './Login.scss'
 import { useRef, useState, useEffect } from 'react'
 import useAuth from '@hooks/useAuth'
@@ -29,7 +29,9 @@ const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null)
   const errorRef = useRef<HTMLDivElement>(null)
 
-  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<ReactNode | string | null>(
+    null
+  )
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<Errors>({})
@@ -84,7 +86,7 @@ const Login = () => {
       const accessToken = response.data?.accessToken
       const user = response.data?.user
 
-      setAuth({ accessToken, user, isAuthenticated: user.isVerified })
+      setAuth({ accessToken, user, isAuthenticated: true })
       setEmail('')
       setPassword('')
       navigate('/', { replace: true })
@@ -92,17 +94,31 @@ const Login = () => {
       if (!err?.response) {
         setSubmitError('No server response')
       } else if (err.response.status === 400) {
-        setSubmitError('Missing email or password')
+        setSubmitError('Valid email or password required')
       } else if (err.response.status === 401) {
-        setSubmitError('Incorrect email or password')
+        setSubmitError(
+          <>
+            Verify your account to continue.{' '}
+            <Link to="/verify" state={{ email }}>
+              Verify Account
+            </Link>
+          </>
+        )
       } else if (err.response.status === 403) {
         setSubmitError('Valid email address required')
       } else if (err.response.status === 404) {
         setSubmitError('User not found')
       } else if (err.response.status === 409) {
-        navigate('/verify', { state: { email } })
+        setSubmitError(
+          <>
+            Reset your password to continue.{' '}
+            <Link to="/reset-password" state={{ email }}>
+              Reset Password
+            </Link>
+          </>
+        )
       } else {
-        setSubmitError('Login Failed')
+        setSubmitError('Login failed')
       }
       if (errorRef.current) errorRef.current.focus()
     }
@@ -188,6 +204,8 @@ const Login = () => {
             Sign Up
           </Link>
         </p>
+
+        <hr />
 
         <p className="footer">
           <span>By continuing, you agree to our</span>

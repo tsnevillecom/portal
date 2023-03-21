@@ -5,7 +5,7 @@ import './SuccessMessage.scss'
 const SuccessMessage = ({ children }: PropsWithChildren) => {
   return (
     <div className="success-message">
-      <FaCheckCircle className="success-message-icon" size={32} />
+      <FaCheckCircle className="success-message-icon" />
       <div className="success-message-text">
         <div>{children}</div>
       </div>

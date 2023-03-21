@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import './Verify.scss'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'

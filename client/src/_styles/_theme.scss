@@ -142,9 +142,8 @@ form {
     position: relative;
 
     p {
-      font-size: 14px;
       margin-bottom: 8px;
-      line-height: 1.4;
+      line-height: 1.6;
 
       span {
         opacity: 0.6;
@@ -207,6 +206,10 @@ body {
         a:active,
         a:visited {
           color: $blue-500;
+
+          &:hover {
+            color: $blue-400;
+          }
         }
 
         .container-slim {
@@ -242,8 +245,13 @@ body {
         }
 
         a,
+        a:active,
         a:visited {
           color: $blue;
+
+          &:hover {
+            color: $blue-800;
+          }
         }
 
         .container-slim {

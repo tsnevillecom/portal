@@ -90,36 +90,6 @@ const logout = async (req, res) => {
   }
 }
 
-const resetPassword = async (req, res) => {
-  const token = req.body.token
-  const password = req.body.password
-
-  try {
-    const foundToken = await EmailToken.findOne({ token })
-    if (!foundToken) {
-      return res.status(400).send({
-        message: ERRORS.EXPIRED_TOKEN,
-      })
-    }
-
-    const user = await User.findOne({ _id: foundToken._userId })
-    if (!user) {
-      return res.status(400).send({ message: ERRORS.NOT_FOUND })
-    }
-
-    if (!user.isVerified) {
-      return res.status(400).send({ message: ERRORS.USER_NOT_VERIFIED })
-    }
-
-    user.password = password
-    await user.save()
-    foundToken.remove()
-    res.status(200).send({ user })
-  } catch (error) {
-    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
-  }
-}
-
 const login = async (req, res) => {
   const cookies = req.cookies
   const { email, password } = req.body
@@ -138,13 +108,17 @@ const login = async (req, res) => {
     return res.status(404).send({ message: ERRORS.NOT_FOUND })
   }
 
+  if (!foundUser.isVerified) {
+    return res.status(401).send({ message: ERRORS.USER_NOT_VERIFIED })
+  }
+
   if (!foundUser.password) {
     return res.status(409).send({ message: ERRORS.UPDATE_PASSWORD })
   }
 
   const isMatch = await bcrypt.compare(password, foundUser.password)
   if (!isMatch) {
-    return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
+    return res.status(403).send({ message: ERRORS.UNAUTHORIZED })
   }
 
   let newRefreshTokenArray = !cookies?.refreshToken
@@ -284,5 +258,4 @@ module.exports = {
   refresh,
   me,
   checkToken,
-  resetPassword,
 }

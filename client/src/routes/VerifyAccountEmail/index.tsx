@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
-import './VerifyEmail.scss'
+import './VerifyAccountEmail.scss'
 import FormControl from '@components/FormControl'
 import SuccessMessage from '@components/SuccessMessage'
 import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
+import axios from '@api/axios'
+import ErrorMessage from '@components/ErrorMessage'
+import { MdArrowBack } from 'react-icons/md'
 
-const VerifyEmail = () => {
+const VerifyAccountEmail = () => {
   const { state } = useLocation()
-
   const [email, setEmail] = useState(state?.email || '')
   const [success, setSuccess] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
   const [errors, setErrors] = useState<Errors>({})
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   useEffect(() => {
     if (emailRef.current) emailRef.current.focus()
@@ -21,6 +24,7 @@ const VerifyEmail = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
 
     switch (name) {
@@ -44,15 +48,28 @@ const VerifyEmail = () => {
     setErrors(errors)
     if (!_.isEmpty(errors)) return
 
-    console.log(email)
-    setSuccess(true)
+    try {
+      await axios.post('/verify/email', data, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      })
+      setSuccess(true)
+    } catch (error) {
+      if (error.response.status === 401) {
+        setSubmitError('Could not send email. Try again.')
+      } else if (error.response.status === 404) {
+        setSubmitError('Account does not exist')
+      } else {
+        setSubmitError('Verification failed. Try again.')
+      }
+    }
   }
 
   return (
-    <section id="verify-email-route">
+    <section id="verify-account-email-route">
       <div className="container-slim">
         <h1>
-          Verify Email
+          Verify account
           {!success && <span>* required</span>}
         </h1>
 
@@ -82,9 +99,12 @@ const VerifyEmail = () => {
 
         {!success && (
           <>
+            {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
+
             <p className="instructions">
-              Enter your email below and submit. An email will be sent to you
-              with instructions about how to complete the process.
+              To verify your account, enter your email below and click
+              &quot;Send Email&quot;. An email will be sent to you with
+              instructions about how to complete the verification process.
             </p>
 
             <form onSubmit={handleSubmit} noValidate>
@@ -103,9 +123,17 @@ const VerifyEmail = () => {
             </form>
           </>
         )}
+
+        <hr />
+
+        <p className="footer">
+          <Link to="/login" className="back" replace>
+            <MdArrowBack /> Back to Login
+          </Link>
+        </p>
       </div>
     </section>
   )
 }
 
-export default VerifyEmail
+export default VerifyAccountEmail

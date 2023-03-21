@@ -3,7 +3,6 @@ const PasswordToken = require('../models/passwordToken')
 const crypto = require('crypto')
 const { ERRORS } = require('../_constants')
 const { sendPasswordResetEmail } = require('../utils/email.util')
-const { ObjectId } = require('mongodb')
 
 const resetPassword = async (req, res) => {
   const email = req.body.email

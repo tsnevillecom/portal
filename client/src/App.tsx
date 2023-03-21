@@ -16,7 +16,7 @@ import PersistLogin from '@routes/PersistLogin'
 import SignUp from '@routes/SignUp'
 import Toasts from '@components/Toasts'
 import Verify from '@routes/Verify'
-import VerifyEmail from '@routes/VerifyEmail'
+import VerifyAccountEmail from '@routes/VerifyAccountEmail'
 import ThemeToggle from '@components/ThemeToggle'
 import ResetPasswordVerify from '@routes/ResetPasswordVerify'
 import ResetPasswordEmail from '@routes/ResetPasswordEmail'
@@ -30,7 +30,7 @@ const App = () => {
             <Route element={<UnauthenticatedRoute />}>
               <Route path="login" element={<Login />} />
               <Route path="sign-up" element={<SignUp />} />
-              <Route path="verify" element={<VerifyEmail />} />
+              <Route path="verify" element={<VerifyAccountEmail />} />
               <Route path="verify/:token" element={<Verify />} />
               <Route path="reset-password" element={<ResetPasswordEmail />} />
               <Route

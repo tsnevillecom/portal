@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './ResetPasswordEmail.scss'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
 import FormControl from '@components/FormControl'
 import SuccessMessage from '@components/SuccessMessage'
@@ -11,7 +11,8 @@ import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
 
 const ResetPasswordEmail = () => {
-  const [email, setEmail] = useState('')
+  const { state } = useLocation()
+  const [email, setEmail] = useState(state?.email || '')
   const [success, setSuccess] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
   const [errors, setErrors] = useState<Errors>({})
@@ -23,8 +24,8 @@ const ResetPasswordEmail = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
-    setSubmitError(null)
 
     switch (name) {
       case 'email':
@@ -59,7 +60,7 @@ const ResetPasswordEmail = () => {
       } else if (error.response.status === 404) {
         setSubmitError('Account does not exist')
       } else {
-        setSubmitError('Passwrod reset failed. Try again.')
+        setSubmitError('Password reset failed. Try again.')
       }
     }
   }
