@@ -1,17 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './VerifyEmail.scss'
-import { FaCheckCircle } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
-import { MdArrowBack } from 'react-icons/md'
 import FormControl from '@components/FormControl'
 import SuccessMessage from '@components/SuccessMessage'
 import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
+import { useLocation } from 'react-router-dom'
 
 const VerifyEmail = () => {
-  const [hasError, setHasError] = useState(false)
-  const [email, setEmail] = useState('')
+  const { state } = useLocation()
+
+  const [email, setEmail] = useState(state?.email || '')
   const [success, setSuccess] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
   const [errors, setErrors] = useState<Errors>({})
@@ -37,6 +36,7 @@ const VerifyEmail = () => {
     const rules: Rules = {
       email: {
         required: true,
+        email: true,
       },
     }
 
@@ -51,24 +51,23 @@ const VerifyEmail = () => {
   return (
     <section id="verify-email-route">
       <div className="container-slim">
-        <h1>Verify Email</h1>
+        <h1>
+          Verify Email
+          {!success && <span>* required</span>}
+        </h1>
 
-        <p className="instructions">
+        <h3>
           <strong>Your account has not been verified.</strong>
-        </p>
-        <p className="instructions">
-          <span>
-            Enter your email below and submit. An email will be sent to you with
-            instructions about how to complete the process.
-          </span>
-        </p>
+        </h3>
 
         {success && (
           <>
             <SuccessMessage>
-              An email was sent to <strong>{email}</strong>. Please check your
-              inbox for a link to complete verification. The link will expire in
-              30 minutes.
+              An email was sent to <strong>{email}</strong>.
+              <br />
+              <br />
+              Please check your inbox for a link to complete verification. The
+              link will expire in 1 day.
             </SuccessMessage>
 
             <p>
@@ -82,20 +81,27 @@ const VerifyEmail = () => {
         )}
 
         {!success && (
-          <form onSubmit={handleSubmit} noValidate>
-            <FormControl
-              label="Email"
-              forRef={emailRef}
-              name="email"
-              value={email}
-              error={errors.email}
-              onChange={handleInputChange}
-            />
+          <>
+            <p className="instructions">
+              Enter your email below and submit. An email will be sent to you
+              with instructions about how to complete the process.
+            </p>
 
-            <button className="btn btn-primary" type="submit">
-              Send Email
-            </button>
-          </form>
+            <form onSubmit={handleSubmit} noValidate>
+              <FormControl
+                label="Email"
+                forRef={emailRef}
+                name="email"
+                value={email}
+                error={errors.email}
+                onChange={handleInputChange}
+              />
+
+              <button className="btn btn-primary" type="submit">
+                Send Email
+              </button>
+            </form>
+          </>
         )}
       </div>
     </section>

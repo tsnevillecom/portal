@@ -12,6 +12,9 @@ import { BsGoogle } from 'react-icons/bs'
 import { axiosPrivate } from '@api/axios'
 import FormControl from '@components/FormControl'
 import ErrorMessage from '@components/ErrorMessage'
+import { Errors, Rules } from '@types'
+import { validateForm } from '@utils/validateForm'
+import _ from 'lodash'
 const LOGIN_URL = '/auth'
 
 interface IHandleLogin {
@@ -29,6 +32,7 @@ const Login = () => {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [errors, setErrors] = useState<Errors>({})
 
   useEffect(() => {
     if (emailRef.current) emailRef.current.focus()
@@ -52,6 +56,25 @@ const Login = () => {
           googleAccessToken: tokenResponse.access_token,
         })
       } else {
+        const data = {
+          email: email.trim(),
+          password: password,
+        }
+
+        const rules: Rules = {
+          email: {
+            required: true,
+            email: true,
+          },
+          password: {
+            required: true,
+          },
+        }
+
+        const errors = validateForm(data, rules)
+        setErrors(errors)
+        if (!_.isEmpty(errors)) return
+
         response = await axiosPrivate.post(
           LOGIN_URL,
           JSON.stringify({ email, password })
@@ -71,13 +94,13 @@ const Login = () => {
       } else if (err.response.status === 400) {
         setSubmitError('Missing email or password')
       } else if (err.response.status === 401) {
-        setSubmitError('Unauthorized')
+        setSubmitError('Incorrect email or password')
       } else if (err.response.status === 403) {
         setSubmitError('Valid email address required')
       } else if (err.response.status === 404) {
         setSubmitError('User not found')
       } else if (err.response.status === 409) {
-        setSubmitError('Account requires password')
+        navigate('/verify', { state: { email } })
       } else {
         setSubmitError('Login Failed')
       }
@@ -102,7 +125,9 @@ const Login = () => {
   return (
     <section id="login-route">
       <div className="container-slim">
-        <h1>Login</h1>
+        <h1>
+          Login<span>* required</span>
+        </h1>
 
         {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
@@ -123,6 +148,7 @@ const Login = () => {
             forRef={emailRef}
             name="email"
             value={email}
+            error={errors.email}
             onChange={handleInputChange}
           />
 
@@ -131,6 +157,7 @@ const Login = () => {
             name="password"
             type="password"
             value={password}
+            error={errors.password}
             onChange={handleInputChange}
           />
 

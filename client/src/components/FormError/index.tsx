@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import './FormError.scss'
-import { MdErrorOutline } from 'react-icons/md'
 
 type AlignOptions = 'left' | 'center' | 'right'
 
 interface FormErrorProps {
   text: string
-  icon?: React.ReactNode
+  icon?: React.ReactNode | null
   align?: AlignOptions
   name?: string
 }
 
 const defaultProps: FormErrorProps = {
   text: '',
-  icon: <MdErrorOutline />,
+  icon: null,
   align: 'left',
   name: '',
 }
@@ -43,7 +42,7 @@ const FormError: React.FC<FormErrorProps> = ({ text, icon, align, name }) => {
 
   return (
     <div className="form-error" style={{ justifyContent }} data-name={name}>
-      {icon}
+      {icon && icon}
       {text}
     </div>
   )

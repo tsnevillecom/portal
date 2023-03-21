@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import './SignUp.scss'
 import {
@@ -25,7 +25,9 @@ const SignUpForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [success, setSuccess] = useState(false)
-  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<ReactNode | string | null>(
+    null
+  )
   const [errors, setErrors] = useState<Errors>({})
 
   const firstNameRef = useRef<HTMLInputElement>(null)
@@ -77,17 +79,17 @@ const SignUpForm = () => {
       },
       email: {
         required: true,
+        email: true,
       },
       password: {
         required: true,
+        password: true,
       },
     }
 
     const errors = validateForm(data, rules)
     setErrors(errors)
     if (!_.isEmpty(errors)) return
-
-    // const data = { password, email, lastName, firstName }
 
     try {
       await axios.post('/register', data, {
@@ -96,13 +98,8 @@ const SignUpForm = () => {
       })
       setSuccess(true)
     } catch (error) {
-      if (error.response.status === 401) {
-        setSubmitError('Could not send verification email')
-      } else if (error.response.status === 409) {
-        setSubmitError('User already exists')
-      } else {
-        setSubmitError('Registration failed. Try again.')
-      }
+      console.log(error)
+      handleError(error)
     }
   }
 
@@ -124,13 +121,23 @@ const SignUpForm = () => {
       navigate('/', { replace: true })
     } catch (error) {
       console.log(error)
-      if (error.response.status === 401) {
-        setSubmitError('Could not retrieve Google account')
-      } else if (error.response.status === 409) {
-        setSubmitError('User already exists')
-      } else {
-        setSubmitError('Registration failed. Try again.')
-      }
+      handleError(error, true)
+    }
+  }
+
+  const handleError = (error: any, isGoogle = false) => {
+    if (error.response.status === 401 && !isGoogle) {
+      setSubmitError('Could not send verification email')
+    } else if (error.response.status === 401 && isGoogle) {
+      setSubmitError('Could not retrieve Google account')
+    } else if (error.response.status === 409) {
+      setSubmitError(
+        <>
+          User already exists. <Link to="/login">Login</Link>
+        </>
+      )
+    } else {
+      setSubmitError('Registration failed. Try again.')
     }
   }
 
@@ -146,9 +153,11 @@ const SignUpForm = () => {
             <h1>Verify Account</h1>
 
             <SuccessMessage>
-              An email was sent to <strong>{email}</strong>. Please check your
-              inbox for a link to verify your account. The link will expire in
-              30 minutes.
+              An email was sent to <strong>{email}</strong>.
+              <br />
+              <br />
+              Please check your inbox for a link to verify your account. The
+              link will expire in 1 day.
             </SuccessMessage>
 
             <p>
@@ -163,7 +172,10 @@ const SignUpForm = () => {
 
         {!success && (
           <>
-            <h1>Sign Up</h1>
+            <h1>
+              Sign Up
+              <span>* required</span>
+            </h1>
 
             {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
@@ -182,8 +194,6 @@ const SignUpForm = () => {
             </div>
 
             <form onSubmit={handleSubmit}>
-              <div id="required">* required</div>
-
               <FormControl
                 label="First Name"
                 forRef={firstNameRef}

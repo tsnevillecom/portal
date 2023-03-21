@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './ResetPasswordEmail.scss'
-import { FaCheckCircle } from 'react-icons/fa'
 import { Link } from 'react-router-dom'
 import { MdArrowBack } from 'react-icons/md'
 import FormControl from '@components/FormControl'
@@ -8,13 +7,15 @@ import SuccessMessage from '@components/SuccessMessage'
 import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
+import axios from '@api/axios'
+import ErrorMessage from '@components/ErrorMessage'
 
 const ResetPasswordEmail = () => {
-  const [hasError, setHasError] = useState(false)
   const [email, setEmail] = useState('')
   const [success, setSuccess] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
   const [errors, setErrors] = useState<Errors>({})
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   useEffect(() => {
     if (emailRef.current) emailRef.current.focus()
@@ -23,6 +24,7 @@ const ResetPasswordEmail = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     if (errors[name]) setErrors(_.omit(errors, name))
+    setSubmitError(null)
 
     switch (name) {
       case 'email':
@@ -37,6 +39,7 @@ const ResetPasswordEmail = () => {
     const rules: Rules = {
       email: {
         required: true,
+        email: true,
       },
     }
 
@@ -44,29 +47,39 @@ const ResetPasswordEmail = () => {
     setErrors(errors)
     if (!_.isEmpty(errors)) return
 
-    console.log(email)
-    setSuccess(true)
+    try {
+      await axios.post('/reset/password', data, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      })
+      setSuccess(true)
+    } catch (error) {
+      if (error.response.status === 401) {
+        setSubmitError('Could not send email. Try again.')
+      } else if (error.response.status === 404) {
+        setSubmitError('Account does not exist')
+      } else {
+        setSubmitError('Passwrod reset failed. Try again.')
+      }
+    }
   }
 
   return (
     <section id="reset-password-email-route">
       <div className="container-slim">
-        <h1>Reset your password</h1>
-
-        <p className="instructions">
-          <span>
-            To reset your password, enter your email below and submit. An email
-            will be sent to you with instructions about how to complete the
-            process.
-          </span>
-        </p>
+        <h1>
+          Reset password
+          {!success && <span>* required</span>}
+        </h1>
 
         {success && (
           <>
             <SuccessMessage>
-              An email was sent to <strong>{email}</strong>. Please check your
-              inbox for a link to complete the password reset. The link will
-              expire in 30 minutes.
+              An email was sent to <strong>{email}</strong>.
+              <br />
+              <br />
+              Please check your inbox for a link to complete the password reset.
+              The link will expire in 30 minutes.
             </SuccessMessage>
 
             <p>
@@ -80,20 +93,30 @@ const ResetPasswordEmail = () => {
         )}
 
         {!success && (
-          <form onSubmit={handleSubmit} noValidate>
-            <FormControl
-              label="Email"
-              forRef={emailRef}
-              name="email"
-              value={email}
-              error={errors.email}
-              onChange={handleInputChange}
-            />
+          <>
+            {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
-            <button className="btn btn-primary" type="submit">
-              Send Email
-            </button>
-          </form>
+            <p className="instructions">
+              To reset your password, enter your email below and click
+              &quot;Send Email&quot;. An email will be sent to you with
+              instructions about how to complete the process.
+            </p>
+
+            <form onSubmit={handleSubmit} noValidate>
+              <FormControl
+                label="Email"
+                forRef={emailRef}
+                name="email"
+                value={email}
+                error={errors.email}
+                onChange={handleInputChange}
+              />
+
+              <button className="btn btn-primary" type="submit">
+                Send Email
+              </button>
+            </form>
+          </>
         )}
 
         <hr />

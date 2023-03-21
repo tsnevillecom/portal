@@ -8,9 +8,16 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const credentials = require('./middleware/credentials')
 const connectDB = require('./db')
+const limiter = require('express-rate-limit')
 
 connectDB()
 const app = express()
+app.use(
+  limiter({
+    windows: 5000,
+    max: 100,
+  })
+)
 
 // app.use(logger)
 
@@ -27,6 +34,7 @@ app.use('/register', require('./routes/register.route'))
 app.use('/verify', require('./routes/verify.route'))
 app.use('/teams', require('./routes/teams.route'))
 app.use('/google', require('./routes/google.route'))
+app.use('/reset', require('./routes/reset.route'))
 
 app.listen(PORT, HOST, function () {
   console.log(`App listening on http://${HOST}:${PORT}`)

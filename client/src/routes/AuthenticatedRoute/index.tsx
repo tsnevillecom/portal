@@ -23,15 +23,6 @@ const AuthenticatedRoute: React.FC<IAuthenticatedRouteProps> = ({
   } else {
     return <Navigate to="/login" replace />
   }
-
-  // return auth.user &&
-  //   (!allowedRoles.length || allowedRoles.includes(auth.user.role)) ? (
-  //   <Outlet />
-  // ) : auth.accessToken ? (
-  //   <Navigate to="/unauthorized" state={{ from: location }} replace />
-  // ) : (
-  //   <Navigate to="/login" replace />
-  // )
 }
 
 export default AuthenticatedRoute

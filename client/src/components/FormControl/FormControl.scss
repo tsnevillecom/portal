@@ -12,8 +12,8 @@
     user-select: none;
 
     span {
-      margin-left: 2px;
-      opacity: 0.4;
+      margin-left: 4px;
+      opacity: 0.5;
     }
   }
 
@@ -93,20 +93,14 @@
 
   &.error {
     .dark & {
-      label {
-        color: $yellow;
-      }
       input,
       input:focus {
-        border: 1px solid $yellow;
-        box-shadow: 0 0 5px rgba($yellow, 0.5);
+        border: 1px solid $red;
+        box-shadow: 0 0 5px rgba($red, 0.5);
       }
     }
 
     .light & {
-      label {
-        color: $red;
-      }
       input,
       input:focus {
         border: 1px solid $red;

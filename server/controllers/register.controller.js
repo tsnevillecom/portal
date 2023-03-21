@@ -20,8 +20,8 @@ const register = async (req, res) => {
       _userId: newUser._id,
       token: crypto.randomBytes(16).toString('hex'),
     })
+
     const token = await emailToken.save()
-    // await sendVerificationEmail(req, newUser.email, token.token)
     await sendVerificationEmail(newUser.email, token.token)
     res.status(200).send({ user })
   } catch (error) {

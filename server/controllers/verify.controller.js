@@ -4,27 +4,24 @@ const { ERRORS } = require('../_constants')
 
 const verifyToken = async (req, res) => {
   const token = req.params.token
-  console.log(token)
 
   try {
     const foundToken = await EmailToken.findOne({ token })
-
-    console.log(foundToken)
     if (!foundToken) {
-      return res.status(400).send({
+      return res.status(401).send({
         message: ERRORS.EXPIRED_TOKEN,
       })
     }
 
     const user = await User.findOne({ _id: foundToken._userId })
     if (!user) {
-      return res.status(400).send({
+      return res.status(404).send({
         message: ERRORS.NOT_FOUND,
       })
     }
 
     if (user.isVerified) {
-      return res.status(400).send({
+      return res.status(409).send({
         message: ERRORS.USER_VERIFIED,
       })
     }

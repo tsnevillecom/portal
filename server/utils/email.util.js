@@ -26,6 +26,25 @@ const sendVerificationEmail = async (email, token) => {
   await sendEmail(mailOptions)
 }
 
+const sendPasswordResetEmail = async (email, token) => {
+  const mailOptions = {
+    from: 'tsneville@gmail.com',
+    to: email,
+    subject: 'Password Reset',
+    text:
+      'Hello,\n\n' +
+      'Click this link to finish resetting your password: \nhttp://' +
+      HOST +
+      ':' +
+      CLIENT_PORT +
+      '/reset-password/' +
+      token +
+      '.\n\n' +
+      'This link will self-destruct in 30 minutes.\n\n',
+  }
+  await sendEmail(mailOptions)
+}
+
 const sendEmail = async (mailOptions) => {
   try {
     const auth = {
@@ -42,4 +61,4 @@ const sendEmail = async (mailOptions) => {
   }
 }
 
-module.exports = { sendVerificationEmail }
+module.exports = { sendVerificationEmail, sendPasswordResetEmail }
