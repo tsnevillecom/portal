@@ -21,6 +21,11 @@
     flex: 1;
     justify-content: center;
     line-height: 1.4;
+    width: 100%;
+
+    > div:not(:last-child) {
+      margin-bottom: 16px;
+    }
   }
 
   .light & {

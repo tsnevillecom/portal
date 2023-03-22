@@ -5,16 +5,14 @@ import SuccessMessage from '@components/SuccessMessage'
 import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
-import { MdArrowBack } from 'react-icons/md'
 import ResendEmail from '@components/ResendEmail'
 
 const VerifyAccountEmail = () => {
-  const navigate = useNavigate()
   const { state } = useLocation()
-  const [isLoading, setIsLoading] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [email, setEmail] = useState(state?.email || '')
   const [success, setSuccess] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
@@ -24,12 +22,6 @@ const VerifyAccountEmail = () => {
   )
 
   useEffect(() => {
-    if (!state?.email) {
-      navigate('/login', { replace: true })
-    } else {
-      setIsLoading(false)
-    }
-
     if (emailRef.current) emailRef.current.focus()
   }, [])
 
@@ -47,6 +39,7 @@ const VerifyAccountEmail = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
     const data = { email: email.trim() }
     const rules: Rules = {
       email: {
@@ -58,6 +51,8 @@ const VerifyAccountEmail = () => {
     const errors = validateForm(data, rules)
     setErrors(errors)
     if (!_.isEmpty(errors)) return
+
+    setIsSubmitting(true)
 
     try {
       await axios.post('/verify/email', data, {
@@ -75,6 +70,8 @@ const VerifyAccountEmail = () => {
       } else {
         setSubmitError('Verification failed. Try again.')
       }
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -82,11 +79,14 @@ const VerifyAccountEmail = () => {
     return (
       <>
         <SuccessMessage>
-          An email was sent to <strong>{email}</strong>.
-          <br />
-          <br />
-          Please check your inbox for a link to complete verification. The link
-          will expire in 1 day.
+          <div>
+            An email was sent to <strong>{email}</strong>.
+          </div>
+
+          <div>
+            Please check your inbox for a link to complete verification. The
+            link will expire in 1 day.
+          </div>
         </SuccessMessage>
 
         <ResendEmail onClick={() => setSuccess(false)} />
@@ -127,8 +127,6 @@ const VerifyAccountEmail = () => {
     )
   }
 
-  if (isLoading) return null
-
   return (
     <section id="verify-account-email-route">
       <div className="container-slim">
@@ -139,10 +137,15 @@ const VerifyAccountEmail = () => {
 
         {success ? renderSuccess() : renderForm()}
 
-        <hr />
-        <p className="footer">
+        <div className="or">
+          <hr />
+          <div>OR</div>
+          <hr />
+        </div>
+
+        <p className="callout">
           <Link to="/login" className="back" replace>
-            <MdArrowBack /> Back to Login
+            Login
           </Link>
         </p>
       </div>

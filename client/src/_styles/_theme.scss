@@ -134,6 +134,10 @@ form {
   color: $red;
 }
 
+.muted {
+  color: $gray-500;
+}
+
 #root {
   position: relative;
   height: 100vh;
@@ -160,7 +164,7 @@ form {
         text-align: center;
       }
 
-      &.footer {
+      &.callout {
         text-align: center;
         margin: 8px 0;
       }

@@ -79,11 +79,16 @@ const ResetPasswordEmail = () => {
         {success && (
           <>
             <SuccessMessage>
-              An email was sent to <strong>{email}</strong>.
-              <br />
-              <br />
-              Please check your inbox for a link to complete the password reset.
-              The link will expire in 30 minutes.
+              <div>
+                A password reset email was sent to:
+                <br />
+                <strong>{email}</strong>
+              </div>
+
+              <div>
+                Please click the link in that message to reset your password.
+                The link will expire in 30 minutes.
+              </div>
             </SuccessMessage>
 
             <ResendEmail onClick={() => setSuccess(false)} />
@@ -117,11 +122,15 @@ const ResetPasswordEmail = () => {
           </>
         )}
 
-        <hr />
+        <div className="or">
+          <hr />
+          <div>OR</div>
+          <hr />
+        </div>
 
-        <p className="footer">
+        <p className="callout">
           <Link to="/login" className="back" replace>
-            <MdArrowBack /> Back to Login
+            Login
           </Link>
         </p>
       </div>

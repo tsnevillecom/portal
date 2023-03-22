@@ -11,7 +11,9 @@ export const AccountVerified = () => {
         <h1>You are already verified!</h1>
 
         <SuccessMessage>
-          It looks like your account has already been verified. Please login.
+          <div>
+            It looks like your account has already been verified. Please login.
+          </div>
         </SuccessMessage>
 
         <p className="small">

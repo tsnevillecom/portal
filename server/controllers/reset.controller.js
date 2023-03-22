@@ -4,6 +4,25 @@ const crypto = require('crypto')
 const { ERRORS } = require('../_constants')
 const { sendPasswordResetEmail } = require('../utils/email.util')
 
+const validateToken = async (req, res) => {
+  const token = req.params.token
+
+  try {
+    const foundToken = await PasswordToken.findOne({ token })
+
+    console.log(foundToken)
+    if (!foundToken) {
+      return res.status(401).send({
+        message: ERRORS.EXPIRED_TOKEN,
+      })
+    }
+
+    res.sendStatus(200)
+  } catch (error) {
+    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
+  }
+}
+
 const resetPassword = async (req, res) => {
   const email = req.body.email
   const user = await User.findOne({ email }).exec()
@@ -71,4 +90,4 @@ const resetPasswordVerify = async (req, res) => {
   }
 }
 
-module.exports = { resetPassword, resetPasswordVerify }
+module.exports = { resetPassword, resetPasswordVerify, validateToken }

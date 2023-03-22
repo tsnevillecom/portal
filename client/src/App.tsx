@@ -21,6 +21,7 @@ import ThemeToggle from '@components/ThemeToggle'
 import ResetPasswordVerify from '@routes/ResetPasswordVerify'
 import ResetPasswordEmail from '@routes/ResetPasswordEmail'
 import AccountVerified from '@routes/AccountVerified'
+import ExpiredLink from '@routes/ExpiredLink'
 
 const App = () => {
   return (
@@ -33,6 +34,7 @@ const App = () => {
               <Route path="sign-up" element={<SignUp />} />
               <Route path="verify" element={<VerifyAccountEmail />} />
               <Route path="verified" element={<AccountVerified />} />
+              <Route path="expired/:link" element={<ExpiredLink />} />
               <Route path="verify/:token" element={<Verify />} />
               <Route path="reset-password" element={<ResetPasswordEmail />} />
               <Route

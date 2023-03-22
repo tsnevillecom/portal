@@ -170,14 +170,14 @@ const SignUpForm = () => {
   const renderSuccess = () => {
     return (
       <>
-        <h1>Verify Account</h1>
-
         <SuccessMessage>
-          An email was sent to <strong>{email}</strong>.
-          <br />
-          <br />
-          Please check your inbox for a link to verify your account. The link
-          will expire in 1 day.
+          <div>
+            An email was sent to <strong>{email}</strong>.
+          </div>
+          <div>
+            Please check your inbox for a link to verify your account. The link
+            will expire in 1 day.
+          </div>
         </SuccessMessage>
 
         <ResendEmail onClick={handleResendEmail} resendStatus={resendStatus} />
@@ -188,24 +188,17 @@ const SignUpForm = () => {
   const renderForm = () => {
     return (
       <>
-        <h1>
-          Sign Up
-          <span>* required</span>
-        </h1>
-
         {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
         <button className="btn btn-secondary" onClick={() => googleRegister()}>
           <BsGoogle size={16} />
           Continue with Google
         </button>
-
         <div className="or">
           <hr />
           <div>OR</div>
           <hr />
         </div>
-
         <form onSubmit={handleSubmit}>
           <FormControl
             label="First Name"
@@ -248,7 +241,6 @@ const SignUpForm = () => {
             Sign Up
           </button>
         </form>
-
         <div className="form-control--checkbox">
           <input
             type="checkbox"
@@ -265,11 +257,16 @@ const SignUpForm = () => {
   return (
     <section id="register-route">
       <div className="container-slim">
+        <h1>
+          Sign Up
+          {!success && <span>* required</span>}
+        </h1>
+
         {success ? renderSuccess() : renderForm()}
 
         <hr />
 
-        <p className="footer">
+        <p className="callout">
           Already have an Account?{' '}
           <Link to="/login" replace>
             Login

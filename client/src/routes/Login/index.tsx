@@ -198,7 +198,7 @@ const Login = () => {
 
         <hr />
 
-        <p className="footer">
+        <p className="callout">
           Don&apos;t have an account?{' '}
           <Link to="/sign-up" replace>
             Sign Up
@@ -207,7 +207,7 @@ const Login = () => {
 
         <hr />
 
-        <p className="footer small">
+        <p className="callout small muted">
           By continuing, you agree to our
           <br />
           <a>User Agreement</a> and <a>Privacy Policy</a>.
