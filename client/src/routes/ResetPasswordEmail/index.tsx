@@ -9,6 +9,7 @@ import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
+import ResendEmail from '@components/ResendEmail'
 
 const ResetPasswordEmail = () => {
   const { state } = useLocation()
@@ -55,7 +56,9 @@ const ResetPasswordEmail = () => {
       })
       setSuccess(true)
     } catch (error) {
-      if (error.response.status === 401) {
+      if (!error?.response) {
+        setSubmitError('No server response')
+      } else if (error.response.status === 401) {
         setSubmitError('Could not send email. Try again.')
       } else if (error.response.status === 404) {
         setSubmitError('Account does not exist')
@@ -83,13 +86,7 @@ const ResetPasswordEmail = () => {
               The link will expire in 30 minutes.
             </SuccessMessage>
 
-            <p>
-              <span>
-                Didn&apos;t receive an email? Check your spam folder or click{' '}
-              </span>
-              <a onClick={() => setSuccess(false)}>here</a>
-              <span> to resend.</span>
-            </p>
+            <ResendEmail onClick={() => setSuccess(false)} />
           </>
         )}
 

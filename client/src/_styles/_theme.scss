@@ -126,6 +126,14 @@ form {
   text-align: right;
 }
 
+.success {
+  color: $green;
+}
+
+.error {
+  color: $red;
+}
+
 #root {
   position: relative;
   height: 100vh;
@@ -145,8 +153,11 @@ form {
       margin-bottom: 8px;
       line-height: 1.6;
 
-      span {
-        opacity: 0.6;
+      &.small {
+        font-size: 14px;
+        line-height: 1.2;
+        margin-bottom: 16px;
+        text-align: center;
       }
 
       &.footer {

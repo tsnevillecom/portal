@@ -39,10 +39,8 @@ const verifyToken = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const email = req.body.email
-
   const user = await User.findOne({ email }).exec()
 
-  console.log(email, user)
   if (!user) {
     return res.status(404).send({
       message: ERRORS.NOT_FOUND,

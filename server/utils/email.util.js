@@ -21,7 +21,7 @@ const sendVerificationEmail = async (email, token) => {
       CLIENT_PORT +
       '/verify/' +
       token +
-      '.\n\n' +
+      '\n\n' +
       'This link will self-destruct in 1 day.\n\n',
   }
   await sendEmail(mailOptions)
@@ -40,7 +40,7 @@ const sendPasswordResetEmail = async (email, token) => {
       CLIENT_PORT +
       '/reset-password/' +
       token +
-      '.\n\n' +
+      '\n\n' +
       'This link will self-destruct in 30 minutes.\n\n',
   }
   await sendEmail(mailOptions)

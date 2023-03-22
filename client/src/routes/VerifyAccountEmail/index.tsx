@@ -1,24 +1,35 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { ReactNode, useEffect, useRef, useState } from 'react'
 import './VerifyAccountEmail.scss'
 import FormControl from '@components/FormControl'
 import SuccessMessage from '@components/SuccessMessage'
 import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
 import { MdArrowBack } from 'react-icons/md'
+import ResendEmail from '@components/ResendEmail'
 
 const VerifyAccountEmail = () => {
+  const navigate = useNavigate()
   const { state } = useLocation()
+  const [isLoading, setIsLoading] = useState(true)
   const [email, setEmail] = useState(state?.email || '')
   const [success, setSuccess] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
   const [errors, setErrors] = useState<Errors>({})
-  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitError, setSubmitError] = useState<ReactNode | string | null>(
+    null
+  )
 
   useEffect(() => {
+    if (!state?.email) {
+      navigate('/login', { replace: true })
+    } else {
+      setIsLoading(false)
+    }
+
     if (emailRef.current) emailRef.current.focus()
   }, [])
 
@@ -55,7 +66,9 @@ const VerifyAccountEmail = () => {
       })
       setSuccess(true)
     } catch (error) {
-      if (error.response.status === 401) {
+      if (!error?.response) {
+        setSubmitError('No server response')
+      } else if (error.response.status === 401) {
         setSubmitError('Could not send email. Try again.')
       } else if (error.response.status === 404) {
         setSubmitError('Account does not exist')
@@ -65,6 +78,57 @@ const VerifyAccountEmail = () => {
     }
   }
 
+  const renderSuccess = () => {
+    return (
+      <>
+        <SuccessMessage>
+          An email was sent to <strong>{email}</strong>.
+          <br />
+          <br />
+          Please check your inbox for a link to complete verification. The link
+          will expire in 1 day.
+        </SuccessMessage>
+
+        <ResendEmail onClick={() => setSuccess(false)} />
+      </>
+    )
+  }
+
+  const renderForm = () => {
+    return (
+      <>
+        <h3>
+          <strong>Your account has not been verified.</strong>
+        </h3>
+
+        {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
+
+        <p className="instructions">
+          To verify your account, enter your email below and click &quot;Send
+          Email&quot;. An email will be sent to you with instructions about how
+          to complete the verification process.
+        </p>
+
+        <form onSubmit={handleSubmit} noValidate>
+          <FormControl
+            label="Email"
+            forRef={emailRef}
+            name="email"
+            value={email}
+            error={errors.email}
+            onChange={handleInputChange}
+          />
+
+          <button className="btn btn-primary" type="submit">
+            Send Email
+          </button>
+        </form>
+      </>
+    )
+  }
+
+  if (isLoading) return null
+
   return (
     <section id="verify-account-email-route">
       <div className="container-slim">
@@ -73,59 +137,9 @@ const VerifyAccountEmail = () => {
           {!success && <span>* required</span>}
         </h1>
 
-        <h3>
-          <strong>Your account has not been verified.</strong>
-        </h3>
-
-        {success && (
-          <>
-            <SuccessMessage>
-              An email was sent to <strong>{email}</strong>.
-              <br />
-              <br />
-              Please check your inbox for a link to complete verification. The
-              link will expire in 1 day.
-            </SuccessMessage>
-
-            <p>
-              <span>
-                Didn&apos;t receive an email? Check your spam folder or click{' '}
-              </span>
-              <a onClick={() => setSuccess(false)}>here</a>
-              <span> to resend.</span>
-            </p>
-          </>
-        )}
-
-        {!success && (
-          <>
-            {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
-
-            <p className="instructions">
-              To verify your account, enter your email below and click
-              &quot;Send Email&quot;. An email will be sent to you with
-              instructions about how to complete the verification process.
-            </p>
-
-            <form onSubmit={handleSubmit} noValidate>
-              <FormControl
-                label="Email"
-                forRef={emailRef}
-                name="email"
-                value={email}
-                error={errors.email}
-                onChange={handleInputChange}
-              />
-
-              <button className="btn btn-primary" type="submit">
-                Send Email
-              </button>
-            </form>
-          </>
-        )}
+        {success ? renderSuccess() : renderForm()}
 
         <hr />
-
         <p className="footer">
           <Link to="/login" className="back" replace>
             <MdArrowBack /> Back to Login

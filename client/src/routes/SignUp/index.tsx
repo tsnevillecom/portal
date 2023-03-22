@@ -16,10 +16,15 @@ import FormControl from '@components/FormControl'
 import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
+import ResendEmail from '@components/ResendEmail'
 
 const SignUpForm = () => {
   const { setAuth, persist, setPersist } = useAuth()
   const navigate = useNavigate()
+  const [token, setToken] = useState<string | null>(null)
+  const [resendStatus, setResendStatus] = useState<'success' | 'error' | null>(
+    null
+  )
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -92,10 +97,13 @@ const SignUpForm = () => {
     if (!_.isEmpty(errors)) return
 
     try {
-      await axios.post('/register', data, {
+      const response = await axios.post('/register', data, {
         headers: { 'Content-Type': 'application/json' },
         withCredentials: true,
       })
+
+      const token = response.data?.token
+      setToken(token)
       setSuccess(true)
     } catch (error) {
       console.log(error)
@@ -126,7 +134,9 @@ const SignUpForm = () => {
   }
 
   const handleError = (error: any, isGoogle = false) => {
-    if (error.response.status === 401 && !isGoogle) {
+    if (!error?.response) {
+      setSubmitError('No server response')
+    } else if (error.response.status === 401 && !isGoogle) {
       setSubmitError('Could not send verification email')
     } else if (error.response.status === 401 && isGoogle) {
       setSubmitError('Could not retrieve Google account')
@@ -141,112 +151,121 @@ const SignUpForm = () => {
     }
   }
 
-  const resendEmail = () => {
-    console.log('resendEmail')
+  const handleResendEmail = async () => {
+    const data = { email, token }
+
+    try {
+      await axios.post('/register/resend', data, {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      })
+
+      setResendStatus('success')
+    } catch (error) {
+      console.log(error)
+      setResendStatus('error')
+    }
+  }
+
+  const renderSuccess = () => {
+    return (
+      <>
+        <h1>Verify Account</h1>
+
+        <SuccessMessage>
+          An email was sent to <strong>{email}</strong>.
+          <br />
+          <br />
+          Please check your inbox for a link to verify your account. The link
+          will expire in 1 day.
+        </SuccessMessage>
+
+        <ResendEmail onClick={handleResendEmail} resendStatus={resendStatus} />
+      </>
+    )
+  }
+
+  const renderForm = () => {
+    return (
+      <>
+        <h1>
+          Sign Up
+          <span>* required</span>
+        </h1>
+
+        {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
+
+        <button className="btn btn-secondary" onClick={() => googleRegister()}>
+          <BsGoogle size={16} />
+          Continue with Google
+        </button>
+
+        <div className="or">
+          <hr />
+          <div>OR</div>
+          <hr />
+        </div>
+
+        <form onSubmit={handleSubmit}>
+          <FormControl
+            label="First Name"
+            forRef={firstNameRef}
+            name="firstName"
+            value={firstName}
+            error={errors.firstName}
+            onChange={handleInputChange}
+          />
+
+          <FormControl
+            label="Last Name"
+            name="lastName"
+            value={lastName}
+            error={errors.lastName}
+            onChange={handleInputChange}
+          />
+
+          <FormControl
+            label="Email"
+            name="email"
+            value={email}
+            error={errors.email}
+            onChange={handleInputChange}
+          />
+
+          <FormControl
+            label="Password"
+            name="password"
+            type="password"
+            togglePassword={true}
+            value={password}
+            error={errors.password}
+            onChange={handleInputChange}
+          />
+
+          <PasswordMeter password={password} />
+
+          <button className="btn btn-primary" type="submit">
+            Sign Up
+          </button>
+        </form>
+
+        <div className="form-control--checkbox">
+          <input
+            type="checkbox"
+            id="persist"
+            onChange={togglePersist}
+            checked={!!persist}
+          />
+          <label htmlFor="persist">Trust This Device</label>
+        </div>
+      </>
+    )
   }
 
   return (
     <section id="register-route">
       <div className="container-slim">
-        {success && (
-          <>
-            <h1>Verify Account</h1>
-
-            <SuccessMessage>
-              An email was sent to <strong>{email}</strong>.
-              <br />
-              <br />
-              Please check your inbox for a link to verify your account. The
-              link will expire in 1 day.
-            </SuccessMessage>
-
-            <p>
-              <span>
-                Didn&apos;t receive an email? Check your spam folder or click{' '}
-              </span>
-              <a onClick={resendEmail}>here</a>
-              <span> to resend.</span>
-            </p>
-          </>
-        )}
-
-        {!success && (
-          <>
-            <h1>
-              Sign Up
-              <span>* required</span>
-            </h1>
-
-            {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
-
-            <button
-              className="btn btn-secondary"
-              onClick={() => googleRegister()}
-            >
-              <BsGoogle size={16} />
-              Continue with Google
-            </button>
-
-            <div className="or">
-              <hr />
-              <div>OR</div>
-              <hr />
-            </div>
-
-            <form onSubmit={handleSubmit}>
-              <FormControl
-                label="First Name"
-                forRef={firstNameRef}
-                name="firstName"
-                value={firstName}
-                error={errors.firstName}
-                onChange={handleInputChange}
-              />
-
-              <FormControl
-                label="Last Name"
-                name="lastName"
-                value={lastName}
-                error={errors.lastName}
-                onChange={handleInputChange}
-              />
-
-              <FormControl
-                label="Email"
-                name="email"
-                value={email}
-                error={errors.email}
-                onChange={handleInputChange}
-              />
-
-              <FormControl
-                label="Password"
-                name="password"
-                type="password"
-                togglePassword={true}
-                value={password}
-                error={errors.password}
-                onChange={handleInputChange}
-              />
-
-              <PasswordMeter password={password} />
-
-              <button className="btn btn-primary" type="submit">
-                Sign Up
-              </button>
-            </form>
-
-            <div className="form-control--checkbox">
-              <input
-                type="checkbox"
-                id="persist"
-                onChange={togglePersist}
-                checked={!!persist}
-              />
-              <label htmlFor="persist">Trust This Device</label>
-            </div>
-          </>
-        )}
+        {success ? renderSuccess() : renderForm()}
 
         <hr />
 

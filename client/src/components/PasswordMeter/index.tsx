@@ -46,15 +46,21 @@ const PasswordMeter = ({ password }: PasswordMeterProps) => {
     setStatus(passwordAttrStatus)
   }
 
-  const renderIcon = (render: boolean) => {
+  const renderIcon = (hasAttr: boolean) => {
     return (
       <span className="password-attr-state">
-        {render ? (
+        {hasAttr ? (
           <FaCheck className="password-attr-check" />
         ) : (
           <AiTwotoneCheckCircle className="password-attr-x" />
         )}
       </span>
+    )
+  }
+
+  const renderAttr = (hasAttr: boolean, text: string) => {
+    return (
+      <span className={`password-attr ${hasAttr && 'has-attr'}`}>{text}</span>
     )
   }
 
@@ -66,23 +72,23 @@ const PasswordMeter = ({ password }: PasswordMeterProps) => {
       <div id="password-check">
         <div>
           {renderIcon(status.hasLowerCase)}
-          <span className="password-attr">One lowercase character</span>
+          {renderAttr(status.hasLowerCase, 'One lowercase character')}
         </div>
         <div>
           {renderIcon(status.hasSpecialChar)}
-          <span className="password-attr">One special character</span>
+          {renderAttr(status.hasSpecialChar, 'One special character')}
         </div>
         <div>
           {renderIcon(status.hasUpperCase)}
-          <span className="password-attr">One uppercase character</span>
+          {renderAttr(status.hasUpperCase, 'One uppercase character')}
         </div>
         <div>
           {renderIcon(status.length)}
-          <span className="password-attr">8 characters minimum</span>
+          {renderAttr(status.length, '8 characters minimum')}
         </div>
         <div>
           {renderIcon(status.hasDigit)}
-          <span className="password-attr">One number</span>
+          {renderAttr(status.hasDigit, 'One number')}
         </div>
       </div>
     </div>

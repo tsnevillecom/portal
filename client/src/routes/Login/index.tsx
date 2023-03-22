@@ -207,10 +207,10 @@ const Login = () => {
 
         <hr />
 
-        <p className="footer">
-          <span>By continuing, you agree to our</span>
+        <p className="footer small">
+          By continuing, you agree to our
           <br />
-          <a>User Agreement</a> <span>and</span> <a>Privacy Policy</a>.
+          <a>User Agreement</a> and <a>Privacy Policy</a>.
         </p>
       </div>
     </section>

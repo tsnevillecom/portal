@@ -33,22 +33,13 @@ const Verify = () => {
       } else if (err.response.status === 404) {
         setSubmitError('User not found')
       } else if (err.response.status === 409) {
-        setSubmitError('User already verified')
-        setShowLogin(true)
+        navigate('/verified', { replace: true })
       } else {
         setSubmitError('Internal error')
       }
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const renderLogin = () => {
-    return (
-      <button className="btn btn-primary" onClick={() => navigate('/login')}>
-        Login
-      </button>
-    )
   }
 
   if (isLoading) return null
@@ -58,45 +49,22 @@ const Verify = () => {
       <div className="container-slim">
         {!success && (
           <>
-            {!showLogin && (
-              <>
-                <h1>Verification failed</h1>
+            <h1>Verification failed</h1>
+            <p>Something went wrong during account verifcation.</p>
 
-                <p>Something went wrong during account verifcation.</p>
+            {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
-                {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
+            <p>
+              Please try again or contact us at <strong>admin@ampd.com</strong>{' '}
+              if you need further assistance.
+            </p>
 
-                <p>
-                  Please try again or contact us at{' '}
-                  <strong>admin@ampd.com</strong> if you need further
-                  assistance.
-                </p>
-
-                <button
-                  className="btn btn-primary"
-                  onClick={() => navigate('/verify')}
-                >
-                  Try again
-                </button>
-              </>
-            )}
-
-            {showLogin && (
-              <>
-                <h1>You are already verified!</h1>
-
-                <SuccessMessage>
-                  It looks like your account has already been verified. Please
-                  proceed to login.
-                </SuccessMessage>
-
-                <p>
-                  Contact us at <strong>admin@ampd.com</strong> if you need
-                  further assistance.
-                </p>
-                {renderLogin()}
-              </>
-            )}
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate('/verify')}
+            >
+              Try again
+            </button>
           </>
         )}
 
@@ -105,11 +73,16 @@ const Verify = () => {
             <h1>You are verified!</h1>
 
             <SuccessMessage>
-              Hello and welcome! Your account has been successfully verified.
+              Congratulations! Your account has been successfully verified.
               Let&apos;s log into your new account!
             </SuccessMessage>
 
-            {renderLogin()}
+            <button
+              className="btn btn-primary"
+              onClick={() => navigate('/login')}
+            >
+              Login
+            </button>
           </>
         )}
       </div>

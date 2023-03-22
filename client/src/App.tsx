@@ -20,6 +20,7 @@ import VerifyAccountEmail from '@routes/VerifyAccountEmail'
 import ThemeToggle from '@components/ThemeToggle'
 import ResetPasswordVerify from '@routes/ResetPasswordVerify'
 import ResetPasswordEmail from '@routes/ResetPasswordEmail'
+import AccountVerified from '@routes/AccountVerified'
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
               <Route path="login" element={<Login />} />
               <Route path="sign-up" element={<SignUp />} />
               <Route path="verify" element={<VerifyAccountEmail />} />
+              <Route path="verified" element={<AccountVerified />} />
               <Route path="verify/:token" element={<Verify />} />
               <Route path="reset-password" element={<ResetPasswordEmail />} />
               <Route
