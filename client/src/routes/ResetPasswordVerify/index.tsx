@@ -9,6 +9,7 @@ import { validateForm } from '@utils/validateForm'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
 import SuccessMessage from '@components/SuccessMessage'
+import Button from '@components/Button'
 
 const ResetPasswordVerify = () => {
   const params = useParams()
@@ -105,9 +106,7 @@ const ResetPasswordVerify = () => {
           <div>Let&apos;s log into your account!</div>
         </SuccessMessage>
 
-        <button className="btn btn-primary" onClick={() => navigate('/login')}>
-          Login
-        </button>
+        <Button onClick={() => navigate('/login')}>Login</Button>
       </>
     )
   }
@@ -135,9 +134,7 @@ const ResetPasswordVerify = () => {
 
           <PasswordMeter password={password} />
 
-          <button className="btn btn-primary" type="submit">
-            Reset Password
-          </button>
+          <Button type="submit" loading={isSubmitting}>Reset Password</Button>
         </form>
       </>
     )

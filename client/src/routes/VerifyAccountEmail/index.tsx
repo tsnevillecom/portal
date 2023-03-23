@@ -9,6 +9,7 @@ import { Link, useLocation } from 'react-router-dom'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
 import ResendEmail from '@components/ResendEmail'
+import Button from '@components/Button'
 
 const VerifyAccountEmail = () => {
   const { state } = useLocation()
@@ -119,9 +120,9 @@ const VerifyAccountEmail = () => {
             onChange={handleInputChange}
           />
 
-          <button className="btn btn-primary" type="submit">
+          <Button type="submit" loading={isSubmitting}>
             Send Email
-          </button>
+          </Button>
         </form>
       </>
     )

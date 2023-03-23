@@ -17,6 +17,7 @@ import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
 import ResendEmail from '@components/ResendEmail'
+import Button from '@components/Button'
 
 const SignUpForm = () => {
   const { setAuth, persist, setPersist } = useAuth()
@@ -30,6 +31,7 @@ const SignUpForm = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [success, setSuccess] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<ReactNode | string | null>(
     null
   )
@@ -96,6 +98,8 @@ const SignUpForm = () => {
     setErrors(errors)
     if (!_.isEmpty(errors)) return
 
+    setIsSubmitting(true)
+
     try {
       const response = await axios.post('/register', data, {
         headers: { 'Content-Type': 'application/json' },
@@ -108,6 +112,8 @@ const SignUpForm = () => {
     } catch (error) {
       console.log(error)
       handleError(error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -190,10 +196,11 @@ const SignUpForm = () => {
       <>
         {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
-        <button className="btn btn-secondary" onClick={() => googleRegister()}>
+        <Button style="secondary" onClick={() => googleRegister()}>
           <BsGoogle size={16} />
           Continue with Google
-        </button>
+        </Button>
+
         <div className="or">
           <hr />
           <div>OR</div>
@@ -237,9 +244,9 @@ const SignUpForm = () => {
 
           <PasswordMeter password={password} />
 
-          <button className="btn btn-primary" type="submit">
+          <Button type="submit" loading={isSubmitting}>
             Sign Up
-          </button>
+          </Button>
         </form>
         <div className="form-control--checkbox">
           <input

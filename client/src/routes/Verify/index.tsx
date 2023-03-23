@@ -4,6 +4,7 @@ import './Verify.scss'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
 import SuccessMessage from '@components/SuccessMessage'
+import Button from '@components/Button'
 
 const Verify = () => {
   const params = useParams()
@@ -54,14 +55,12 @@ const Verify = () => {
           </div>
         </SuccessMessage>
 
-        <button className="btn btn-primary" onClick={() => navigate('/login')}>
-          Login
-        </button>
+        <Button onClick={() => navigate('/login')}>Login</Button>
       </>
     )
   }
 
-  const renderForm = () => {
+  const renderFailure = () => {
     return (
       <>
         <h1>Verification failed</h1>
@@ -74,9 +73,7 @@ const Verify = () => {
           you need further assistance.
         </p>
 
-        <button className="btn btn-primary" onClick={() => navigate('/verify')}>
-          Try again
-        </button>
+        <Button onClick={() => navigate('/verify')}>Try again</Button>
       </>
     )
   }
@@ -86,7 +83,7 @@ const Verify = () => {
   return (
     <section id="verify-route">
       <div className="container-slim">
-        {success ? renderSuccess() : renderForm()}
+        {success ? renderSuccess() : renderFailure()}
       </div>
     </section>
   )

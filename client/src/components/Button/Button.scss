@@ -7,13 +7,15 @@
   color: $white;
   cursor: pointer;
   font-size: $base-font-size;
-  outline: 0;
-  padding: 8px 12px;
-  transition: all $time ease-in-out;
   display: flex;
   align-items: center;
-  justify-content: center;
+  outline: 0;
+  padding: 0 16px;
+  line-height: 36px;
+  transition: all $time ease-in-out;
+
   user-select: none;
+  position: relative;
 
   &:hover {
     background-color: darken($gray-500, 5%);
@@ -69,13 +71,41 @@
     }
   }
 
+  &.btn-warning {
+    background-color: $yellow;
+    color: $white;
+    border-color: $yellow;
+
+    &:hover {
+      background-color: darken($yellow, 5%);
+    }
+  }
+
   &:focus {
     box-shadow: 0 0 5px $blue;
     border: 1px solid $blue;
   }
 
+  span {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &.btn-loading {
+    pointer-events: none;
+  }
+
   svg {
     margin-right: 8px;
+
+    &.loading {
+      margin-right: 0;
+      position: absolute;
+      right: 8px;
+      animation: spin 1s linear infinite;
+    }
   }
 
   &:disabled {
@@ -99,5 +129,22 @@
     outline: none;
     border: none;
     box-shadow: none;
+  }
+}
+
+@-moz-keyframes spin {
+  100% {
+    -moz-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
   }
 }

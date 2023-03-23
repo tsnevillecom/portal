@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import ErrorMessage from '@components/ErrorMessage'
 import { useNavigate, useParams } from 'react-router-dom'
 import _ from 'lodash'
+import Button from '@components/Button'
 
 export const ExpiredLink = () => {
   const params = useParams()
@@ -29,11 +30,7 @@ export const ExpiredLink = () => {
         break
     }
 
-    return (
-      <button className="btn btn-primary" onClick={() => navigate(to)}>
-        {btnText}
-      </button>
-    )
+    return <Button onClick={() => navigate(to)}>{btnText}</Button>
   }
 
   return (

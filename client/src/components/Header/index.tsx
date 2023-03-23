@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import useAuth from '@hooks/useAuth'
 import useLogout from '@hooks/useLogout'
 import './Header.scss'
+import Button from '@components/Button'
 
 const Header = () => {
   const { auth, isAdmin } = useAuth()
@@ -23,9 +24,9 @@ const Header = () => {
         </Link>
       </div>
 
-      <button className="btn-link" onClick={logout}>
+      <Button style="link" onClick={logout}>
         Sign Out
-      </button>
+      </Button>
     </header>
   )
 }

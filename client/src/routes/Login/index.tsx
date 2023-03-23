@@ -15,6 +15,7 @@ import ErrorMessage from '@components/ErrorMessage'
 import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
+import Button from '@components/Button'
 const LOGIN_URL = '/auth'
 
 interface IHandleLogin {
@@ -32,6 +33,7 @@ const Login = () => {
   const [submitError, setSubmitError] = useState<ReactNode | string | null>(
     null
   )
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<Errors>({})
@@ -77,6 +79,7 @@ const Login = () => {
         setErrors(errors)
         if (!_.isEmpty(errors)) return
 
+        setIsSubmitting(true)
         response = await axiosPrivate.post(
           LOGIN_URL,
           JSON.stringify({ email, password })
@@ -90,6 +93,7 @@ const Login = () => {
       setEmail('')
       setPassword('')
       navigate('/', { replace: true })
+      setIsSubmitting(false)
     } catch (err) {
       if (!err?.response) {
         setSubmitError('No server response')
@@ -121,12 +125,15 @@ const Login = () => {
         setSubmitError('Login failed')
       }
       if (errorRef.current) errorRef.current.focus()
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     if (submitError) setSubmitError(null)
+    if (errors[name]) setErrors(_.omit(errors, name))
 
     switch (name) {
       case 'email':
@@ -147,10 +154,10 @@ const Login = () => {
 
         {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
-        <button className="btn btn-secondary" onClick={() => googleLogin()}>
+        <Button style="secondary" onClick={() => googleLogin()}>
           <BsGoogle size={16} />
           Continue with Google
-        </button>
+        </Button>
 
         <div className="or">
           <hr />
@@ -181,9 +188,9 @@ const Login = () => {
             Forgot password?
           </Link>
 
-          <button className="btn btn-primary" type="submit">
+          <Button type="submit" loading={isSubmitting}>
             Login
-          </button>
+          </Button>
 
           <div className="form-control--checkbox">
             <input

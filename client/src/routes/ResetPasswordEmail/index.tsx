@@ -10,11 +10,13 @@ import _ from 'lodash'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
 import ResendEmail from '@components/ResendEmail'
+import Button from '@components/Button'
 
 const ResetPasswordEmail = () => {
   const { state } = useLocation()
   const [email, setEmail] = useState(state?.email || '')
   const [success, setSuccess] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const emailRef = useRef<HTMLInputElement>(null)
   const [errors, setErrors] = useState<Errors>({})
   const [submitError, setSubmitError] = useState<string | null>(null)
@@ -49,6 +51,8 @@ const ResetPasswordEmail = () => {
     setErrors(errors)
     if (!_.isEmpty(errors)) return
 
+    setIsSubmitting(true)
+
     try {
       await axios.post('/reset/password', data, {
         headers: { 'Content-Type': 'application/json' },
@@ -65,6 +69,8 @@ const ResetPasswordEmail = () => {
       } else {
         setSubmitError('Password reset failed. Try again.')
       }
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
@@ -115,9 +121,9 @@ const ResetPasswordEmail = () => {
                 onChange={handleInputChange}
               />
 
-              <button className="btn btn-primary" type="submit">
+              <Button type="submit" loading={isSubmitting}>
                 Send Email
-              </button>
+              </Button>
             </form>
           </>
         )}

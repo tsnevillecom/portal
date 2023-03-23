@@ -1,3 +1,4 @@
+import Button from '@components/Button'
 import SuccessMessage from '@components/SuccessMessage'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -21,9 +22,7 @@ export const AccountVerified = () => {
           you need further assistance.
         </p>
 
-        <button className="btn btn-primary" onClick={() => navigate('/login')}>
-          Login
-        </button>
+        <Button onClick={() => navigate('/login')}>Login</Button>
       </div>
     </section>
   )
