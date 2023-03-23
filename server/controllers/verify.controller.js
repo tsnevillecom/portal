@@ -52,9 +52,7 @@ const verifyEmail = async (req, res) => {
       _userId: user._id,
       token: crypto.randomBytes(16).toString('hex'),
     })
-    console.log(token)
     const token = await emailToken.save()
-
     await sendVerificationEmail(email, token.token)
     res.status(200).send({ email })
   } catch (error) {
@@ -62,7 +60,7 @@ const verifyEmail = async (req, res) => {
       return res.status(401).send({ message: error.message })
     }
 
-    res.status(400).send({ message: ERRORS.VERIFICATION_FAILED })
+    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
   }
 }
 

@@ -94,35 +94,30 @@ const Login = () => {
       setPassword('')
       navigate('/', { replace: true })
       setIsSubmitting(false)
-    } catch (err) {
-      if (!err?.response) {
+    } catch (error) {
+      if (!error?.response) {
         setSubmitError('No server response')
-      } else if (err.response.status === 400) {
+      } else if (error.response.status === 400) {
         setSubmitError('Valid email or password required')
-      } else if (err.response.status === 401) {
-        setSubmitError(
-          <>
-            Verify your account to continue.{' '}
-            <Link to="/verify" state={{ email }}>
-              Verify Account
-            </Link>
-          </>
-        )
-      } else if (err.response.status === 403) {
-        setSubmitError('Valid email address required')
-      } else if (err.response.status === 404) {
+      } else if (error.response.status === 401) {
+        setSubmitError('Login failed. Invalid credentials.')
+      } else if (error.response.status === 403) {
+        navigate('/verify', { state: { email } })
+      } else if (error.response.status === 404) {
         setSubmitError('User not found')
-      } else if (err.response.status === 409) {
+      } else if (error.response.status === 405) {
+        setSubmitError('An error was returned from Google. Try again.')
+      } else if (error.response.status === 409) {
         setSubmitError(
-          <>
+          <div>
             Reset your password to continue.{' '}
             <Link to="/reset-password" state={{ email }}>
               Reset Password
             </Link>
-          </>
+          </div>
         )
       } else {
-        setSubmitError('Login failed')
+        setSubmitError('Login failed. Try again.')
       }
       if (errorRef.current) errorRef.current.focus()
     } finally {

@@ -17,7 +17,7 @@ const validateToken = async (req, res) => {
       })
     }
 
-    res.sendStatus(200)
+    res.sendStatus(204)
   } catch (error) {
     res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
   }
@@ -49,7 +49,7 @@ const resetPassword = async (req, res) => {
       return res.status(401).send({ message: error.message })
     }
 
-    res.status(400).send({ message: ERRORS.INTERNAL_ERROR })
+    res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
   }
 }
 

@@ -14,7 +14,7 @@ const me = async (req, res) => {
 }
 
 const checkToken = async (req, res) => {
-  res.sendStatus(200)
+  res.sendStatus(204)
 }
 
 const logoutAll = async (req, res) => {
@@ -100,7 +100,7 @@ const login = async (req, res) => {
   }
 
   if (!validator.isEmail(email)) {
-    return res.status(403).send({ message: ERRORS.INVALID_EMAIL })
+    return res.status(400).send({ message: ERRORS.INVALID_EMAIL })
   }
 
   const foundUser = await User.findOne({ email }).exec()
@@ -109,7 +109,7 @@ const login = async (req, res) => {
   }
 
   if (!foundUser.isVerified) {
-    return res.status(401).send({ message: ERRORS.USER_NOT_VERIFIED })
+    return res.status(403).send({ message: ERRORS.USER_NOT_VERIFIED })
   }
 
   if (!foundUser.password) {
@@ -118,7 +118,7 @@ const login = async (req, res) => {
 
   const isMatch = await bcrypt.compare(password, foundUser.password)
   if (!isMatch) {
-    return res.status(403).send({ message: ERRORS.UNAUTHORIZED })
+    return res.status(401).send({ message: ERRORS.UNAUTHORIZED })
   }
 
   let newRefreshTokenArray = !cookies?.refreshToken
@@ -203,6 +203,7 @@ const refresh = async (req, res) => {
       const result = await hackedUser.save()
       console.log('hacked user', result)
     })
+
     return res.status(403).send({ message: ERRORS.FORBIDDEN })
   }
 
@@ -246,7 +247,7 @@ const refresh = async (req, res) => {
       res.send({ user: foundUser, accessToken })
     } catch (error) {
       console.log(error)
-      return res.status(403).send({ message: ERRORS.FORBIDDEN })
+      return res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
     }
   })
 }

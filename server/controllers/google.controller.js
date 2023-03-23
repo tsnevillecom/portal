@@ -2,7 +2,6 @@ const User = require('../models/user')
 const axios = require('axios')
 const { REFRESH_TOKEN_EXPIRY, SECURE_COOKIE } = require('../config')
 const { ERRORS } = require('../_constants')
-const { verifyToken } = require('./verify.controller')
 
 const login = async (req, res) => {
   const cookies = req.cookies
@@ -59,7 +58,7 @@ const login = async (req, res) => {
     const accessToken = await foundUser.newAccessToken()
     res.send({ user: foundUser, accessToken })
   } catch (error) {
-    return res.status(401).send({ error, message: ERRORS.UNAUTHORIZED })
+    return res.status(500).send({ error, message: ERRORS.INTERNAL_ERROR })
   }
 }
 
@@ -80,7 +79,7 @@ const getGoogleUser = async (req, res) => {
 
     return googleResponse.data
   } catch (error) {
-    return res.status(401).send({ error, message: ERRORS.GOOGLE_ERROR })
+    return res.status(405).send({ error, message: ERRORS.GOOGLE_ERROR })
   }
 }
 
@@ -118,7 +117,7 @@ const register = async (req, res) => {
     const accessToken = await newUser.newAccessToken()
     res.status(200).send({ user: newUser, accessToken })
   } catch (error) {
-    return res.status(400).send({ error, message: ERRORS.REGISTRATION_FAILED })
+    return res.status(500).send({ error, message: ERRORS.REGISTRATION_FAILED })
   }
 }
 

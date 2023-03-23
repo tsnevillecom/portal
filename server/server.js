@@ -9,8 +9,10 @@ const cookieParser = require('cookie-parser')
 const credentials = require('./middleware/credentials')
 const connectDB = require('./db')
 const limiter = require('express-rate-limit')
+const invalidPathHandler = require('./middleware/invalidPath.middleware')
 
 connectDB()
+
 const app = express()
 app.use(
   limiter({
@@ -35,6 +37,8 @@ app.use('/verify', require('./routes/verify.route'))
 app.use('/teams', require('./routes/teams.route'))
 app.use('/google', require('./routes/google.route'))
 app.use('/reset', require('./routes/reset.route'))
+
+app.use(invalidPathHandler)
 
 app.listen(PORT, HOST, function () {
   console.log(`App listening on http://${HOST}:${PORT}`)
