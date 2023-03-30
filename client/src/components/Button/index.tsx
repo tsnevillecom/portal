@@ -11,6 +11,7 @@ interface ButtonProps {
   loading?: boolean
   name?: string
   id?: string
+  classes?: string
 }
 
 const defaultProps: ButtonProps = {
@@ -30,12 +31,15 @@ const Button = ({
   name,
   id,
   loading,
+  classes,
 }: ButtonProps) => {
   const buttonAttr = {
     type,
     name,
     id,
-    className: `btn btn-${style} ${loading ? 'btn-loading' : ''}`,
+    className: `btn btn-${style} ${loading ? 'btn-loading' : ''} ${
+      classes ? classes : ''
+    }`,
     ...(onClick && { onClick: () => onClick() }),
     ...(disabled && { disabled }),
   }

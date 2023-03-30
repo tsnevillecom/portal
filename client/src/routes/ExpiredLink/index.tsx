@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import ErrorMessage from '@components/ErrorMessage'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import _ from 'lodash'
 import Button from '@components/Button'
 
@@ -30,7 +30,11 @@ export const ExpiredLink = () => {
         break
     }
 
-    return <Button onClick={() => navigate(to)}>{btnText}</Button>
+    return (
+      <Button classes="margin-bottom-12" onClick={() => navigate(to)}>
+        {btnText}
+      </Button>
+    )
   }
 
   return (
@@ -50,6 +54,18 @@ export const ExpiredLink = () => {
         </p>
 
         {renderAction()}
+
+        <div className="or">
+          <hr />
+          <div>OR</div>
+          <hr />
+        </div>
+
+        <p className="callout">
+          <Link to="/login" className="back" replace>
+            Login
+          </Link>
+        </p>
       </div>
     </section>
   )
