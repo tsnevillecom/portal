@@ -9,22 +9,6 @@ if (result.error) {
   throw result.error
 }
 
-interface IEnvironmentalVars {
-  ACCESS_TOKEN_EXPIRY: number
-  ACCESS_TOKEN_EXPIRY_SIGN: string
-  REFRESH_TOKEN_EXPIRY: number
-  REFRESH_TOKEN_EXPIRY_SIGN: string
-  SECURE_COOKIE: boolean
-  CLIENT_PORT: number
-  REFRESH_TOKEN_SECRET: string
-  ACCESS_TOKEN_SECRET: string
-  DATABASE_URL: string
-  MAILGUN_API_KEY: string
-  MAILGUN_DOMAIN: string
-  HOST: number
-  PORT: number
-}
-
 const environmentalVars = {
   // ACCESS_TOKEN_EXPIRY: 10000,
   // ACCESS_TOKEN_EXPIRY_SIGN: '10s',
@@ -43,6 +27,7 @@ const environmentalVars = {
   MAILGUN_DOMAIN: null,
   HOST: null,
   PORT: null,
+  ADMIN_PASSWORD: null,
   ...result.parsed,
 }
 

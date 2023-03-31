@@ -14,7 +14,7 @@ html {
 
 h1 {
   margin-bottom: 16px;
-  font-size: 60px;
+  font-size: 40px;
   font-weight: 700;
 }
 
@@ -143,12 +143,41 @@ form {
   height: 100vh;
   width: 100vw;
   display: flex;
-  flex-direction: column;
   overflow: hidden;
+  border-top: 8px solid $blue;
+
+  aside {
+    width: 300px;
+    height: 100%;
+
+    &.sidebar {
+      display: flex;
+      flex-direction: column;
+
+      > div {
+        padding: 24px;
+
+        &.sidebar-header {
+          flex: 0 0 $header-height;
+          height: $header-height;
+          font-weight: 700;
+          font-size: 32px;
+          display: flex;
+          align-items: center;
+        }
+
+        &.sidebar-body {
+          flex: 1;
+          background-color: #101010;
+        }
+      }
+    }
+  }
 
   main {
     display: flex;
-    width: 100vw;
+    flex-direction: column;
+    height: 100%;
     flex: 1;
     overflow: hidden;
     position: relative;
@@ -172,17 +201,10 @@ form {
 
     > section {
       flex: 1;
-      height: 100%;
+      width: 100%;
       overflow-y: auto;
       overflow-x: hidden;
       padding: 24px;
-    }
-
-    &.authenticated {
-      aside {
-        width: 300px;
-        padding: 24px;
-      }
     }
 
     &.unauthenticated {
@@ -207,11 +229,14 @@ body {
   overflow: hidden;
 
   &.dark {
-    color: $white;
-    background-color: $gray-900;
-    background-image: linear-gradient($gray-900, darken($gray-900, 5%));
+    color: $gray-300;
+    background-color: #1a1a1a;
 
     #root {
+      aside {
+        background: $black;
+      }
+
       main {
         hr {
           background-color: rgba($white, 0.2);
@@ -238,9 +263,6 @@ body {
         }
 
         &.authenticated {
-          aside {
-            background: #eee;
-          }
         }
 
         &.unauthenticated {
@@ -254,6 +276,10 @@ body {
     background-color: $gray-200;
 
     #root {
+      aside {
+        background: $gray-300;
+      }
+
       main {
         hr {
           background-color: rgba($black, 0.3);
@@ -280,9 +306,6 @@ body {
         }
 
         &.authenticated {
-          aside {
-            background: #eee;
-          }
         }
 
         &.unauthenticated {

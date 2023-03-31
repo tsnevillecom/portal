@@ -1,4 +1,4 @@
-export const required = (value: any) => (value ? undefined : 'Required')
+export const required = (value: unknown) => (value ? undefined : 'Required')
 
 export const maxLength = (max: number) => (value: string) =>
   value && value.length > max ? `Must be ${max} characters or less` : undefined

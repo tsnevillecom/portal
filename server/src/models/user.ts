@@ -21,6 +21,7 @@ interface IUser {
   deleted: boolean
   avatar: string
   role: string
+  fullName: string
 }
 
 interface IUserMethods {
@@ -102,6 +103,10 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
   },
   { timestamps: true }
 )
+
+UserSchema.virtual('fullName').get(function () {
+  return this.firstName + ' ' + this.lastName
+})
 
 UserSchema.methods.newAccessToken = async function () {
   const user = this.toJSON()

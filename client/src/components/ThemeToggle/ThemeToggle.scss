@@ -6,7 +6,7 @@
   width: 60px;
   padding: 4px;
   border-radius: 16px;
-  border: 1px solid rgba($white, 0.1);
+  border: 1px solid rgba($white, 0.3);
   background-color: $black;
   position: absolute;
   bottom: 16px;
@@ -23,12 +23,12 @@
 
     &.light {
       left: 4px;
-      background-color: $slate-100;
+      background-color: $gray-100;
     }
 
     &.dark {
-      left: 32px;
-      background-color: $slate-500;
+      left: 30px;
+      background-color: $gray-500;
     }
   }
 }

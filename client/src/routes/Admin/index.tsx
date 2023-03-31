@@ -3,7 +3,6 @@ import React from 'react'
 const Admin = () => {
   return (
     <>
-      <aside />
       <section id="admin-route">
         <h1>Admin</h1>
         <p>

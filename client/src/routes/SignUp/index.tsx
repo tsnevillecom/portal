@@ -18,6 +18,7 @@ import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
 import ResendEmail from '@components/ResendEmail'
 import Button from '@components/Button'
+import { AxiosError } from 'axios'
 
 const SignUpForm = () => {
   const { setAuth, persist, setPersist } = useAuth()
@@ -139,7 +140,7 @@ const SignUpForm = () => {
     }
   }
 
-  const handleError = (error: any, isGoogle = false) => {
+  const handleError = (error: AxiosError, isGoogle = false) => {
     if (!error?.response) {
       setSubmitError('No server response')
     } else if (error.response.status === 401 && !isGoogle) {

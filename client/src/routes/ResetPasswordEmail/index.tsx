@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './ResetPasswordEmail.scss'
 import { Link, useLocation } from 'react-router-dom'
-import { MdArrowBack } from 'react-icons/md'
 import FormControl from '@components/FormControl'
 import SuccessMessage from '@components/SuccessMessage'
 import { Errors, Rules } from '@types'

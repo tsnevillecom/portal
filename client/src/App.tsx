@@ -17,13 +17,16 @@ import SignUp from '@routes/SignUp'
 import Toasts from '@components/Toasts'
 import Verify from '@routes/Verify'
 import VerifyAccountEmail from '@routes/VerifyAccountEmail'
-import ThemeToggle from '@components/ThemeToggle'
 import ResetPasswordVerify from '@routes/ResetPasswordVerify'
 import ResetPasswordEmail from '@routes/ResetPasswordEmail'
 import AccountVerified from '@routes/AccountVerified'
 import ExpiredLink from '@routes/ExpiredLink'
+import Rooms from '@routes/Rooms'
+import useTheme from '@hooks/useTheme'
 
 const App = () => {
+  useTheme()
+
   return (
     <>
       <Routes>
@@ -49,6 +52,7 @@ const App = () => {
             <Route element={<AuthenticatedRoute allowedRoles={[]} />}>
               <Route path="/" element={<Home />} />
               <Route path="profile" element={<Profile />} />
+              <Route path="rooms" element={<Rooms />} />
               <Route path="unauthorized" element={<Unauthorized />} />
             </Route>
 
@@ -63,8 +67,6 @@ const App = () => {
           <Route path="*" element={<Missing />} />
         </Route>
       </Routes>
-
-      <ThemeToggle />
 
       <Toasts />
     </>

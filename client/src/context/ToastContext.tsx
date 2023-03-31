@@ -3,12 +3,13 @@ import React, {
   useState,
   useRef,
   PropsWithChildren,
+  useMemo,
 } from 'react'
 
 import { generateUuid } from '@utils/generateUuid.util'
 import { IToast, IToastType } from '@types'
 
-interface ToastContextData {
+interface IToastContext {
   toasts: IToast[]
   removeToast: (id: string) => void
   addToast: (
@@ -20,13 +21,13 @@ interface ToastContextData {
   ) => void
 }
 
-const toastContextDefaultValue: ToastContextData = {
+export const ToastContext = createContext<IToastContext>({
   toasts: [],
   removeToast: () => null,
   addToast: () => null,
-}
+})
 
-const useToastContextValue = (): ToastContextData => {
+export const ToastProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [toasts, setToasts] = useState<IToast[]>([])
   const toastRef = useRef(toasts)
   toastRef.current = toasts
@@ -58,20 +59,17 @@ const useToastContextValue = (): ToastContextData => {
     setToasts(toastArr)
   }
 
-  return {
-    toasts,
-    removeToast,
-    addToast,
-  }
-}
+  const contextValue = useMemo(
+    () => ({
+      toasts,
+      removeToast,
+      addToast,
+    }),
+    [toasts]
+  )
 
-export const ToastContext = createContext<ToastContextData>(
-  toastContextDefaultValue
-)
-
-export const ToastProvider: React.FC<PropsWithChildren> = ({ children }) => {
   return (
-    <ToastContext.Provider value={useToastContextValue()}>
+    <ToastContext.Provider value={contextValue}>
       {children}
     </ToastContext.Provider>
   )

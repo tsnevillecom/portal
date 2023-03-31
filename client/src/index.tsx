@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './context/AuthProvider'
 import App from './App'
 import { ToastProvider } from './context/ToastContext'
+import { SocketProvider } from '@context/SocketProvider'
 
 const container = document.getElementById('root')
 const root = createRoot(container as Element)
@@ -27,9 +28,11 @@ root.render(
   <BrowserRouter>
     <ToastProvider>
       <AuthProvider>
-        <Routes>
-          <Route path="/*" element={<App />} />
-        </Routes>
+        <SocketProvider>
+          <Routes>
+            <Route path="/*" element={<App />} />
+          </Routes>
+        </SocketProvider>
       </AuthProvider>
     </ToastProvider>
   </BrowserRouter>

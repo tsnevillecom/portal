@@ -159,6 +159,7 @@ class AuthController {
       })
 
       const accessToken = await foundUser.newAccessToken()
+
       res.send({ user: foundUser, accessToken })
     } catch (error) {
       console.log(error)

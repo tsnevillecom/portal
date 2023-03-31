@@ -1,9 +1,43 @@
-import React from 'react'
+import Button from '@components/Button'
+import { SocketContext } from '@context/SocketProvider'
+import useStateRef from '@hooks/useStateRef'
+import _ from 'lodash'
+import React, { useContext, useEffect } from 'react'
+import { SocketEventData } from 'src/_types/socket'
 
 const Home = () => {
+  const { socket } = useContext(SocketContext)
+  const [messages, setMessages, messagesRef] = useStateRef<string[]>([])
+
+  useEffect(() => {
+    if (socket) socket.on('NOTIFICATION', handleSocketEvent)
+
+    return () => {
+      if (socket) socket.off('NOTIFICATION', handleSocketEvent)
+    }
+  }, [socket])
+
+  const handleSocketEvent = (event: SocketEventData) => {
+    const body = event.data['body'] as string
+    setMessages([body, ...messagesRef.current])
+  }
+
+  const sendSocketEvent = () => {
+    if (socket) socket.emit('message', Math.random())
+  }
+
   return (
     <section id="home-route">
       <h1>Home</h1>
+
+      <Button onClick={sendSocketEvent}>Send socket stuff</Button>
+      <br />
+      <br />
+
+      {_.map(messages, (message, i) => (
+        <p key={i}>{message}</p>
+      ))}
+
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac nulla
         pellentesque, scelerisque massa id, mollis odio. Nam non metus erat. Ut

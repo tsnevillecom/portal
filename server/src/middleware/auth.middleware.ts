@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { ACCESS_TOKEN_SECRET } from '../config'
+import config from '../config'
 
 class AuthMiddleware {
   public authenticate = (req: Request, res: Response, next: NextFunction) => {
@@ -10,7 +10,7 @@ class AuthMiddleware {
       if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401)
 
       const accessToken = authHeader.split(' ')[1]
-      jwt.verify(accessToken, ACCESS_TOKEN_SECRET, (err, decoded) => {
+      jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET, (err, decoded) => {
         if (err) return res.sendStatus(403) //invalid token
         req['user'] = decoded.user
         req['accessToken'] = accessToken

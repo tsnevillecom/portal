@@ -13,9 +13,9 @@ const Header = () => {
 
   return (
     <header>
-      <div id="logo">LOGO</div>
       <nav>
         <Link to="/">Home</Link>
+        <Link to="/rooms">Rooms</Link>
         {isAdmin && <Link to="/admin">Admin</Link>}
       </nav>
       <div id="user-menu">

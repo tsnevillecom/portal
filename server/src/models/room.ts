@@ -1,16 +1,18 @@
 import { Schema, model } from 'mongoose'
 
-const TeamSchema = new Schema(
+const RoomSchema = new Schema(
   {
     name: {
       type: String,
       required: true,
       trim: true,
+      minlength: 4,
     },
     members: [
       {
         type: Schema.Types.ObjectId,
         ref: 'User',
+        required: true,
       },
     ],
     createdBy: {
@@ -26,5 +28,5 @@ const TeamSchema = new Schema(
   { timestamps: true }
 )
 
-const Team = model('Team', TeamSchema)
-export default Team
+const Room = model('Room', RoomSchema)
+export default Room
