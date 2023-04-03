@@ -8,10 +8,8 @@
   border-radius: 16px;
   border: 1px solid rgba($white, 0.3);
   background-color: $black;
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
   cursor: pointer;
+  position: relative;
 
   #theme-toggle-dot {
     position: absolute;

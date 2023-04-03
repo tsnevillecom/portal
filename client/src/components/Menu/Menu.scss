@@ -1,0 +1,95 @@
+@import '@styles/variables';
+
+#menu.sidebar {
+  width: 240px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  > div {
+    padding: 24px;
+
+    &.sidebar-header {
+      background: #111;
+      flex: 0 0 $header-height;
+      height: $header-height;
+      font-weight: 700;
+      font-size: 32px;
+      display: flex;
+      align-items: center;
+    }
+
+    &.sidebar-body {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      background-color: #101010;
+
+      nav {
+        display: flex;
+        flex-direction: column;
+
+        a {
+          padding: 8px 16px;
+          border-radius: 32px;
+          background-color: rgba($white, 0.02);
+          margin-bottom: 4px;
+          display: flex;
+          align-items: center;
+
+          span {
+            display: flex;
+            align-items: center;
+
+            &:first-child {
+              width: 30px;
+            }
+          }
+
+          &:hover {
+            background-color: rgba($white, 0.06);
+          }
+        }
+      }
+    }
+
+    &.sidebar-user {
+      display: flex;
+      align-items: center;
+      border-top: 1px solid rgba($white, 0.1);
+      cursor: pointer;
+
+      span {
+        display: flex;
+        align-items: center;
+
+        &:first-child {
+          width: 30px;
+        }
+
+        &.sidebar-user-name {
+          flex: 1;
+        }
+
+        &.sidebar-user-avatar,
+        &.sidebar-user-caret {
+          opacity: 0.5;
+        }
+      }
+    }
+
+    &.sidebar-theme {
+      display: flex;
+      align-items: center;
+    }
+  }
+
+  .dark & {
+    background: $black;
+  }
+
+  .light & {
+    background: $gray-300;
+  }
+}

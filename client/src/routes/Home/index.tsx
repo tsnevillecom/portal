@@ -1,4 +1,5 @@
 import Button from '@components/Button'
+import Page from '@components/Page'
 import { SocketContext } from '@context/SocketProvider'
 import useStateRef from '@hooks/useStateRef'
 import _ from 'lodash'
@@ -27,7 +28,7 @@ const Home = () => {
   }
 
   return (
-    <section id="home-route">
+    <Page id="home-route">
       <h1>Home</h1>
 
       <Button onClick={sendSocketEvent}>Send socket stuff</Button>
@@ -188,7 +189,7 @@ const Home = () => {
         pharetra tellus nec, faucibus sapien. In facilisis sit amet lorem quis
         tristique. Suspendisse vel elementum nisl.
       </p>
-    </section>
+    </Page>
   )
 }
 

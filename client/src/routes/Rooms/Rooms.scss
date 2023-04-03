@@ -1,0 +1,30 @@
+@import '@styles/variables';
+
+#chat {
+  #chat-channels {
+    flex: 0 0 200px;
+    border-right: 1px solid $black;
+    padding: 24px;
+  }
+
+  #chat-room {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    background: $black;
+
+    &-header {
+      padding: 24px 16px;
+    }
+
+    &-thread {
+      flex: 1;
+      padding: 16px;
+      background: #111;
+    }
+
+    &-input {
+      height: 60px;
+    }
+  }
+}

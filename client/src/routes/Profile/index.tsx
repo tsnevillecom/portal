@@ -4,6 +4,7 @@ import './Profile.scss'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import useLogout from '@hooks/useLogout'
 import useRefreshToken from '@hooks/useRefreshToken'
+import Page from '@components/Page'
 
 const Profile = () => {
   const axiosPrivate = useAxiosPrivate()
@@ -27,7 +28,7 @@ const Profile = () => {
   }
 
   return (
-    <section id="profile-route">
+    <Page id="profile-route">
       <h1>Profile</h1>
 
       <a onClick={getMe}>Me</a>
@@ -41,7 +42,7 @@ const Profile = () => {
       <div className="flexGrow">
         <Link to="/">Home</Link>
       </div>
-    </section>
+    </Page>
   )
 }
 

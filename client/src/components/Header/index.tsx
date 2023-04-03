@@ -12,12 +12,9 @@ const Header = () => {
   if (!auth.isAuthenticated) return null
 
   return (
-    <header>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to="/rooms">Rooms</Link>
-        {isAdmin && <Link to="/admin">Admin</Link>}
-      </nav>
+    <header id="header">
+      <div id="search"></div>
+
       <div id="user-menu">
         <Link to="/profile">
           {`${auth.user?.firstName} ${auth.user?.lastName}`}
