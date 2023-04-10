@@ -1,30 +1,82 @@
 @import '@styles/variables';
 
 #chat {
-  #chat-channels {
+  border-left: 1px solid $black;
+
+  #chat-rooms {
     flex: 0 0 200px;
-    border-right: 1px solid $black;
     padding: 24px;
+    position: relative;
+
+    #new-room {
+      position: absolute;
+      top: 28px;
+      right: 16px;
+      font-size: 24px;
+      font-weight: 400;
+      height: 24px;
+      width: 24px;
+      line-height: 24px;
+      text-align: center;
+    }
+
+    .chat-rooms--room {
+      font-size: 14px;
+      font-weight: 400;
+      margin: 0 -12px 4px;
+      padding: 6px 12px;
+      color: $gray-400;
+      border-radius: 4px;
+      transition: color $time ease-out, background-color $time ease-in;
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgba($white, 0.1);
+
+        &:not(.active) {
+          color: $gray-300;
+        }
+      }
+
+      &.active {
+        color: $white;
+        font-weight: 700;
+      }
+    }
   }
 
   #chat-room {
     display: flex;
     flex-direction: column;
     flex: 1;
-    background: $black;
+    padding-right: 16px;
 
-    &-header {
+    &--header {
       padding: 24px 16px;
     }
 
-    &-thread {
+    &--thread {
       flex: 1;
       padding: 16px;
-      background: #111;
+      border: 1px solid $black;
+      border-radius: 16px;
+      background: rgba($black, 0.2);
     }
 
-    &-input {
+    &--input {
       height: 60px;
+      display: flex;
+      align-items: center;
+
+      #chat-input {
+        padding: 8px 16px;
+        background: rgba($black, 0.2);
+        border-radius: 24px;
+        border: 1px solid $black;
+        flex: 1;
+        color: rgba($white, 0.7);
+        outline: none;
+      }
     }
   }
 }

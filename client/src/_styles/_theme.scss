@@ -141,7 +141,7 @@ form {
   width: 100vw;
   display: flex;
   overflow: hidden;
-  border-top: 8px solid $blue;
+  border-top: 6px solid $blue;
 
   main {
     display: flex;
@@ -178,6 +178,7 @@ form {
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        width: 100%;
       }
     }
   }

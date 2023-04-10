@@ -6,8 +6,11 @@ const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme()
 
   return (
-    <div id="theme-toggle" onClick={toggleTheme}>
-      <div id="theme-toggle-dot" className={theme}></div>
+    <div id="theme">
+      <div id="theme-toggle" className={theme} onClick={toggleTheme}>
+        <div id="theme-toggle-dot"></div>
+      </div>
+      <div id="theme-mode">{theme}</div>
     </div>
   )
 }

@@ -1,32 +1,52 @@
 @import '@styles/variables';
 
-#theme-toggle {
-  display: inline-block;
-  height: 34px;
-  width: 60px;
-  padding: 4px;
-  border-radius: 16px;
-  border: 1px solid rgba($white, 0.3);
-  background-color: $black;
-  cursor: pointer;
-  position: relative;
+#theme {
+  display: flex;
+  align-items: center;
 
-  #theme-toggle-dot {
-    position: absolute;
-    top: 4px;
-    height: 24px;
-    width: 24px;
-    border-radius: 12px;
-    transition: left $time ease-in-out;
+  #theme-mode {
+    text-transform: uppercase;
+    font-size: 13px;
+    font-weight: 600;
+    color: $gray-500;
+  }
+
+  #theme-toggle {
+    display: inline-block;
+    height: 28px;
+    width: 50px;
+    padding: 4px;
+    margin-right: 12px;
+    border-radius: 16px;
+    border: 2px solid $gray-500;
+    cursor: pointer;
+    position: relative;
+
+    #theme-toggle-dot {
+      position: absolute;
+      top: 4px;
+      height: 16px;
+      width: 16px;
+      border-radius: 12px;
+      transition: left $time ease-in-out;
+    }
 
     &.light {
-      left: 4px;
-      background-color: $gray-100;
+      background-color: $black;
+
+      #theme-toggle-dot {
+        left: 4px;
+        background-color: $gray-100;
+      }
     }
 
     &.dark {
-      left: 30px;
-      background-color: $gray-500;
+      background-color: $black;
+
+      #theme-toggle-dot {
+        left: 26px;
+        background-color: $gray-500;
+      }
     }
   }
 }
