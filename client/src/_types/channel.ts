@@ -1,6 +1,6 @@
 import { User } from './user'
 
-export type Room = {
+export type Channel = {
   _id: string
   name: string
   members: User[]

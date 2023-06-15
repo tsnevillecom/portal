@@ -39,7 +39,6 @@ const defaultProps: FormControlProps = {
   name: '',
   required: true,
   round: false,
-  rows: 4,
   spellCheck: true,
   textarea: false,
   type: 'text',
@@ -74,6 +73,7 @@ const FormControl: React.FC<FormControlProps> = ({
   const [focused, setFocused] = useState(false)
   const [viewPassword, setViewPassword] = useState(false)
   const [inputType, setInputType] = useState(type)
+  const [textareaRows, setTextareaRows] = useState(rows || 1)
 
   useEffect(() => {
     if (value !== inputValue) setInputValue(value)
@@ -90,21 +90,27 @@ const FormControl: React.FC<FormControlProps> = ({
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    switch (type) {
-      case 'number':
-        e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '')
-        break
-      case 'tel':
-        e.currentTarget.value = e.currentTarget.value.replace(
-          /[^0-9() .\-+]+/g,
-          ''
-        )
-        break
-      default:
-        break
+    const target = e.currentTarget
+
+    if (textarea) {
+      const height = target.scrollHeight
+      const rowHeight = 26
+      const currRows = Math.ceil(height / rowHeight) - 1
+      if (currRows > textareaRows) setTextareaRows(currRows)
+    } else {
+      switch (type) {
+        case 'number':
+          target.value = target.value.replace(/\D/g, '')
+          break
+        case 'tel':
+          target.value = target.value.replace(/[^0-9() .\-+]+/g, '')
+          break
+        default:
+          break
+      }
     }
 
-    setInputValue(e.currentTarget.value)
+    setInputValue(target.value)
     if (onChange) onChange(e)
   }
 
@@ -162,7 +168,7 @@ const FormControl: React.FC<FormControlProps> = ({
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             disabled={disabled}
-            rows={rows}
+            rows={textareaRows}
             ref={forRef as React.Ref<HTMLTextAreaElement> | null}
             name={name}
             {...(!_.isNull(placeholder) && {

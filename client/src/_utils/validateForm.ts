@@ -2,7 +2,7 @@ import { Errors, FormFieldValue, Rules } from '@types'
 import _ from 'lodash'
 
 // eslint-disable-next-line no-useless-escape
-const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+const EMAIL_REGEX = /^\w+([\.+-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
 
 export const validateForm = (fields: FormFieldValue, rules: Rules): Errors => {
   const errors: Errors = {}

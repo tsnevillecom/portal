@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 
-const RoomSchema = new Schema(
+const ChannelSchema = new Schema(
   {
     name: {
       type: String,
@@ -28,5 +28,5 @@ const RoomSchema = new Schema(
   { timestamps: true }
 )
 
-const Room = model('Room', RoomSchema)
-export default Room
+const Channel = model('Channel', ChannelSchema)
+export default Channel

@@ -1,7 +1,7 @@
-import Room from '../models/room'
+import Channel from '../models/channel'
 import User from '../models/user'
 
-class RoomsSeed {
+class ChannelsSeed {
   public seed = async (): Promise<void> => {
     console.log('Seeding rooms collection')
 
@@ -10,7 +10,7 @@ class RoomsSeed {
       role: 'admin',
     })
 
-    const rooms = [
+    const channels = [
       {
         name: 'General',
         createdBy: user._id,
@@ -28,22 +28,22 @@ class RoomsSeed {
       },
     ]
 
-    for (const room of rooms) {
-      const foundRoom = await Room.exists({
-        name: room.name,
+    for (const channel of channels) {
+      const foundRoom = await Channel.exists({
+        name: channel.name,
         createdBy: user._id,
       })
 
       if (foundRoom) {
-        console.log(`Room exists: ${room.name}`)
+        console.log(`Room exists: ${channel.name}`)
         continue
       }
 
-      await new Room(room).save()
+      await new Channel(channel).save()
     }
 
     console.log('Rooms created')
   }
 }
 
-export default RoomsSeed
+export default ChannelsSeed

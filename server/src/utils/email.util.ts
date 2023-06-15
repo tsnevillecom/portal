@@ -4,6 +4,8 @@ import config from '../config'
 import { errors } from '../_constants'
 
 class EmailUtil {
+  private env = process.env.NODE_ENV
+
   public sendVerificationEmail = async (email, token) => {
     const mailOptions = {
       from: 'tsneville@gmail.com',
@@ -43,6 +45,11 @@ class EmailUtil {
   }
 
   private sendEmail = async (mailOptions) => {
+    if (this.env === 'development') {
+      console.log(mailOptions)
+      return
+    }
+
     try {
       const auth = {
         auth: {

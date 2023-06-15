@@ -1,6 +1,6 @@
 export * from './errors'
 export * from './formFieldValue'
-export * from './room'
+export * from './channel'
 export * from './rules'
 export * from './toast'
 export * from './user'

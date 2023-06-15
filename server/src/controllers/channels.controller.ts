@@ -1,11 +1,11 @@
 import { ObjectId } from 'mongodb'
-import Room from '../models/room'
+import Channel from '../models/channel'
 import User from '../models/user'
 
-class RoomsController {
-  public getAllRooms = async (req, res) => {
+class ChannelsController {
+  public getAllChannels = async (req, res) => {
     try {
-      await Room.find({ deleted: false })
+      await Channel.find({ deleted: false })
         .populate([
           { path: 'members', select: 'firstName -_id' },
           { path: 'createdBy', select: '-_id' },
@@ -21,68 +21,70 @@ class RoomsController {
     }
   }
 
-  public getRoom = async (req, res) => {
+  public getChannel = async (req, res) => {
     const id = req.params.id
 
     try {
-      const room = await Room.findOne({ _id: id }).populate('createdBy').exec()
+      const room = await Channel.findOne({ _id: id })
+        .populate('createdBy')
+        .exec()
       res.status(200).send(room)
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
   }
 
-  public addRoomMembers = async (req, res) => {
+  public addChannelMembers = async (req, res) => {
     const id = req.params.id
     const members = req.body.members
 
     try {
-      const room = await Room.findOne({ _id: id }).exec()
-      room.members = members
-      await room.save()
-      res.send(room)
-      res.status(200).send(room)
+      const channel = await Channel.findOne({ _id: id }).exec()
+      channel.members = members
+      await channel.save()
+      res.send(channel)
+      res.status(200).send(channel)
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
   }
 
-  public createRoom = async (req, res) => {
-    const room = new Room(req.body)
+  public createChannel = async (req, res) => {
+    const channel = new Channel(req.body)
 
     try {
       const user = await User.findOne({ email: req.user.email })
-      room.createdBy = user._id
-      room.members = [user._id]
-      await room.save()
-      res.send(room)
+      channel.createdBy = user._id
+      channel.members = [user._id]
+      await channel.save()
+      res.send(channel)
     } catch (error) {
       res.status(500).send(error)
     }
   }
 
-  public updateRoom = async (req, res) => {
+  public updateChannel = async (req, res) => {
     const id = req.params.id
 
     try {
-      const room = await Room.findOne({ _id: id })
-      room.name = req.body.name
-      await room.save()
-      res.send(room)
+      const channel = await Channel.findOne({ _id: id })
+      channel.name = req.body.name
+      await channel.save()
+      res.send(channel)
     } catch (error) {
       res.status(500).send(error)
     }
   }
 
-  public deleteRoom = async (req, res) => {
+  public deleteChannel = async (req, res) => {
     const id = req.params.id
     try {
       if (!ObjectId.isValid(id)) {
         return res.status(404).send()
       }
 
-      const room = await Room.findOne({ _id: id })
-      await room.remove()
+      const channel = await Channel.findOne({ _id: id })
+      await channel.remove()
       res.sendStatus(204)
     } catch (error) {
       res.status(500).json({ message: error.message })
@@ -90,4 +92,4 @@ class RoomsController {
   }
 }
 
-export default RoomsController
+export default ChannelsController

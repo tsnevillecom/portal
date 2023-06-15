@@ -5,9 +5,12 @@ import React, {
   useEffect,
   useRef,
   PropsWithChildren,
+  useContext,
 } from 'react'
 import { io, Socket } from 'socket.io-client'
 import useAuth from '@hooks/useAuth'
+import useRefreshToken from '@hooks/useRefreshToken'
+import { ToastContext } from './ToastContext'
 
 type Disposable = { dispose: () => void }
 type EventCallback = (event: Record<string, unknown>) => void
@@ -24,8 +27,14 @@ export const SocketContext = createContext<ISocketContext>({
   socket: null,
 })
 
+const MAX_REFRESH_ATTEMPTS = 4
+
 export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { auth } = useAuth()
+  const { addToast } = useContext(ToastContext)
+
+  const refresh = useRefreshToken()
+  const resetAttempts = useRef(0)
 
   const [connected, setConnected] = useState<boolean>(false)
   const [subscribed, setSubscribed] = useState<boolean>(false)
@@ -84,7 +93,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     socket.on('disconnect', (reason) => disconnect(reason))
 
-    socket.on('joinuser', ({ joined }) => {
+    socket.on('user_joined', ({ joined }) => {
       if (joined) {
         console.log('subscribing user')
         setSubscribed(true)
@@ -94,34 +103,33 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
       }
     })
 
-    socket.on('message', (event) =>
+    socket.on('message', (event) => {
+      console.log(event)
       subscriptionsRef.current.forEach((callback) => callback(event))
-    )
+    })
 
     socket.connect()
     setSocket(socket)
   }
 
   const joinUser = (socket: Socket) => {
-    socket.emit('joinuser', { token: auth.accessToken })
+    if (!auth.user) return
+    socket.emit('join_server', { accessToken: auth.accessToken })
   }
 
   const resetSocket = async () => {
     if (socketRef.current) socketRef.current.disconnect()
+    resetAttempts.current++
     setConnected(false)
     setSubscribed(false)
     setSocket(null)
 
-    //   const refreshAccessTokenResponse = await AuthService.refreshAccessToken(
-    //     refreshToken.token,
-    //     clientSecret
-    //   )
-
-    //   if (refreshAccessTokenResponse) {
-    //     const accessToken = refreshAccessTokenResponse.headers['x-myveeva-auth']
-    //     setAccessToken(accessToken)
-    //     console.log('access token refreshed (socket)')
-    //   }
+    if (resetAttempts.current <= MAX_REFRESH_ATTEMPTS) {
+      refresh()
+    } else {
+      addToast('Could not establish socket connection')
+      resetAttempts.current = 0
+    }
   }
 
   const reconnect = () => {
@@ -132,14 +140,14 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }
 
   const disconnect = (reason?: string) => {
+    console.log('socket disconnected:', reason)
     setConnected(false)
     setSubscriptions([])
 
-    if (reason === 'io client disconnect') {
+    if (reason === 'io client disconnect' || reason === 'user logged out') {
       setSubscribed(false)
       setSocket(null)
     } else {
-      console.log('socket disconnected:', reason)
       reconnect()
     }
   }

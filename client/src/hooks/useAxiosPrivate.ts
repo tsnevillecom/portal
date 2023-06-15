@@ -2,7 +2,7 @@ import { axiosPrivate } from '../api/axios'
 import { useEffect } from 'react'
 import useRefreshToken from './useRefreshToken'
 import useAuth from './useAuth'
-import { AxiosError } from 'axios'
+import { AxiosError, AxiosHeaders } from 'axios'
 import useLogout from './useLogout'
 
 type FailedResponseQueueType = {
@@ -23,7 +23,10 @@ const useAxiosPrivate = () => {
             Authorization: `Bearer ${auth?.accessToken}`,
           }
 
-          config.headers = { ...config.headers, ...authorizationHeader }
+          config.headers = {
+            ...config.headers,
+            ...authorizationHeader,
+          } as unknown as AxiosHeaders
         }
         return config
       },

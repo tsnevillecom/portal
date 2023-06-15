@@ -21,7 +21,7 @@ import ResetPasswordVerify from '@routes/ResetPasswordVerify'
 import ResetPasswordEmail from '@routes/ResetPasswordEmail'
 import AccountVerified from '@routes/AccountVerified'
 import ExpiredLink from '@routes/ExpiredLink'
-import Rooms from '@routes/Rooms'
+import Channels from '@routes/Channels'
 import useTheme from '@hooks/useTheme'
 
 const App = () => {
@@ -52,7 +52,7 @@ const App = () => {
             <Route element={<AuthenticatedRoute allowedRoles={[]} />}>
               <Route path="/" element={<Home />} />
               <Route path="profile" element={<Profile />} />
-              <Route path="rooms" element={<Rooms />} />
+              <Route path="rooms" element={<Channels />} />
               <Route path="unauthorized" element={<Unauthorized />} />
             </Route>
 

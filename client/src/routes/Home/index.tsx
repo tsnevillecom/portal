@@ -24,7 +24,7 @@ const Home = () => {
   }
 
   const sendSocketEvent = () => {
-    if (socket) socket.emit('message', Math.random())
+    if (socket) socket.emit('send_message', Math.random())
   }
 
   return (

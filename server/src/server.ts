@@ -13,7 +13,8 @@ import path from 'path'
 import CredentialsMiddleware from './middleware/credentials.middleware'
 import InvalidPathMiddleware from './middleware/invalidPath.middleware'
 import UsersSeed from './seed/users.seed'
-import RoomsSeed from './seed/rooms.seed'
+import ChannelsSeed from './seed/channels.seed'
+import jwt from 'jsonwebtoken'
 
 class Server {
   private port: number
@@ -56,24 +57,39 @@ class Server {
     return new Promise((resolve) => {
       db.once('open', async () => {
         await new UsersSeed().seed()
-        await new RoomsSeed().seed()
+        await new ChannelsSeed().seed()
         resolve(null)
       })
     })
   }
 
   private handleSocketConnection(): void {
-    this.io.on('connection', (socket) => {
-      console.log('Socket connected.', socket.id)
+    this.io.sockets.on('connection', (socket) => {
+      console.log('Socket connected:', socket.id)
 
-      socket.on('message', function (message: any) {
-        console.log(message)
+      socket.on('join_server', async ({ accessToken }) => {
+        let user = null
+
+        jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET, (err, decoded) => {
+          if (err) console.log('invalid accessToken')
+          user = decoded.user
+        })
+
+        socket.emit('user_joined', { joined: !!user })
+      })
+
+      socket.on('send_message', (data: any, callback) => {
+        console.log(data)
+        callback({
+          status: 'ok',
+          data,
+        })
 
         setTimeout(
           () =>
             socket.emit('NOTIFICATION', {
               data: {
-                body: `Hey! ${message}`,
+                body: `Hey! ${data.message}`,
               },
             }),
           2000

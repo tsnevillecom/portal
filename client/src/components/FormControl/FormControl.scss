@@ -40,6 +40,13 @@
     }
   }
 
+  textarea {
+    font-family: 'Roboto', sans-serif;
+    resize: none;
+    line-height: 26px;
+    font-size: 0.9rem;
+  }
+
   .dark & {
     #viewPassword {
       color: rgba($white, 0.4);
@@ -62,6 +69,10 @@
         color: rgba($white, 0.5);
       }
     }
+
+    textarea {
+      color: $gray-300;
+    }
   }
 
   .light & {
@@ -82,8 +93,12 @@
       }
 
       &::placeholder {
-        color: $gray-400;
+        color: $gray-500;
       }
+    }
+
+    textarea {
+      color: $gray;
     }
   }
 
