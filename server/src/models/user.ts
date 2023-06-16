@@ -1,6 +1,6 @@
 import { Schema, model, Model } from 'mongoose'
 import validator from 'validator'
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import ROLES from '../config/roles'
 import config from '../config'
@@ -142,8 +142,8 @@ UserSchema.methods.toJSON = function () {
 //hash the plain text password before saving
 UserSchema.pre('save', async function (next) {
   const user = this
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 10)
+  if (user.isModified('password') && user.password) {
+    user.password = await bcrypt.hashSync(user.password, 10)
   }
   next()
 })

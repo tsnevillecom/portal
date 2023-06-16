@@ -1,7 +1,7 @@
 import config from '../config'
 import User from '../models/user'
 import validator from 'validator'
-import bcrypt from 'bcryptjs'
+import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { errors } from '../_constants'
 
@@ -200,9 +200,12 @@ class AuthController {
           const hackedUser = await User.findOne({
             _id,
           }).exec()
-          hackedUser.refreshTokens = []
-          const result = await hackedUser.save()
-          console.log('hacked user', result)
+
+          if (hackedUser) {
+            hackedUser.refreshTokens = []
+            const result = await hackedUser.save()
+            console.log('hacked user', result)
+          }
         }
       )
 

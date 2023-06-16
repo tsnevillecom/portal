@@ -114,7 +114,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const joinUser = (socket: Socket) => {
     if (!auth.user) return
-    socket.emit('join_server', { accessToken: auth.accessToken })
+    socket.emit('join_rooms', { accessToken: auth.accessToken })
   }
 
   const resetSocket = async () => {

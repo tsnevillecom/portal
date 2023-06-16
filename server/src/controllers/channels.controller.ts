@@ -21,6 +21,27 @@ class ChannelsController {
     }
   }
 
+  public getChannelsByMemberId = async (req, res) => {
+    const userId = req.user._id
+    console.log(req.user)
+
+    try {
+      await Channel.find({ members: { $in: [userId] } })
+        .populate([
+          { path: 'members', select: 'firstName -_id' },
+          { path: 'createdBy', select: '-_id' },
+        ])
+        .exec(function (error, rooms) {
+          if (error) {
+            res.status(500).send({ message: error.message })
+          }
+          res.status(200).send(rooms)
+        })
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  }
+
   public getChannel = async (req, res) => {
     const id = req.params.id
 

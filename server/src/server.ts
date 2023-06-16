@@ -67,7 +67,7 @@ class Server {
     this.io.sockets.on('connection', (socket) => {
       console.log('Socket connected:', socket.id)
 
-      socket.on('join_server', async ({ accessToken }) => {
+      socket.on('join_rooms', async ({ accessToken }) => {
         let user = null
 
         jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET, (err, decoded) => {

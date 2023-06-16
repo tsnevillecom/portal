@@ -14,18 +14,26 @@ class UsersSeed {
         isVerified: true,
         role: 'admin',
       },
+      {
+        firstName: 'Music',
+        lastName: 'Fan',
+        email: 'tsneville+fan@gmail.com',
+        password: '12345678',
+        isVerified: true,
+        role: 'fan',
+      },
     ]
 
     for (const user of users) {
       const foundUser = await User.exists({ email: user.email })
 
       if (foundUser) {
-        console.log('Admin exists')
-        return
+        console.log(`${user.email} exists`)
+        continue
       }
 
       await new User(user).save()
-      console.log('Admin created')
+      console.log(`${user.email} created`)
     }
   }
 }

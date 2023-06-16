@@ -29,7 +29,7 @@ const Channels = () => {
 
   const init = async () => {
     try {
-      const response = await axiosPrivate('/channels')
+      const response = await axiosPrivate('/channels/member')
       setChannels(response.data)
     } catch (error) {
       console.log(error)

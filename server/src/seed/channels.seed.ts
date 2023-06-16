@@ -5,33 +5,38 @@ class ChannelsSeed {
   public seed = async (): Promise<void> => {
     console.log('Seeding rooms collection')
 
-    const user = await User.exists({
+    const admin = await User.exists({
       email: 'tsneville@gmail.com',
       role: 'admin',
+    })
+
+    const fan = await User.exists({
+      email: 'tsneville+fan@gmail.com',
+      role: 'fan',
     })
 
     const channels = [
       {
         name: 'General',
-        createdBy: user._id,
-        members: [user._id],
+        createdBy: admin._id,
+        members: [admin._id],
       },
       {
         name: 'Admins',
-        createdBy: user._id,
-        members: [user._id],
+        createdBy: admin._id,
+        members: [admin._id],
       },
       {
         name: 'Random',
-        createdBy: user._id,
-        members: [user._id],
+        createdBy: admin._id,
+        members: [admin._id, fan._id],
       },
     ]
 
     for (const channel of channels) {
       const foundRoom = await Channel.exists({
         name: channel.name,
-        createdBy: user._id,
+        createdBy: admin._id,
       })
 
       if (foundRoom) {
@@ -40,9 +45,8 @@ class ChannelsSeed {
       }
 
       await new Channel(channel).save()
+      console.log(`${channel.name} created`)
     }
-
-    console.log('Rooms created')
   }
 }
 

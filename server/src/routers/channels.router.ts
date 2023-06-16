@@ -2,7 +2,7 @@ import { Router } from 'express'
 import ChannelsController from '../controllers/channels.controller'
 import AuthMiddleware from '../middleware/auth.middleware'
 
-class RoomsRouter {
+class ChannelsRouter {
   public router = Router()
   public channelsController = new ChannelsController()
   public authenticate = new AuthMiddleware().authenticate
@@ -16,6 +16,11 @@ class RoomsRouter {
       '/',
       this.authenticate,
       this.channelsController.getAllChannels
+    )
+    this.router.get(
+      '/member',
+      this.authenticate,
+      this.channelsController.getChannelsByMemberId
     )
     this.router.get(
       '/:id',
@@ -47,4 +52,4 @@ class RoomsRouter {
   }
 }
 
-export default RoomsRouter
+export default ChannelsRouter
