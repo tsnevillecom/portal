@@ -22,6 +22,14 @@ class UsersSeed {
         isVerified: true,
         role: 'fan',
       },
+      {
+        firstName: 'John',
+        lastName: 'Smith',
+        email: 'tsneville+john@gmail.com',
+        password: '12345678',
+        isVerified: true,
+        role: 'fan',
+      },
     ]
 
     for (const user of users) {

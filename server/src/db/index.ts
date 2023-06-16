@@ -2,6 +2,7 @@ import config from '../config'
 import mongoose, { ConnectOptions } from 'mongoose'
 
 const connectDatabase = () => {
+  mongoose.set('strictQuery', false)
   mongoose.connect(config.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

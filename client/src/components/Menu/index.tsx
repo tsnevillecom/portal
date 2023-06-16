@@ -32,11 +32,11 @@ const Menu = () => {
             </span>
             <span>Home</span>
           </Link>
-          <Link to="/rooms">
+          <Link to="/chat">
             <span>
               <BiChat />
             </span>
-            <span>Rooms</span>
+            <span>Chat</span>
           </Link>
           {isAdmin && (
             <Link to="/admin">

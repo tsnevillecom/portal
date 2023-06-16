@@ -52,7 +52,7 @@ const App = () => {
             <Route element={<AuthenticatedRoute allowedRoles={[]} />}>
               <Route path="/" element={<Home />} />
               <Route path="profile" element={<Profile />} />
-              <Route path="rooms" element={<Channels />} />
+              <Route path="chat" element={<Channels />} />
               <Route path="unauthorized" element={<Unauthorized />} />
             </Route>
 

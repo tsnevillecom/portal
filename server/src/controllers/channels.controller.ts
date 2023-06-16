@@ -23,8 +23,6 @@ class ChannelsController {
 
   public getChannelsByMemberId = async (req, res) => {
     const userId = req.user._id
-    console.log(req.user)
-
     try {
       await Channel.find({ members: { $in: [userId] } })
         .populate([

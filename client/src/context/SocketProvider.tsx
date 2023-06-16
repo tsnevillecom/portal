@@ -53,10 +53,10 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   }, [])
 
   useEffect(() => {
-    if (auth.accessToken && !socket) {
+    if (auth.accessToken && !socketRef.current) {
       connect()
-    } else if (!auth.accessToken && socket) {
-      disconnect('user logged out')
+    } else if (!auth.accessToken && socketRef.current) {
+      socketRef.current.disconnect()
     }
   }, [auth.accessToken])
 
@@ -75,6 +75,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const connect = () => {
     if (socketRef.current) return
+
     const socket = io('http://localhost:3333', {
       transports: ['websocket'],
       reconnection: false,
@@ -105,7 +106,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     socket.on('message', (event) => {
       console.log(event)
-      subscriptionsRef.current.forEach((callback) => callback(event))
+      // subscriptionsRef.current.forEach((callback) => callback(event))
     })
 
     socket.connect()
@@ -114,7 +115,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const joinUser = (socket: Socket) => {
     if (!auth.user) return
-    socket.emit('join_rooms', { accessToken: auth.accessToken })
+    socket.emit('join_channels', { accessToken: auth.accessToken })
   }
 
   const resetSocket = async () => {
@@ -144,7 +145,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
     setConnected(false)
     setSubscriptions([])
 
-    if (reason === 'io client disconnect' || reason === 'user logged out') {
+    if (reason === 'io client disconnect') {
       setSubscribed(false)
       setSocket(null)
     } else {

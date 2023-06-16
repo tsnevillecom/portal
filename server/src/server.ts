@@ -15,6 +15,8 @@ import InvalidPathMiddleware from './middleware/invalidPath.middleware'
 import UsersSeed from './seed/users.seed'
 import ChannelsSeed from './seed/channels.seed'
 import jwt from 'jsonwebtoken'
+import ChannelsController from './controllers/channels.controller'
+import Channel from './models/channel'
 
 class Server {
   private port: number
@@ -67,19 +69,33 @@ class Server {
     this.io.sockets.on('connection', (socket) => {
       console.log('Socket connected:', socket.id)
 
-      socket.on('join_rooms', async ({ accessToken }) => {
+      socket.on('join_channels', async ({ accessToken }) => {
         let user = null
 
-        jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET, (err, decoded) => {
-          if (err) console.log('invalid accessToken')
-          user = decoded.user
-        })
+        jwt.verify(
+          accessToken,
+          config.ACCESS_TOKEN_SECRET,
+          async (err, decoded) => {
+            if (err) {
+              console.log('invalid accessToken')
+              socket.emit('user_joined', { joined: false, channels: [] })
+            }
+            user = decoded.user
+            const channels = await Channel.find({
+              members: { $in: [user._id] },
+            }).distinct('_id')
 
-        socket.emit('user_joined', { joined: !!user })
+            socket.join(channels.map((c) => c.toString()))
+            socket.emit('user_joined', { joined: true, channels })
+          }
+        )
+      })
+
+      socket.on('disconnect', () => {
+        console.log('Socket disconnected:', socket.id)
       })
 
       socket.on('send_message', (data: any, callback) => {
-        console.log(data)
         callback({
           status: 'ok',
           data,
@@ -87,11 +103,7 @@ class Server {
 
         setTimeout(
           () =>
-            socket.emit('NOTIFICATION', {
-              data: {
-                body: `Hey! ${data.message}`,
-              },
-            }),
+            this.io.in(data.channel).emit('message', { message: data.message }),
           2000
         )
       })

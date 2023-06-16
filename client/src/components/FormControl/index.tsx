@@ -95,8 +95,10 @@ const FormControl: React.FC<FormControlProps> = ({
     if (textarea) {
       const height = target.scrollHeight
       const rowHeight = 26
+      const maxRows = 3
       const currRows = Math.ceil(height / rowHeight) - 1
-      if (currRows > textareaRows) setTextareaRows(currRows)
+      if (currRows > textareaRows && currRows <= maxRows)
+        setTextareaRows(currRows)
     } else {
       switch (type) {
         case 'number':
