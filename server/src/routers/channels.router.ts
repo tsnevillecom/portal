@@ -43,7 +43,7 @@ class ChannelsRouter {
       this.channelsController.deleteChannel
     )
 
-    //Room Members
+    //Channel Members
     this.router.post(
       '/:id/members',
       this.authenticate,

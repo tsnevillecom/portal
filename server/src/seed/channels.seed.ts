@@ -3,7 +3,7 @@ import User from '../models/user'
 
 class ChannelsSeed {
   public seed = async (): Promise<void> => {
-    console.log('Seeding rooms collection')
+    console.log('Seeding channel collection')
 
     const admin = await User.exists({
       email: 'tsneville@gmail.com',
@@ -31,6 +31,12 @@ class ChannelsSeed {
         createdBy: admin._id,
         members: [admin._id, fan._id],
       },
+      {
+        name: 'Deleted',
+        createdBy: admin._id,
+        members: [admin._id, fan._id],
+        deleted: true,
+      },
     ]
 
     for (const channel of channels) {
@@ -40,12 +46,12 @@ class ChannelsSeed {
       })
 
       if (foundRoom) {
-        console.log(`Room exists: ${channel.name}`)
+        console.log(`Channel exists: ${channel.name}`)
         continue
       }
 
       await new Channel(channel).save()
-      console.log(`${channel.name} created`)
+      console.log(`Channel created: ${channel.name}`)
     }
   }
 }

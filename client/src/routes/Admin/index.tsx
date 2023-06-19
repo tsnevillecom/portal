@@ -3,8 +3,7 @@ import React from 'react'
 
 const Admin = () => {
   return (
-    <Page id="admin-route">
-      <h1>Admin</h1>
+    <Page id="admin-route" title="Admin">
       <p>
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac nulla
         pellentesque, scelerisque massa id, mollis odio. Nam non metus erat. Ut

@@ -4,6 +4,5 @@ export type User = {
   email: string
   active: boolean
   isVerified: boolean
-  deleted: boolean
   role: string
 }

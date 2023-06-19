@@ -134,7 +134,9 @@ UserSchema.methods.toJSON = function () {
   const userObj = user.toObject()
   delete userObj.password
   delete userObj.refreshTokens
-  delete userObj.__id
+  delete userObj.createdAt
+  delete userObj.updatedAt
+  delete userObj.deleted
   delete userObj.__v
   return userObj
 }

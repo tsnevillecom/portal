@@ -5,17 +5,8 @@ import User from '../models/user'
 class ChannelsController {
   public getAllChannels = async (req, res) => {
     try {
-      await Channel.find({ deleted: false })
-        .populate([
-          { path: 'members', select: 'firstName -_id' },
-          { path: 'createdBy', select: '-_id' },
-        ])
-        .exec(function (error, rooms) {
-          if (error) {
-            res.status(500).send({ message: error.message })
-          }
-          res.status(200).send(rooms)
-        })
+      const channels = await Channel.find({ deleted: false }).exec()
+      res.status(200).send(channels)
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
@@ -24,17 +15,11 @@ class ChannelsController {
   public getChannelsByMemberId = async (req, res) => {
     const userId = req.user._id
     try {
-      await Channel.find({ members: { $in: [userId] } })
-        .populate([
-          { path: 'members', select: 'firstName -_id' },
-          { path: 'createdBy', select: '-_id' },
-        ])
-        .exec(function (error, rooms) {
-          if (error) {
-            res.status(500).send({ message: error.message })
-          }
-          res.status(200).send(rooms)
-        })
+      const channels = await Channel.find({
+        deleted: false,
+        members: { $in: [userId] },
+      }).exec()
+      res.status(200).send(channels)
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
@@ -44,10 +29,8 @@ class ChannelsController {
     const id = req.params.id
 
     try {
-      const room = await Channel.findOne({ _id: id })
-        .populate('createdBy')
-        .exec()
-      res.status(200).send(room)
+      const channel = await Channel.findOne({ _id: id }).exec()
+      res.status(200).send(channel)
     } catch (error) {
       res.status(404).send({ message: error.message })
     }
@@ -72,7 +55,7 @@ class ChannelsController {
     const channel = new Channel(req.body)
 
     try {
-      const user = await User.findOne({ email: req.user.email })
+      const user = await User.findOne({ email: req.user.email }).exec()
       channel.createdBy = user._id
       channel.members = [user._id]
       await channel.save()
@@ -86,7 +69,7 @@ class ChannelsController {
     const id = req.params.id
 
     try {
-      const channel = await Channel.findOne({ _id: id })
+      const channel = await Channel.findOne({ _id: id }).exec()
       channel.name = req.body.name
       await channel.save()
       res.send(channel)
@@ -102,7 +85,7 @@ class ChannelsController {
         return res.status(404).send()
       }
 
-      const channel = await Channel.findOne({ _id: id })
+      const channel = await Channel.findOne({ _id: id }).exec()
       await channel.remove()
       res.sendStatus(204)
     } catch (error) {

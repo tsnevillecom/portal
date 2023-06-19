@@ -64,6 +64,24 @@ const Channels = () => {
 
   return (
     <Page id="chat" flex={true}>
+      {activeChannel && (
+        <div id="chat-channel">
+          <div id="chat-channel-header">{activeChannel.name}</div>
+          <div id="chat-channel-thread"></div>
+          <div id="chat-channel-control">
+            <FormControl
+              forRef={messageRef}
+              name="message"
+              value={message}
+              textarea
+              onChange={handleInputChange}
+            />
+
+            <Button onClick={sendMessage}>Send</Button>
+          </div>
+        </div>
+      )}
+
       <div id="chat-channels">
         <div id="chat-channels-header">
           <h4>Channels</h4>
@@ -89,24 +107,6 @@ const Channels = () => {
           )
         })}
       </div>
-
-      {activeChannel && (
-        <div id="chat-room">
-          <div id="chat-room-header">{activeChannel.name}</div>
-          <div id="chat-room-thread"></div>
-          <div id="chat-room-control">
-            <FormControl
-              forRef={messageRef}
-              name="message"
-              value={message}
-              textarea
-              onChange={handleInputChange}
-            />
-
-            <Button onClick={sendMessage}>Send</Button>
-          </div>
-        </div>
-      )}
     </Page>
   )
 }

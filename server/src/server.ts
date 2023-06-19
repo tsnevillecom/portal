@@ -95,15 +95,16 @@ class Server {
         console.log('Socket disconnected:', socket.id)
       })
 
-      socket.on('send_message', (data: any, callback) => {
-        callback({
-          status: 'ok',
-          data,
-        })
+      socket.on('send_message', ({ message, channel }, callback) => {
+        if (callback)
+          callback({
+            status: 'sent',
+            message,
+            channel,
+          })
 
         setTimeout(
-          () =>
-            this.io.in(data.channel).emit('message', { message: data.message }),
+          () => this.io.in(channel).emit('message', { message, channel }),
           2000
         )
       })
