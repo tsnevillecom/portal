@@ -49,7 +49,10 @@ class Server {
   }
 
   public async initializeSocket() {
-    this.io = new SocketIOServer(this.httpServer)
+    this.io = new SocketIOServer(this.httpServer, {
+      pingInterval: 10000,
+      pingTimeout: 30000,
+    })
     this.handleSocketConnection()
   }
 
@@ -76,11 +79,13 @@ class Server {
           accessToken,
           config.ACCESS_TOKEN_SECRET,
           async (err, decoded) => {
-            if (err) {
-              console.log('invalid accessToken')
+            if (err || !decoded?.user) {
+              console.log(err ? 'invalid accessToken' : 'no user found')
               socket.emit('user_joined', { joined: false, channels: [] })
+              return
             }
-            user = decoded.user
+
+            user = decoded?.user
             const channels = await Channel.find({
               members: { $in: [user._id] },
             }).distinct('_id')

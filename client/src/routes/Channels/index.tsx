@@ -3,29 +3,84 @@ import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import './Channels.scss'
 import { Channel } from '@types'
 import _ from 'lodash'
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react'
 import Page from '@components/Page'
 import { classNames } from '@utils/classNames.util'
 import FormControl from '@components/FormControl'
 import { SocketContext } from '@context/SocketProvider'
+
+interface SendMessageEmitResponse {
+  channel: string
+  message: string
+  status: string
+}
+
+interface Message {
+  body: string
+  date: Date
+}
+
+interface SocketEventData {
+  message: string
+  channel: string
+}
 
 const Channels = () => {
   const { socket } = useContext(SocketContext)
   const axiosPrivate = useAxiosPrivate()
   const [isLoading, setIsLoading] = useState(true)
   const [channels, setChannels] = useState<Channel[]>([])
-  const [activeChannel, setActiveChannel] = useState<Channel>()
+  const [activeChannel, setActiveChannel] = useState<Channel | null>(null)
   const [message, setMessage] = useState<string>('')
+  const [messages, setMessages] = useState<Record<string, Message[]>>({})
 
   const messageRef = useRef<HTMLTextAreaElement>(null)
+  const activeChannelRef = useRef<Channel | null>(null)
 
   useEffect(() => {
     init()
   }, [])
 
+  const listener = useCallback(
+    (event: SocketEventData) => {
+      console.log(event, activeChannel)
+
+      if (!activeChannel) return
+      console.log(event)
+      const channelMessages = messages[activeChannel._id] || []
+      setMessages({
+        ...messages,
+        [activeChannel._id]: [
+          ...channelMessages,
+          { body: event.message, date: new Date() },
+        ],
+      })
+      setMessage('')
+    },
+    [messages, activeChannel]
+  )
+
   useEffect(() => {
-    setActiveChannel(activeChannel || channels[0])
+    socket?.on('message', listener)
+
+    return () => {
+      socket?.off('message', listener)
+    }
+  }, [listener])
+
+  useEffect(() => {
+    setActiveChannel(channels[0])
   }, [channels])
+
+  useEffect(() => {
+    activeChannelRef.current = activeChannel
+  }, [activeChannel])
 
   const init = async () => {
     try {
@@ -46,7 +101,7 @@ const Channels = () => {
           message,
           channel: activeChannel?._id,
         },
-        (response: any) => console.log(response)
+        (response: SendMessageEmitResponse) => console.log(response)
       )
   }
 
@@ -60,14 +115,18 @@ const Channels = () => {
     }
   }
 
-  if (isLoading) return null
-
   return (
-    <Page id="chat" flex={true}>
+    <Page id="chat" flex={true} isLoading={isLoading}>
       {activeChannel && (
         <div id="chat-channel">
           <div id="chat-channel-header">{activeChannel.name}</div>
-          <div id="chat-channel-thread"></div>
+          <div id="chat-channel-thread">
+            {activeChannel &&
+              messages[activeChannel._id] &&
+              messages[activeChannel._id].map((m, i) => (
+                <div key={i}>{m.body}</div>
+              ))}
+          </div>
           <div id="chat-channel-control">
             <FormControl
               forRef={messageRef}
@@ -91,7 +150,7 @@ const Channels = () => {
         {_.map(channels, (channel, i) => {
           const cx = {
             'chat-channel': true,
-            active: activeChannel && channel._id === activeChannel._id,
+            active: !!activeChannel && channel._id === activeChannel._id,
           }
 
           const classes = classNames(cx)

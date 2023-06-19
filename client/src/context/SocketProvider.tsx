@@ -12,18 +12,13 @@ import useAuth from '@hooks/useAuth'
 import useRefreshToken from '@hooks/useRefreshToken'
 import { ToastContext } from './ToastContext'
 
-type Disposable = { dispose: () => void }
-type EventCallback = (event: Record<string, unknown>) => void
-
 export type ISocketContext = {
   connected: boolean
-  subscribe: (callback: EventCallback) => Disposable
   socket: Socket | null
 }
 
 export const SocketContext = createContext<ISocketContext>({
   connected: false,
-  subscribe: () => ({ dispose: () => null }),
   socket: null,
 })
 
@@ -33,15 +28,13 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { auth } = useAuth()
   const { addToast } = useContext(ToastContext)
 
-  const refresh = useRefreshToken()
+  const { refresh } = useRefreshToken()
   const resetAttempts = useRef(0)
 
   const [connected, setConnected] = useState<boolean>(false)
   const [subscribed, setSubscribed] = useState<boolean>(false)
-  const [subscriptions, setSubscriptions] = useState<Array<EventCallback>>([])
   const [socket, setSocket] = useState<Socket | null>(null)
 
-  const subscriptionsRef = useRef(subscriptions)
   const socketRef = useRef<Socket | null>(null)
   const socketTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -69,10 +62,6 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
     socketRef.current = socket
   }, [socket])
 
-  useEffect(() => {
-    subscriptionsRef.current = subscriptions
-  }, [subscriptions])
-
   const connect = () => {
     if (socketRef.current) return
 
@@ -83,7 +72,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     socket.on('connect', () => {
       setConnected(true)
-      if (!subscribed) joinUser(socket)
+      if (!subscribed) joinChannels(socket)
       if (socketTimerRef.current) clearTimeout(socketTimerRef.current)
     })
 
@@ -96,30 +85,28 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     socket.on('user_joined', ({ joined }) => {
       if (joined) {
-        console.log('subscribing user')
+        console.log('subscribing user to channels')
         setSubscribed(true)
       } else {
-        console.log('resetting socket')
-        resetSocket()
+        console.log('socket resetting')
+        setTimeout(() => resetSocket(), 2000)
       }
-    })
-
-    socket.on('message', (event) => {
-      console.log(event)
-      // subscriptionsRef.current.forEach((callback) => callback(event))
     })
 
     socket.connect()
     setSocket(socket)
   }
 
-  const joinUser = (socket: Socket) => {
+  const joinChannels = (socket: Socket) => {
     if (!auth.user) return
     socket.emit('join_channels', { accessToken: auth.accessToken })
   }
 
   const resetSocket = async () => {
-    if (socketRef.current) socketRef.current.disconnect()
+    if (socketRef.current) {
+      socketRef.current.disconnect()
+      socketRef.current = null
+    }
     resetAttempts.current++
     setConnected(false)
     setSubscribed(false)
@@ -143,7 +130,6 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const disconnect = (reason?: string) => {
     console.log('socket disconnected:', reason)
     setConnected(false)
-    setSubscriptions([])
 
     if (reason === 'io client disconnect') {
       setSubscribed(false)
@@ -153,24 +139,10 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
     }
   }
 
-  const subscribe = (callback: EventCallback) => {
-    setTimeout(() => {
-      console.log('socket subscribed')
-      setSubscriptions([...subscriptionsRef.current, callback])
-    }, 0)
-
-    const dispose = () => {
-      console.log('socket disposed')
-      const scrubbed = subscriptionsRef.current.filter((sub) => sub != callback)
-      setSubscriptions(scrubbed)
-    }
-    return { dispose }
-  }
-
   const contextValue = useMemo(
     () => ({
       connected,
-      subscribe,
+      subscribed,
       socket,
     }),
     [connected, subscribed, socket]
@@ -182,20 +154,3 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
     </SocketContext.Provider>
   )
 }
-
-// HOW TO SUBSCRIBE
-
-// const sub = subscribe((event: SocketEventData) => {
-//     if (event.type === SOCKET_EVENT.msg) {
-//       const activeChannelIds = _.map(activeChannelsRef.current, 'id')
-//       if (!_.includes(activeChannelIds, event.data.channelId)) {
-//         getChannels()
-//       }
-//     } else if (event.type === SOCKET_EVENT.channel) {
-//       const channelId = event.data.channelId
-//       setUpdateChannelConnection(channelId)
-//       getChannels()
-//     }
-//   })
-
-//   return () => sub.dispose()

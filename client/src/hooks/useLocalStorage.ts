@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import {
   Dispatch,
   SetStateAction,
@@ -44,7 +43,6 @@ export function useLocalStorage<T>(
 
   const setStoredValue = (newState: T) => {
     _setStoredValue((prev) => {
-      // if (!_.isEqual(newState, prev)) {
       if (JSON.stringify(newState) !== JSON.stringify(prev)) {
         return newState
       } else {

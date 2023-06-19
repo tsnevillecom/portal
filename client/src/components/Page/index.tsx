@@ -1,7 +1,8 @@
 import './Page.scss'
-import _ from 'lodash'
-import React, { ReactNode, useEffect, useState } from 'react'
+import React, { ReactNode } from 'react'
 import { classNames } from '@utils/classNames.util'
+import { divide } from 'lodash'
+import Spinner from '@components/Spinner'
 
 interface IPage {
   isLoading?: boolean
@@ -18,8 +19,6 @@ const Page: React.FC<IPage> = ({
   id,
   flex = false,
 }) => {
-  if (isLoading) return null
-
   const cx = {
     page: true,
     flex,
@@ -28,8 +27,18 @@ const Page: React.FC<IPage> = ({
 
   return (
     <section id={id} className={classes}>
-      {!!title && <h1>{title}</h1>}
-      {children}
+      {isLoading && (
+        <div id="loader">
+          <Spinner size={60} />
+        </div>
+      )}
+
+      {!isLoading && (
+        <>
+          {!!title && <h1>{title}</h1>}
+          {children}
+        </>
+      )}
     </section>
   )
 }

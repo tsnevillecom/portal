@@ -1,5 +1,4 @@
 import Page from '@components/Page'
-import _ from 'lodash'
 import React from 'react'
 
 const Home = () => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Outlet } from 'react-router-dom'
 import useRefreshToken from '@hooks/useRefreshToken'
 import useAuth from '@hooks/useAuth'
@@ -7,15 +7,16 @@ import _ from 'lodash'
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const refresh = useRefreshToken()
+  const { refresh } = useRefreshToken()
   const { auth, persist } = useAuth()
-
-  let ignore = false
+  const ignoreRef = useRef(false)
 
   useEffect(() => {
+    const debounceLoadingFalse = _.debounce(() => setIsLoading(false), 500)
+
     const verifyRefreshToken = async () => {
-      if (ignore) return
-      ignore = true
+      if (ignoreRef.current) return
+      ignoreRef.current = true
 
       try {
         await refresh()
@@ -33,8 +34,6 @@ const PersistLogin = () => {
     // Avoids unwanted call to verifyRefreshToken
     !auth.accessToken && persist ? verifyRefreshToken() : debounceLoadingFalse()
   }, [])
-
-  const debounceLoadingFalse = _.debounce(() => setIsLoading(false), 500)
 
   if (persist && isLoading) return <Spinner />
 

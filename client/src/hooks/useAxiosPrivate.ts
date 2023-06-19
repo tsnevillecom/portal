@@ -12,7 +12,7 @@ type FailedResponseQueueType = {
 
 const useAxiosPrivate = () => {
   const { logout } = useLogout()
-  const refresh = useRefreshToken()
+  const { refresh } = useRefreshToken()
   const { auth } = useAuth()
 
   useEffect(() => {

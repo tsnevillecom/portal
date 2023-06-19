@@ -6,7 +6,7 @@ import './Header.scss'
 import Button from '@components/Button'
 
 const Header = () => {
-  const { auth, isAdmin } = useAuth()
+  const { auth } = useAuth()
   const { logout } = useLogout()
 
   if (!auth.isAuthenticated) return null

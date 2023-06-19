@@ -9,7 +9,7 @@ import Page from '@components/Page'
 const Profile = () => {
   const axiosPrivate = useAxiosPrivate()
   const { logoutall } = useLogout()
-  const refresh = useRefreshToken()
+  const { refresh } = useRefreshToken()
 
   const getMe = async () => {
     try {
