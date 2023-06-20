@@ -37,7 +37,6 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    // background: $black;
 
     &-header {
       padding: 24px 16px;
@@ -47,7 +46,7 @@
     &-thread {
       flex: 1;
       padding: 16px;
-      // background: #111;
+      background: #111;
       display: flex;
       flex-direction: column-reverse;
       overflow-x: hidden;
@@ -100,7 +99,7 @@
 
   #chat-channel-control {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     padding: 16px;
 
     .form-control {

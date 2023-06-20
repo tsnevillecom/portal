@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, RefObject } from 'react'
 import FormError from '@components/FormError'
 import { classNames } from '@utils/classNames.util'
 import './FormControl.scss'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import _ from 'lodash'
+import useAutosizeTextArea from '@hooks/useAutosizeTextArea'
 
 interface FormControlProps {
   disabled?: boolean
   error?: string
   hasError?: boolean
-  forRef?: React.Ref<HTMLInputElement | HTMLTextAreaElement> | null
+  forRef?: RefObject<HTMLInputElement | HTMLTextAreaElement> | null
   id?: string
   label?: string
   maxLength?: number
@@ -21,6 +22,7 @@ interface FormControlProps {
   placeholder?: string | null
   round?: boolean
   rows?: number
+  maxRows?: number
   spellCheck?: boolean
   textarea?: boolean
   required?: boolean
@@ -45,6 +47,8 @@ const defaultProps: FormControlProps = {
   value: '',
   autoComplete: 'off',
   togglePassword: false,
+  rows: 1,
+  maxRows: 4,
 }
 
 const FormControl: React.FC<FormControlProps> = ({
@@ -63,20 +67,28 @@ const FormControl: React.FC<FormControlProps> = ({
   required,
   round,
   rows,
+  maxRows,
   spellCheck,
   textarea,
   togglePassword,
   type,
   value,
 }) => {
-  const [inputValue, setInputValue] = useState(value)
+  const [inputValue, setInputValue] = useState<string>(value || '')
   const [focused, setFocused] = useState(false)
   const [viewPassword, setViewPassword] = useState(false)
   const [inputType, setInputType] = useState(type)
-  const [textareaRows, setTextareaRows] = useState(rows || 1)
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (forRef && textarea)
+    useAutosizeTextArea(
+      forRef.current as HTMLTextAreaElement,
+      inputValue,
+      maxRows as number
+    )
 
   useEffect(() => {
-    if (value !== inputValue) setInputValue(value)
+    if (value !== inputValue) setInputValue(value || '')
   }, [value])
 
   useEffect(() => {
@@ -92,24 +104,15 @@ const FormControl: React.FC<FormControlProps> = ({
   ) => {
     const target = e.currentTarget
 
-    if (textarea) {
-      const height = target.scrollHeight
-      const rowHeight = 26
-      const maxRows = 3
-      const currRows = Math.ceil(height / rowHeight) - 1
-      if (currRows > textareaRows && currRows <= maxRows)
-        setTextareaRows(currRows)
-    } else {
-      switch (type) {
-        case 'number':
-          target.value = target.value.replace(/\D/g, '')
-          break
-        case 'tel':
-          target.value = target.value.replace(/[^0-9() .\-+]+/g, '')
-          break
-        default:
-          break
-      }
+    switch (type) {
+      case 'number':
+        target.value = target.value.replace(/\D/g, '')
+        break
+      case 'tel':
+        target.value = target.value.replace(/[^0-9() .\-+]+/g, '')
+        break
+      default:
+        break
     }
 
     setInputValue(target.value)
@@ -170,7 +173,7 @@ const FormControl: React.FC<FormControlProps> = ({
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
             disabled={disabled}
-            rows={textareaRows}
+            rows={rows}
             ref={forRef as React.Ref<HTMLTextAreaElement> | null}
             name={name}
             {...(!_.isNull(placeholder) && {
