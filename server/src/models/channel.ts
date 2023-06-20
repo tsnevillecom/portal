@@ -37,8 +37,7 @@ ChannelSchema.methods.toJSON = function () {
 }
 
 ChannelSchema.pre('find', function (next) {
-  const select =
-    '-password -refreshTokens -deleted -createdAt -updatedAt -__v -role -isVerified'
+  const select = '_id firstName lastName active'
   this.populate([
     { path: 'createdBy', select },
     { path: 'members', select },

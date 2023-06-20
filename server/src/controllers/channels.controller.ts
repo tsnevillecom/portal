@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongodb'
 import Channel from '../models/channel'
 import User from '../models/user'
+import Message from '../models/message'
 
 class ChannelsController {
   public getAllChannels = async (req, res) => {
@@ -20,6 +21,19 @@ class ChannelsController {
         members: { $in: [userId] },
       }).exec()
       res.status(200).send(channels)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  }
+
+  public getMessagesByChannelId = async (req, res) => {
+    const channelId = req.params.id
+    try {
+      const messages = await Message.find({
+        deleted: false,
+        channelId: channelId,
+      }).exec()
+      res.status(200).send(messages)
     } catch (error) {
       res.status(404).send({ message: error.message })
     }

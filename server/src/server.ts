@@ -15,8 +15,10 @@ import InvalidPathMiddleware from './middleware/invalidPath.middleware'
 import UsersSeed from './seed/users.seed'
 import ChannelsSeed from './seed/channels.seed'
 import jwt from 'jsonwebtoken'
-import ChannelsController from './controllers/channels.controller'
 import Channel from './models/channel'
+import User from './models/user'
+import cookie from 'cookie'
+import Message from './models/message'
 
 class Server {
   private port: number
@@ -48,7 +50,7 @@ class Server {
     this.initializeSocket()
   }
 
-  public async initializeSocket() {
+  private async initializeSocket() {
     this.io = new SocketIOServer(this.httpServer, {
       pingInterval: 10000,
       pingTimeout: 30000,
@@ -69,49 +71,57 @@ class Server {
   }
 
   private handleSocketConnection(): void {
+    this.io.use(async (socket, next) => {
+      var cookies = cookie.parse(socket.handshake.headers.cookie)
+
+      try {
+        const refreshToken = cookies.refreshToken
+        const foundUser = await User.findOne({
+          'refreshTokens.refreshToken': refreshToken,
+        }).exec()
+
+        socket['userId'] = foundUser._id
+        next()
+      } catch (e) {
+        next(new Error('unknown user'))
+      }
+    })
+
     this.io.sockets.on('connection', (socket) => {
       console.log('Socket connected:', socket.id)
 
-      socket.on('join_channels', async ({ accessToken }) => {
-        let user = null
+      socket.on('join_channels', async () => {
+        const channels = await Channel.find({
+          members: { $in: [socket['userId']] },
+          deleted: false,
+        }).distinct('_id')
 
-        jwt.verify(
-          accessToken,
-          config.ACCESS_TOKEN_SECRET,
-          async (err, decoded) => {
-            if (err || !decoded?.user) {
-              console.log(err ? 'invalid accessToken' : 'no user found')
-              socket.emit('user_joined', { joined: false, channels: [] })
-              return
-            }
-
-            user = decoded?.user
-            const channels = await Channel.find({
-              members: { $in: [user._id] },
-            }).distinct('_id')
-
-            socket.join(channels.map((c) => c.toString()))
-            socket.emit('user_joined', { joined: true, channels })
-          }
-        )
+        socket.join(channels.map((c) => c.toString()))
+        socket.emit('user_joined', { joined: true, channels })
       })
 
       socket.on('disconnect', () => {
         console.log('Socket disconnected:', socket.id)
       })
 
-      socket.on('send_message', ({ message, channel }, callback) => {
-        if (callback)
-          callback({
-            status: 'sent',
-            message,
-            channel,
+      socket.on('send_message', async (data, callback) => {
+        try {
+          const newMessage = new Message({
+            ...data,
+            createdBy: socket['userId'],
           })
+          await newMessage.save()
 
-        setTimeout(
-          () => this.io.in(channel).emit('message', { message, channel }),
-          2000
-        )
+          if (callback)
+            callback({
+              status: 'sent',
+              ...data,
+            })
+
+          this.io.in(data.channelId).emit('new_message', newMessage)
+        } catch (error) {
+          this.io.in(data.channelId).emit('send_message_failed', { ...data })
+        }
       })
     })
   }

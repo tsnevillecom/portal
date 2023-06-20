@@ -1,7 +1,6 @@
 import './Page.scss'
 import React, { ReactNode } from 'react'
 import { classNames } from '@utils/classNames.util'
-import { divide } from 'lodash'
 import Spinner from '@components/Spinner'
 
 interface IPage {

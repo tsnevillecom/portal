@@ -99,7 +99,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
   const joinChannels = (socket: Socket) => {
     if (!auth.user) return
-    socket.emit('join_channels', { accessToken: auth.accessToken })
+    socket.emit('join_channels')
   }
 
   const resetSocket = async () => {

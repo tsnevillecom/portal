@@ -67,10 +67,10 @@ const Channels = () => {
   )
 
   useEffect(() => {
-    socket?.on('message', listener)
+    socket?.on('new_message', listener)
 
     return () => {
-      socket?.off('message', listener)
+      socket?.off('new_message', listener)
     }
   }, [listener])
 
@@ -98,8 +98,8 @@ const Channels = () => {
       socket.emit(
         'send_message',
         {
-          message,
-          channel: activeChannel?._id,
+          body: message,
+          channelId: activeChannel?._id,
         },
         (response: SendMessageEmitResponse) => console.log(response)
       )

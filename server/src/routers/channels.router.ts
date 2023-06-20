@@ -17,6 +17,11 @@ class ChannelsRouter {
       this.authenticate,
       this.channelsController.getAllChannels
     )
+    this.router.post(
+      '/',
+      this.authenticate,
+      this.channelsController.createChannel
+    )
     this.router.get(
       '/member',
       this.authenticate,
@@ -27,10 +32,10 @@ class ChannelsRouter {
       this.authenticate,
       this.channelsController.getChannel
     )
-    this.router.post(
-      '/',
+    this.router.get(
+      '/:id/messages',
       this.authenticate,
-      this.channelsController.createChannel
+      this.channelsController.getMessagesByChannelId
     )
     this.router.patch(
       '/:id',
