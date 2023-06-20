@@ -53,6 +53,7 @@ const App = () => {
               <Route path="/" element={<Home />} />
               <Route path="profile" element={<Profile />} />
               <Route path="chat" element={<Channels />} />
+              <Route path="chat/:channel" element={<Channels />} />
               <Route path="unauthorized" element={<Unauthorized />} />
             </Route>
 

@@ -115,7 +115,7 @@ class Server {
           if (callback)
             callback({
               status: 'sent',
-              ...data,
+              message: { ...newMessage },
             })
 
           this.io.in(data.channelId).emit('new_message', newMessage)

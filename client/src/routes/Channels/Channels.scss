@@ -3,7 +3,7 @@
 #chat {
   #chat-channels {
     flex: 0 0 200px;
-    border-right: 1px solid $black;
+    border-left: 1px solid $black;
 
     #chat-channels-header {
       display: flex;
@@ -37,7 +37,7 @@
     display: flex;
     flex-direction: column;
     flex: 1;
-    background: $black;
+    // background: $black;
 
     &-header {
       padding: 24px 16px;
@@ -47,11 +47,54 @@
     &-thread {
       flex: 1;
       padding: 16px;
-      background: #111;
+      // background: #111;
+      display: flex;
+      flex-direction: column-reverse;
+      overflow-x: hidden;
+      overflow-y: auto;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: rgba($white, 0.1);
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba($white, 0.2);
+      }
     }
 
     &-input {
       height: 60px;
+    }
+
+    &-messages {
+      min-height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .chat-channel-message {
+      margin: 8px 0;
+      padding: 8px 12px;
+      border-radius: 12px;
+      color: $white;
+      max-width: 80%;
+      font-size: 0.9rem;
+      line-height: 1.4rem;
+
+      &.sender {
+        align-self: flex-end;
+        background-color: $blue-800;
+      }
+
+      &.receiver {
+        align-self: flex-start;
+        background-color: $zinc-700;
+      }
     }
   }
 
@@ -64,5 +107,13 @@
       flex: 1;
       margin: 0 16px 0 0;
     }
+  }
+
+  .dark & {
+    background: #111;
+  }
+
+  .light & {
+    background: $gray-400;
   }
 }

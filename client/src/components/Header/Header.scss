@@ -39,4 +39,12 @@
     position: relative;
     align-items: center;
   }
+
+  .dark & {
+    background: #111;
+  }
+
+  .light & {
+    background: $gray-400;
+  }
 }

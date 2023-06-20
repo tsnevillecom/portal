@@ -14,24 +14,26 @@ import Page from '@components/Page'
 import { classNames } from '@utils/classNames.util'
 import FormControl from '@components/FormControl'
 import { SocketContext } from '@context/SocketProvider'
+import { AuthContext } from '@context/AuthProvider'
+import { useNavigate, useParams } from 'react-router'
 
 interface SendMessageEmitResponse {
-  channel: string
-  message: string
+  message: Message
   status: string
 }
 
 interface Message {
   body: string
-  date: Date
-}
-
-interface SocketEventData {
-  message: string
-  channel: string
+  channelId: string
+  createdBy: string
+  updatedAt: string
+  _id: string
 }
 
 const Channels = () => {
+  const navigate = useNavigate()
+  const { channel } = useParams<{ channel: string | undefined }>()
+  const { auth } = useContext(AuthContext)
   const { socket } = useContext(SocketContext)
   const axiosPrivate = useAxiosPrivate()
   const [isLoading, setIsLoading] = useState(true)
@@ -41,6 +43,7 @@ const Channels = () => {
   const [messages, setMessages] = useState<Record<string, Message[]>>({})
 
   const messageRef = useRef<HTMLTextAreaElement>(null)
+  const chatThreadRef = useRef<HTMLDivElement>(null)
   const activeChannelRef = useRef<Channel | null>(null)
 
   useEffect(() => {
@@ -48,38 +51,55 @@ const Channels = () => {
   }, [])
 
   const listener = useCallback(
-    (event: SocketEventData) => {
-      console.log(event, activeChannel)
-
+    (message: Message) => {
       if (!activeChannel) return
-      console.log(event)
-      const channelMessages = messages[activeChannel._id] || []
-      setMessages({
-        ...messages,
-        [activeChannel._id]: [
-          ...channelMessages,
-          { body: event.message, date: new Date() },
-        ],
+
+      setMessages(previousMessages => {
+        const channelMessages = previousMessages[activeChannel._id] || []
+
+        return {
+          ...previousMessages,
+          [activeChannel._id]: [...channelMessages, message],
+        }
       })
+
       setMessage('')
     },
     [messages, activeChannel]
   )
 
   useEffect(() => {
-    socket?.on('new_message', listener)
+    if (socket) socket.on('new_message', listener)
 
     return () => {
-      socket?.off('new_message', listener)
+      if (socket) socket.off('new_message', listener)
     }
   }, [listener])
 
   useEffect(() => {
-    setActiveChannel(channels[0])
+    if (channels.length) {
+      const activeChannelId = channel || ''
+      const match = _.find(channels, cc => cc._id === activeChannelId)
+      setActiveChannel(match || channels[0])
+    }
   }, [channels])
 
   useEffect(() => {
+    if (chatThreadRef.current)
+      chatThreadRef.current.scrollTo({
+        left: 0,
+        top: document.body.scrollHeight,
+        behavior: 'smooth',
+      })
+  }, [messages])
+
+  useEffect(() => {
     activeChannelRef.current = activeChannel
+    if (activeChannel) {
+      const route = `/chat/${activeChannel._id}`
+      navigate(route, { replace: true })
+      getMessages(activeChannel)
+    }
   }, [activeChannel])
 
   const init = async () => {
@@ -91,6 +111,22 @@ const Channels = () => {
     }
 
     setIsLoading(false)
+  }
+
+  const getMessages = async (activeChannel: Channel) => {
+    try {
+      const response = await axiosPrivate(
+        `/channels/${activeChannel._id}/messages`
+      )
+      setMessages(previousMessages => {
+        return {
+          ...previousMessages,
+          [activeChannel._id]: response.data,
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const sendMessage = () => {
@@ -115,17 +151,41 @@ const Channels = () => {
     }
   }
 
+  const renderBody = (body: string) => {
+    return body.replace(
+      // eslint-disable-next-line no-control-regex
+      new RegExp('\r?\n', 'g'),
+      '<br>'
+    )
+  }
+
   return (
     <Page id="chat" flex={true} isLoading={isLoading}>
       {activeChannel && (
         <div id="chat-channel">
           <div id="chat-channel-header">{activeChannel.name}</div>
-          <div id="chat-channel-thread">
-            {activeChannel &&
-              messages[activeChannel._id] &&
-              messages[activeChannel._id].map((m, i) => (
-                <div key={i}>{m.body}</div>
-              ))}
+          <div id="chat-channel-thread" ref={chatThreadRef}>
+            <div id="chat-channel-messages">
+              {activeChannel &&
+                messages[activeChannel._id] &&
+                messages[activeChannel._id].map((m, i) => {
+                  const cx = {
+                    'chat-channel-message': true,
+                    sender: auth.user?._id === m.createdBy,
+                    receiver: auth.user?._id !== m.createdBy,
+                  }
+
+                  const classes = classNames(cx)
+
+                  return (
+                    <div
+                      key={i}
+                      className={classes}
+                      dangerouslySetInnerHTML={{ __html: renderBody(m.body) }}
+                    />
+                  )
+                })}
+            </div>
           </div>
           <div id="chat-channel-control">
             <FormControl

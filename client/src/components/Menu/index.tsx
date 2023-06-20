@@ -1,7 +1,7 @@
 import React from 'react'
 import './Menu.scss'
 import ThemeToggle from '@components/ThemeToggle'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import useAuth from '@hooks/useAuth'
 import { BiChat, BiHome, BiShield } from 'react-icons/bi'
 import { FaUserCircle } from 'react-icons/fa'
@@ -26,25 +26,25 @@ const Menu = () => {
       </div>
       <div className="sidebar-body">
         <nav>
-          <Link to="/">
+          <NavLink to="/">
             <span>
               <BiHome />
             </span>
             <span>Home</span>
-          </Link>
-          <Link to="/chat">
+          </NavLink>
+          <NavLink to="/chat">
             <span>
               <BiChat />
             </span>
             <span>Chat</span>
-          </Link>
+          </NavLink>
           {isAdmin && (
-            <Link to="/admin">
+            <NavLink to="/admin">
               <span>
                 <BiShield />
               </span>
               <span>Admin</span>
-            </Link>
+            </NavLink>
           )}
         </nav>
       </div>
