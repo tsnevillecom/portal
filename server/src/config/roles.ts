@@ -1,9 +1,8 @@
 const ROLES = {
+  SUPER_ADMIN: 'super-admin',
   ADMIN: 'admin',
-  FAN: 'fan',
-  ARTIST: 'artist',
-  INDUSTRY: 'industry',
-  VENUE: 'venue',
+  USER: 'user',
+  GUEST: 'guest',
 }
 
 export default ROLES

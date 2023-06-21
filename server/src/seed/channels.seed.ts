@@ -1,3 +1,4 @@
+import ROLES from '../config/roles'
 import Channel from '../models/channel'
 import User from '../models/user'
 
@@ -5,36 +6,36 @@ class ChannelsSeed {
   public seed = async (): Promise<void> => {
     console.log('Seeding channel collection')
 
-    const admin = await User.exists({
+    const superAdmin = await User.exists({
       email: 'tsneville@gmail.com',
-      role: 'admin',
+      role: ROLES.SUPER_ADMIN,
     })
 
-    const fan = await User.exists({
-      email: 'tsneville+fan@gmail.com',
-      role: 'fan',
+    const admin = await User.exists({
+      email: 'tsneville+admin@gmail.com',
+      role: ROLES.ADMIN,
     })
 
     const channels = [
       {
         name: 'General',
-        createdBy: admin._id,
-        members: [admin._id],
+        createdBy: superAdmin._id,
+        members: [superAdmin._id],
       },
       {
         name: 'Admins',
-        createdBy: admin._id,
-        members: [admin._id],
+        createdBy: superAdmin._id,
+        members: [superAdmin._id],
       },
       {
         name: 'Random',
-        createdBy: admin._id,
-        members: [admin._id, fan._id],
+        createdBy: superAdmin._id,
+        members: [superAdmin._id, admin._id],
       },
       {
         name: 'Deleted',
-        createdBy: admin._id,
-        members: [admin._id, fan._id],
+        createdBy: superAdmin._id,
+        members: [superAdmin._id, admin._id],
         deleted: true,
       },
     ]

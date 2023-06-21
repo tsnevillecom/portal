@@ -16,6 +16,7 @@ import FormControl from '@components/FormControl'
 import { SocketContext } from '@context/SocketProvider'
 import { AuthContext } from '@context/AuthProvider'
 import { useNavigate, useParams } from 'react-router'
+import { GrSend } from 'react-icons/gr'
 
 interface SendMessageEmitResponse {
   message: Message
@@ -54,7 +55,7 @@ const Channels = () => {
     (message: Message) => {
       if (!activeChannel) return
 
-      setMessages(previousMessages => {
+      setMessages((previousMessages) => {
         const channelMessages = previousMessages[activeChannel._id] || []
 
         return {
@@ -79,7 +80,7 @@ const Channels = () => {
   useEffect(() => {
     if (channels.length) {
       const activeChannelId = channel || ''
-      const match = _.find(channels, cc => cc._id === activeChannelId)
+      const match = _.find(channels, (cc) => cc._id === activeChannelId)
       setActiveChannel(match || channels[0])
     }
   }, [channels])
@@ -118,7 +119,7 @@ const Channels = () => {
       const response = await axiosPrivate(
         `/channels/${activeChannel._id}/messages`
       )
-      setMessages(previousMessages => {
+      setMessages((previousMessages) => {
         return {
           ...previousMessages,
           [activeChannel._id]: response.data,
@@ -196,7 +197,10 @@ const Channels = () => {
               onChange={handleInputChange}
             />
 
-            <Button onClick={sendMessage}>Send</Button>
+            <Button onClick={sendMessage}>
+              <GrSend color="#fff" />
+              Send
+            </Button>
           </div>
         </div>
       )}

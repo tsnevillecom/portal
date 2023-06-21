@@ -100,6 +100,10 @@
   svg {
     margin-right: 8px;
 
+    path {
+      stroke: #fff;
+    }
+
     &.loading {
       margin-right: 0;
       position: absolute;

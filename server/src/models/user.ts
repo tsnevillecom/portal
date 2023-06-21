@@ -97,8 +97,8 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
     },
     role: {
       type: String,
-      default: ROLES.FAN,
-      enum: [ROLES.ADMIN, ROLES.FAN, ROLES.ARTIST, ROLES.INDUSTRY, ROLES.VENUE],
+      default: ROLES.USER,
+      enum: [ROLES.SUPER_ADMIN, ROLES.ADMIN, ROLES.USER, ROLES.GUEST],
     },
   },
   { timestamps: true }

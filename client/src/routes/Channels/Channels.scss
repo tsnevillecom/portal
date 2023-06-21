@@ -84,10 +84,11 @@
       max-width: 80%;
       font-size: 0.9rem;
       line-height: 1.4rem;
+      white-space: pre-wrap;
 
       &.sender {
         align-self: flex-end;
-        background-color: $blue-800;
+        background-color: $blue-600;
       }
 
       &.receiver {

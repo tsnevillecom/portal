@@ -1,4 +1,5 @@
 import config from '../config'
+import ROLES from '../config/roles'
 import User from '../models/user'
 
 class UsersSeed {
@@ -8,27 +9,35 @@ class UsersSeed {
     const users = [
       {
         firstName: 'Tim',
-        lastName: 'Neville',
+        lastName: 'SuperAdmin',
         email: 'tsneville@gmail.com',
         password: config.ADMIN_PASSWORD,
         isVerified: true,
-        role: 'admin',
+        role: ROLES.SUPER_ADMIN,
       },
       {
-        firstName: 'Music',
-        lastName: 'Fan',
-        email: 'tsneville+fan@gmail.com',
-        password: '12345678',
+        firstName: 'Tim',
+        lastName: 'Admin',
+        email: 'tsneville+admin@gmail.com',
+        password: config.ADMIN_PASSWORD,
         isVerified: true,
-        role: 'fan',
+        role: ROLES.ADMIN,
       },
       {
-        firstName: 'John',
-        lastName: 'Smith',
-        email: 'tsneville+john@gmail.com',
+        firstName: 'Tim',
+        lastName: 'User',
+        email: 'tsneville+user@gmail.com',
         password: '12345678',
         isVerified: true,
-        role: 'fan',
+        role: ROLES.USER,
+      },
+      {
+        firstName: 'Tim',
+        lastName: 'Guest',
+        email: 'tsneville+guest@gmail.com',
+        password: '12345678',
+        isVerified: true,
+        role: ROLES.GUEST,
       },
     ]
 
