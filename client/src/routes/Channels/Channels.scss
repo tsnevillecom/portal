@@ -98,17 +98,6 @@
     }
   }
 
-  #chat-channel-control {
-    display: flex;
-    align-items: flex-start;
-    padding: 16px;
-
-    .form-control {
-      flex: 1;
-      margin: 0 16px 0 0;
-    }
-  }
-
   .dark & {
     background: #111;
   }

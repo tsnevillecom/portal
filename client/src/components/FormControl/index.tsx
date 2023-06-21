@@ -102,6 +102,8 @@ const FormControl: React.FC<FormControlProps> = ({
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
+    console.log('handleOnChange', forRef?.current?.value)
+
     const target = e.currentTarget
 
     switch (type) {
@@ -151,7 +153,7 @@ const FormControl: React.FC<FormControlProps> = ({
       {!textarea && (
         <input
           disabled={disabled}
-          ref={forRef as React.Ref<HTMLInputElement> | null}
+          ref={forRef as RefObject<HTMLInputElement> | null}
           name={name}
           {...(!_.isNull(placeholder) && { placeholder: placeholder || label })}
           autoComplete={autoComplete}
@@ -174,7 +176,7 @@ const FormControl: React.FC<FormControlProps> = ({
             onBlur={() => setFocused(false)}
             disabled={disabled}
             rows={rows}
-            ref={forRef as React.Ref<HTMLTextAreaElement> | null}
+            ref={forRef as RefObject<HTMLTextAreaElement> | null}
             name={name}
             {...(!_.isNull(placeholder) && {
               placeholder: placeholder || label,

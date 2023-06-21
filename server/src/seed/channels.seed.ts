@@ -43,7 +43,7 @@ class ChannelsSeed {
     for (const channel of channels) {
       const foundRoom = await Channel.exists({
         name: channel.name,
-        createdBy: admin._id,
+        createdBy: superAdmin._id,
       })
 
       if (foundRoom) {

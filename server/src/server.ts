@@ -5,16 +5,12 @@ import cookieParser from 'cookie-parser'
 import express, { Application as ExpressApplication } from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-import mongoose from 'mongoose'
 import connectDatabase from './db'
 import corsOptions from './config/corsOptions'
 import limiter from 'express-rate-limit'
 import path from 'path'
 import CredentialsMiddleware from './middleware/credentials.middleware'
 import InvalidPathMiddleware from './middleware/invalidPath.middleware'
-import UsersSeed from './seed/users.seed'
-import ChannelsSeed from './seed/channels.seed'
-import jwt from 'jsonwebtoken'
 import Channel from './models/channel'
 import User from './models/user'
 import cookie from 'cookie'
@@ -46,7 +42,6 @@ class Server {
 
   public async initialize() {
     connectDatabase()
-    await this.seed()
     this.initializeSocket()
   }
 
@@ -56,18 +51,6 @@ class Server {
       pingTimeout: 30000,
     })
     this.handleSocketConnection()
-  }
-
-  private seed(): Promise<any> {
-    const db = mongoose.connection
-
-    return new Promise((resolve) => {
-      db.once('open', async () => {
-        await new UsersSeed().seed()
-        await new ChannelsSeed().seed()
-        resolve(null)
-      })
-    })
   }
 
   private handleSocketConnection(): void {
@@ -104,6 +87,10 @@ class Server {
         console.log('Socket disconnected:', socket.id)
       })
 
+      socket.on('typing', (data) => {
+        socket.to(data.channelId).emit('channel_typing', data)
+      })
+
       socket.on('send_message', async (data, callback) => {
         try {
           const newMessage = new Message({
@@ -115,7 +102,7 @@ class Server {
           if (callback)
             callback({
               status: 'sent',
-              message: { ...newMessage },
+              message: newMessage,
             })
 
           this.io.in(data.channelId).emit('new_message', newMessage)

@@ -1,4 +1,3 @@
-import config from '../config'
 import ROLES from '../config/roles'
 import User from '../models/user'
 
@@ -11,7 +10,7 @@ class UsersSeed {
         firstName: 'Tim',
         lastName: 'SuperAdmin',
         email: 'tsneville@gmail.com',
-        password: config.ADMIN_PASSWORD,
+        password: null,
         isVerified: true,
         role: ROLES.SUPER_ADMIN,
       },
@@ -19,7 +18,7 @@ class UsersSeed {
         firstName: 'Tim',
         lastName: 'Admin',
         email: 'tsneville+admin@gmail.com',
-        password: config.ADMIN_PASSWORD,
+        password: '12345678',
         isVerified: true,
         role: ROLES.ADMIN,
       },

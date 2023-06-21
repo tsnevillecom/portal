@@ -1,11 +1,11 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, MouseEvent } from 'react'
 import './Button.scss'
 import { CgSpinner } from 'react-icons/cg'
 
 interface ButtonProps {
   children: string | ReactNode
   style: 'primary' | 'danger' | 'warning' | 'secondary' | 'link'
-  onClick?: () => void
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
   loading?: boolean
@@ -40,7 +40,9 @@ const Button = ({
     className: `btn btn-${style} ${loading ? 'btn-loading' : ''} ${
       classes ? classes : ''
     }`,
-    ...(onClick && { onClick: () => onClick() }),
+    ...(onClick && {
+      onClick: (e: MouseEvent<HTMLButtonElement>) => onClick(e),
+    }),
     ...(disabled && { disabled }),
   }
 

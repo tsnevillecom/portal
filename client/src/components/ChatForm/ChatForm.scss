@@ -1,0 +1,11 @@
+#chat-channel-control {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: row;
+  padding: 16px;
+
+  .form-control {
+    flex: 1;
+    margin: 0 16px 0 0;
+  }
+}

@@ -12,16 +12,10 @@ import React, {
 } from 'react'
 import Page from '@components/Page'
 import { classNames } from '@utils/classNames.util'
-import FormControl from '@components/FormControl'
 import { SocketContext } from '@context/SocketProvider'
 import { AuthContext } from '@context/AuthProvider'
 import { useNavigate, useParams } from 'react-router'
-import { GrSend } from 'react-icons/gr'
-
-interface SendMessageEmitResponse {
-  message: Message
-  status: string
-}
+import ChatForm from '@components/ChatForm'
 
 interface Message {
   body: string
@@ -36,14 +30,14 @@ const Channels = () => {
   const { channel } = useParams<{ channel: string | undefined }>()
   const { auth } = useContext(AuthContext)
   const { socket } = useContext(SocketContext)
+
   const axiosPrivate = useAxiosPrivate()
+
   const [isLoading, setIsLoading] = useState(true)
   const [channels, setChannels] = useState<Channel[]>([])
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null)
-  const [message, setMessage] = useState<string>('')
   const [messages, setMessages] = useState<Record<string, Message[]>>({})
 
-  const messageRef = useRef<HTMLTextAreaElement>(null)
   const chatThreadRef = useRef<HTMLDivElement>(null)
   const activeChannelRef = useRef<Channel | null>(null)
 
@@ -63,8 +57,6 @@ const Channels = () => {
           [activeChannel._id]: [...channelMessages, message],
         }
       })
-
-      setMessage('')
     },
     [messages, activeChannel]
   )
@@ -130,28 +122,6 @@ const Channels = () => {
     }
   }
 
-  const sendMessage = () => {
-    if (socket)
-      socket.emit(
-        'send_message',
-        {
-          body: message,
-          channelId: activeChannel?._id,
-        },
-        (response: SendMessageEmitResponse) => console.log(response)
-      )
-  }
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-
-    switch (name) {
-      case 'message':
-        setMessage(value)
-        break
-    }
-  }
-
   const renderBody = (body: string) => {
     return body.replace(
       // eslint-disable-next-line no-control-regex
@@ -188,20 +158,8 @@ const Channels = () => {
                 })}
             </div>
           </div>
-          <div id="chat-channel-control">
-            <FormControl
-              forRef={messageRef}
-              name="message"
-              value={message}
-              textarea
-              onChange={handleInputChange}
-            />
 
-            <Button onClick={sendMessage}>
-              <GrSend color="#fff" />
-              Send
-            </Button>
-          </div>
+          <ChatForm channel={activeChannel} />
         </div>
       )}
 
