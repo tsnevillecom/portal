@@ -3,7 +3,6 @@
 #chat {
   #chat-channels {
     flex: 0 0 200px;
-    border-left: 1px solid $black;
 
     #chat-channels-header {
       display: flex;
@@ -46,7 +45,6 @@
     &-thread {
       flex: 1;
       padding: 16px;
-      background: #111;
       display: flex;
       flex-direction: column-reverse;
       overflow-x: hidden;
@@ -54,14 +52,6 @@
 
       &::-webkit-scrollbar {
         width: 6px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background-color: rgba($white, 0.1);
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background-color: rgba($white, 0.2);
       }
     }
 
@@ -94,27 +84,71 @@
 
       &.sender {
         align-self: flex-end;
-        background-color: $blue-600;
       }
 
       &.receiver {
         align-self: flex-start;
-        background-color: $zinc-700;
       }
     }
   }
 
   .dark & {
-    background-color: #111;
+    border-top: 1px solid rgba($white, 0.2);
+
+    #chat-channels {
+      border-right: 1px solid rgba($white, 0.2);
+    }
 
     #chat-channel {
       &-thread {
-        // background-color: $black;
+        &::-webkit-scrollbar-track {
+          background-color: rgba($white, 0.1);
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba($white, 0.2);
+        }
+      }
+
+      .chat-channel-message {
+        &.sender {
+          background-color: $blue-600;
+        }
+
+        &.receiver {
+          background-color: $zinc-700;
+        }
       }
     }
   }
 
   .light & {
-    background-color: $gray-400;
+    border-top: 1px solid rgba($black, 0.2);
+
+    #chat-channels {
+      border-right: 1px solid rgba($black, 0.2);
+    }
+
+    #chat-channel {
+      &-thread {
+        &::-webkit-scrollbar-track {
+          background-color: rgba($black, 0.1);
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba($black, 0.2);
+        }
+      }
+
+      .chat-channel-message {
+        &.sender {
+          background-color: $blue-500;
+        }
+
+        &.receiver {
+          background-color: $zinc-500;
+        }
+      }
+    }
   }
 }

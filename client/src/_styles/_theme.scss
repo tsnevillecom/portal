@@ -130,7 +130,7 @@ form {
 }
 
 .muted {
-  color: $gray-500;
+  color: $zinc-500;
 }
 
 #root {
@@ -189,7 +189,7 @@ body {
   overflow: hidden;
 
   &.dark {
-    color: $gray-300;
+    color: $zinc-300;
     background-color: #1a1a1a;
 
     hr {
@@ -223,7 +223,7 @@ body {
 
   &.light {
     color: $black;
-    background-color: $gray-200;
+    background-color: $zinc-200;
 
     hr {
       background-color: rgba($black, 0.3);

@@ -1,7 +1,6 @@
 @import '@styles/variables';
 
 #header {
-  background: #111;
   color: $white;
   display: flex;
   align-items: center;
@@ -11,6 +10,7 @@
   width: 100%;
   flex-shrink: 0;
   user-select: none;
+  background-color: $zinc-800;
 
   #search {
     display: flex;
@@ -21,7 +21,6 @@
   }
 
   .btn-link {
-    color: $white;
     height: 100%;
     display: flex;
     position: relative;
@@ -38,13 +37,5 @@
     height: 100%;
     position: relative;
     align-items: center;
-  }
-
-  .dark & {
-    background: #111;
-  }
-
-  .light & {
-    background: $gray-400;
   }
 }

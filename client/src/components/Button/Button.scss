@@ -20,15 +20,15 @@
     background-color: darken($gray-500, 5%);
   }
 
-  .light & {
-    color: $black;
-    border: 1px solid $gray-300;
-    background-color: $gray-100;
+  // .light & {
+  //   color: $black;
+  //   border: 1px solid $gray-300;
+  //   background-color: $gray-100;
 
-    &:hover {
-      background-color: darken($gray-100, 5%);
-    }
-  }
+  //   &:hover {
+  //     background-color: darken($gray-100, 5%);
+  //   }
+  // }
 
   &.btn-primary {
     background-color: $blue;
@@ -129,6 +129,12 @@
   outline: none;
   font-size: $base-font-size;
   cursor: pointer;
+
+  color: $blue;
+
+  &:hover {
+    color: $blue-500;
+  }
 
   &:focus {
     outline: none;

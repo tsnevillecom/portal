@@ -156,6 +156,32 @@ const Channels = () => {
 
   return (
     <Page id="chat" flex={true} isLoading={isLoading}>
+      <div id="chat-channels">
+        <div id="chat-channels-header">
+          <h4>Channels</h4>
+          <Button>+</Button>
+        </div>
+
+        {_.map(channels, (channel, i) => {
+          const cx = {
+            'chat-channel': true,
+            active: !!activeChannel && channel._id === activeChannel._id,
+          }
+
+          const classes = classNames(cx)
+
+          return (
+            <div
+              className={classes}
+              key={i}
+              onClick={() => setActiveChannel(channel)}
+            >
+              {channel.name}
+            </div>
+          )
+        })}
+      </div>
+
       {activeChannel && (
         <div id="chat-channel">
           <div id="chat-channel-header">{activeChannel.name}</div>
@@ -194,32 +220,6 @@ const Channels = () => {
           <ChatForm activeChannel={activeChannel} ref={messageRef} />
         </div>
       )}
-
-      <div id="chat-channels">
-        <div id="chat-channels-header">
-          <h4>Channels</h4>
-          <Button>+</Button>
-        </div>
-
-        {_.map(channels, (channel, i) => {
-          const cx = {
-            'chat-channel': true,
-            active: !!activeChannel && channel._id === activeChannel._id,
-          }
-
-          const classes = classNames(cx)
-
-          return (
-            <div
-              className={classes}
-              key={i}
-              onClick={() => setActiveChannel(channel)}
-            >
-              {channel.name}
-            </div>
-          )
-        })}
-      </div>
     </Page>
   )
 }
