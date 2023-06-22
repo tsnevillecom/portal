@@ -1,7 +1,7 @@
 import Button from '@components/Button'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import './Channels.scss'
-import { Channel } from '@types'
+import { Channel, User } from '@types'
 import _ from 'lodash'
 import React, {
   useCallback,
@@ -25,6 +25,13 @@ interface Message {
   _id: string
 }
 
+interface Typing {
+  isTyping: boolean
+  userId: string
+  channelId: string
+  member: User
+}
+
 const Channels = () => {
   const navigate = useNavigate()
   const { channel } = useParams<{ channel: string | undefined }>()
@@ -37,6 +44,7 @@ const Channels = () => {
   const [channels, setChannels] = useState<Channel[]>([])
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null)
   const [messages, setMessages] = useState<Record<string, Message[]>>({})
+  const [typing, setTyping] = useState<User | null>(null)
 
   const chatThreadRef = useRef<HTMLDivElement>(null)
   const activeChannelRef = useRef<Channel | null>(null)
@@ -45,9 +53,11 @@ const Channels = () => {
     init()
   }, [])
 
-  const listener = useCallback(
+  const newMessageListener = useCallback(
     (message: Message) => {
       if (!activeChannel) return
+
+      console.log(activeChannel._id)
 
       setMessages((previousMessages) => {
         const channelMessages = previousMessages[activeChannel._id] || []
@@ -61,13 +71,31 @@ const Channels = () => {
     [messages, activeChannel]
   )
 
+  const channelTypingListener = useCallback(
+    (channelTyping: Typing) => {
+      const member = activeChannel?.members.find(
+        (memmber) => memmber._id === channelTyping.userId
+      ) as User
+      setTyping(channelTyping.isTyping ? member : null)
+    },
+    [activeChannel]
+  )
+
   useEffect(() => {
-    if (socket) socket.on('new_message', listener)
+    if (socket) socket.on('new_message', newMessageListener)
 
     return () => {
-      if (socket) socket.off('new_message', listener)
+      if (socket) socket.off('new_message', newMessageListener)
     }
-  }, [listener])
+  }, [newMessageListener])
+
+  useEffect(() => {
+    if (socket) socket.on('channel_typing', channelTypingListener)
+
+    return () => {
+      if (socket) socket.off('channel_typing', channelTypingListener)
+    }
+  }, [channelTypingListener])
 
   useEffect(() => {
     if (channels.length) {
@@ -158,6 +186,12 @@ const Channels = () => {
                 })}
             </div>
           </div>
+
+          {typing && (
+            <div id="chat-channel-typing">
+              {`${typing.firstName} ${typing.lastName}`} is typing
+            </div>
+          )}
 
           <ChatForm channel={activeChannel} />
         </div>

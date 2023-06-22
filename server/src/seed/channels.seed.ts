@@ -16,11 +16,16 @@ class ChannelsSeed {
       role: ROLES.ADMIN,
     })
 
+    const user = await User.exists({
+      email: 'tsneville+user@gmail.com',
+      role: ROLES.USER,
+    })
+
     const channels = [
       {
         name: 'General',
         createdBy: superAdmin._id,
-        members: [superAdmin._id],
+        members: [superAdmin._id, user._id],
       },
       {
         name: 'Admins',
@@ -30,7 +35,7 @@ class ChannelsSeed {
       {
         name: 'Random',
         createdBy: superAdmin._id,
-        members: [superAdmin._id, admin._id],
+        members: [superAdmin._id, admin._id, user._id],
       },
       {
         name: 'Deleted',

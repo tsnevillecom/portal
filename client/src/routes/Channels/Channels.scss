@@ -65,6 +65,12 @@
       }
     }
 
+    &-typing {
+      font-size: 12px;
+      padding: 8px 16px;
+      color: $gray-400;
+    }
+
     &-input {
       height: 60px;
     }

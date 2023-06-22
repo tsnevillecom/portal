@@ -53,10 +53,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ channel }) => {
   }, [messageRef])
 
   useEffect(() => {
-    if (messageRef.current) {
-      messageRef.current.value = ''
-      messageRef.current.focus()
-    }
+    clearInput()
     channelIdRef.current = channel._id
   }, [channel])
 
@@ -71,17 +68,18 @@ const ChatForm: React.FC<ChatFormProps> = ({ channel }) => {
   const clearInput = () => {
     if (messageRef.current) {
       messageRef.current.value = ''
+      messageRef.current.focus()
       setDisabledSubmit(true)
     }
   }
 
   const handleSendMessage = (
-    e: React.MouseEvent<HTMLElement> | KeyboardEvent
+    e?: React.MouseEvent<HTMLElement> | KeyboardEvent
   ) => {
     setTypingOn.cancel()
     setTypingOff.flush()
 
-    e.preventDefault()
+    e?.preventDefault()
     const body = (messageRef.current as HTMLTextAreaElement).value
     if (!body) return
 
@@ -90,7 +88,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ channel }) => {
         'send_message',
         {
           body: body,
-          channelId: channel._id,
+          channelId: channelIdRef.current,
         },
         (response: SendMessageEmitResponse) => {
           console.log(response)
@@ -106,7 +104,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ channel }) => {
         socket.emit('typing', {
           isTyping: true,
           userId: auth.user?._id,
-          channelId: channel._id,
+          channelId: channelIdRef.current,
         })
     },
     2000,
@@ -119,7 +117,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ channel }) => {
         socket.emit('typing', {
           isTyping: false,
           userId: auth.user?._id,
-          channelId: channel._id,
+          channelId: channelIdRef.current,
         })
     },
     2000,
@@ -139,6 +137,17 @@ const ChatForm: React.FC<ChatFormProps> = ({ channel }) => {
     debounceSetTypingOn()
     debounceSetTypingOff()
   }
+  const submit = () => {
+    const keyboardEvent = new KeyboardEvent('keydown', {
+      code: 'Enter',
+      key: 'Enter',
+      charCode: 13,
+      keyCode: 13,
+      view: window,
+      bubbles: true,
+    })
+    messageRef.current?.dispatchEvent(keyboardEvent)
+  }
 
   return (
     <div id="chat-channel-control">
@@ -152,7 +161,7 @@ const ChatForm: React.FC<ChatFormProps> = ({ channel }) => {
         />
       </div>
       <div className="chat-form--submit">
-        <Button onClick={handleSendMessage} disabled={disabledSubmit}>
+        <Button onClick={submit} disabled={disabledSubmit}>
           <GrSend color="#fff" />
           Send
         </Button>
