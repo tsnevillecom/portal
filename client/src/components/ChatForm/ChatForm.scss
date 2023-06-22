@@ -4,8 +4,12 @@
   flex-direction: row;
   padding: 16px;
 
-  .form-control {
+  #chat-form--input {
     flex: 1;
     margin: 0 16px 0 0;
+  }
+
+  #chat-form--submit {
+    margin-top: 2px;
   }
 }

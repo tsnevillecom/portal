@@ -105,10 +105,16 @@
   }
 
   .dark & {
-    background: #111;
+    background-color: #111;
+
+    #chat-channel {
+      &-thread {
+        // background-color: $black;
+      }
+    }
   }
 
   .light & {
-    background: $gray-400;
+    background-color: $gray-400;
   }
 }

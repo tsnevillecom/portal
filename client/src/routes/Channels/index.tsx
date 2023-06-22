@@ -34,20 +34,20 @@ interface Typing {
 
 const Channels = () => {
   const navigate = useNavigate()
+  const axiosPrivate = useAxiosPrivate()
+
   const { channel } = useParams<{ channel: string | undefined }>()
   const { auth } = useContext(AuthContext)
   const { socket } = useContext(SocketContext)
 
-  const axiosPrivate = useAxiosPrivate()
-
   const [isLoading, setIsLoading] = useState(true)
   const [channels, setChannels] = useState<Channel[]>([])
+  const [typing, setTyping] = useState<User | null>(null)
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null)
   const [messages, setMessages] = useState<Record<string, Message[]>>({})
-  const [typing, setTyping] = useState<User | null>(null)
 
   const chatThreadRef = useRef<HTMLDivElement>(null)
-  const activeChannelRef = useRef<Channel | null>(null)
+  const messageRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     init()
@@ -55,16 +55,11 @@ const Channels = () => {
 
   const newMessageListener = useCallback(
     (message: Message) => {
-      if (!activeChannel) return
-
-      console.log(activeChannel._id)
-
       setMessages((previousMessages) => {
-        const channelMessages = previousMessages[activeChannel._id] || []
-
+        const channelMessages = previousMessages[message.channelId] || []
         return {
           ...previousMessages,
-          [activeChannel._id]: [...channelMessages, message],
+          [message.channelId]: [...channelMessages, message],
         }
       })
     },
@@ -73,6 +68,8 @@ const Channels = () => {
 
   const channelTypingListener = useCallback(
     (channelTyping: Typing) => {
+      if (channelTyping.channelId !== activeChannel?._id) return
+
       const member = activeChannel?.members.find(
         (memmber) => memmber._id === channelTyping.userId
       ) as User
@@ -115,7 +112,6 @@ const Channels = () => {
   }, [messages])
 
   useEffect(() => {
-    activeChannelRef.current = activeChannel
     if (activeChannel) {
       const route = `/chat/${activeChannel._id}`
       navigate(route, { replace: true })
@@ -167,20 +163,22 @@ const Channels = () => {
             <div id="chat-channel-messages">
               {activeChannel &&
                 messages[activeChannel._id] &&
-                messages[activeChannel._id].map((m, i) => {
+                messages[activeChannel._id].map((message, i) => {
                   const cx = {
                     'chat-channel-message': true,
-                    sender: auth.user?._id === m.createdBy,
-                    receiver: auth.user?._id !== m.createdBy,
+                    sender: auth.user?._id === message.createdBy,
+                    receiver: auth.user?._id !== message.createdBy,
                   }
 
                   const classes = classNames(cx)
 
                   return (
                     <div
-                      key={i}
+                      key={message._id}
                       className={classes}
-                      dangerouslySetInnerHTML={{ __html: renderBody(m.body) }}
+                      dangerouslySetInnerHTML={{
+                        __html: renderBody(message.body),
+                      }}
                     />
                   )
                 })}
@@ -193,7 +191,7 @@ const Channels = () => {
             </div>
           )}
 
-          <ChatForm channel={activeChannel} />
+          <ChatForm activeChannel={activeChannel} ref={messageRef} />
         </div>
       )}
 

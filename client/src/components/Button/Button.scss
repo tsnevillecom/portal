@@ -13,7 +13,6 @@
   padding: 0 16px;
   line-height: 36px;
   transition: all $time ease-in-out;
-
   user-select: none;
   position: relative;
 
@@ -112,9 +111,11 @@
     }
   }
 
-  &:disabled {
+  &:disabled,
+  &:disabled:hover {
     opacity: 0.5;
-    pointer-events: none;
+    border: 1px solid $zinc-700;
+    background-color: $zinc-600;
     cursor: not-allowed;
   }
 }
