@@ -93,10 +93,9 @@
   }
 
   .dark & {
-    border-top: 1px solid rgba($white, 0.2);
-
     #chat-channels {
-      border-right: 1px solid rgba($white, 0.2);
+      border-right: 1px solid rgba($black, 0.5);
+      background-color: rgba($black, 0.1);
     }
 
     #chat-channel {
@@ -123,10 +122,9 @@
   }
 
   .light & {
-    border-top: 1px solid rgba($black, 0.2);
-
     #chat-channels {
       border-right: 1px solid rgba($black, 0.2);
+      background-color: rgba($black, 0.04);
     }
 
     #chat-channel {
