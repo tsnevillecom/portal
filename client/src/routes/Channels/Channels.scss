@@ -2,8 +2,6 @@
 
 #chat {
   #chat-channels {
-    flex: 0 0 200px;
-
     #chat-channels-header {
       display: flex;
       align-items: center;
@@ -92,11 +90,21 @@
     }
   }
 
-  .dark & {
-    border-top: 1px solid rgba($white, 0.2);
+  #chat-sidebar {
+    background-color: rgba($black, 0.1);
+    padding: 24px;
 
+    h5 {
+      flex: 1;
+      text-transform: uppercase;
+    }
+  }
+
+  .dark & {
     #chat-channels {
-      border-right: 1px solid rgba($white, 0.2);
+      background-color: rgba($black, 0.2);
+      border-right: 1px solid $zinc-800;
+      box-shadow: inset 0px 0px 5px -1px $black;
     }
 
     #chat-channel {
@@ -123,9 +131,8 @@
   }
 
   .light & {
-    border-top: 1px solid rgba($black, 0.2);
-
     #chat-channels {
+      background-color: rgba($black, 0.2);
       border-right: 1px solid rgba($black, 0.2);
     }
 

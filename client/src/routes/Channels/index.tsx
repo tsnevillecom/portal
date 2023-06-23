@@ -16,6 +16,7 @@ import { SocketContext } from '@context/SocketProvider'
 import { AuthContext } from '@context/AuthProvider'
 import { useNavigate, useParams } from 'react-router'
 import ChatForm from '@components/ChatForm'
+import Sidebar from '@components/Sidebar'
 
 interface Message {
   body: string
@@ -45,6 +46,7 @@ const Channels = () => {
   const [typing, setTyping] = useState<User | null>(null)
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null)
   const [messages, setMessages] = useState<Record<string, Message[]>>({})
+  const [openDetails, setOpenDetails] = useState(true)
 
   const chatThreadRef = useRef<HTMLDivElement>(null)
   const messageRef = useRef<HTMLTextAreaElement>(null)
@@ -156,7 +158,7 @@ const Channels = () => {
 
   return (
     <Page id="chat" flex={true} isLoading={isLoading}>
-      <div id="chat-channels">
+      <Sidebar id="chat-channels" side="left">
         <div id="chat-channels-header">
           <h4>Channels</h4>
           <Button>+</Button>
@@ -180,7 +182,7 @@ const Channels = () => {
             </div>
           )
         })}
-      </div>
+      </Sidebar>
 
       {activeChannel && (
         <div id="chat-channel">
@@ -189,7 +191,7 @@ const Channels = () => {
             <div id="chat-channel-messages">
               {activeChannel &&
                 messages[activeChannel._id] &&
-                messages[activeChannel._id].map((message, i) => {
+                messages[activeChannel._id].map((message) => {
                   const cx = {
                     'chat-channel-message': true,
                     sender: auth.user?._id === message.createdBy,
@@ -201,6 +203,7 @@ const Channels = () => {
                   return (
                     <div
                       key={message._id}
+                      onClick={() => setOpenDetails(!openDetails)}
                       className={classes}
                       dangerouslySetInnerHTML={{
                         __html: renderBody(message.body),
@@ -220,6 +223,10 @@ const Channels = () => {
           <ChatForm activeChannel={activeChannel} ref={messageRef} />
         </div>
       )}
+
+      <Sidebar id="chat-sidebar" side="right" open={openDetails} width={300}>
+        <h5>Details</h5>
+      </Sidebar>
     </Page>
   )
 }

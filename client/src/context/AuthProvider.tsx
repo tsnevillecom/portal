@@ -21,7 +21,7 @@ export const DEFAULT_AUTH_STATE = {
   isAuthenticated: false,
 }
 
-// export interface IAuthProvider extends PropsWithChildren {}
+export const ADMIN_ROLES = ['admin', 'super-admin']
 
 export interface IAuthContext {
   auth: Auth
@@ -29,6 +29,7 @@ export interface IAuthContext {
   persist: boolean | null
   setPersist: (shouldPersist: boolean) => void
   isAdmin: boolean
+  isSuperAdmin: boolean
 }
 
 export const AuthContext = createContext<IAuthContext>({
@@ -37,13 +38,22 @@ export const AuthContext = createContext<IAuthContext>({
   persist: true,
   setPersist: noop,
   isAdmin: false,
+  isSuperAdmin: false,
 })
 
 export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [auth, setAuth] = useState<Auth>(DEFAULT_AUTH_STATE)
   const [persist, setPersist] = useLocalStorage<boolean>('persist', true)
 
-  const isAdmin = useMemo(() => auth.user?.role === 'admin', [auth])
+  const isAdmin = useMemo(
+    () => !!auth.user && ADMIN_ROLES.includes(auth.user.role),
+    [auth]
+  )
+
+  const isSuperAdmin = useMemo(
+    () => !!auth.user && auth.user.role === 'super-admin',
+    [auth]
+  )
 
   const contextValue = useMemo(
     () => ({
@@ -52,6 +62,7 @@ export const AuthProvider: React.FC<PropsWithChildren> = ({ children }) => {
       persist,
       setPersist,
       isAdmin,
+      isSuperAdmin,
     }),
     [auth, persist]
   )

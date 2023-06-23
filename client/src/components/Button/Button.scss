@@ -12,23 +12,12 @@
   outline: 0;
   padding: 0 16px;
   line-height: 36px;
-  transition: all $time ease-in-out;
   user-select: none;
   position: relative;
 
   &:hover {
     background-color: darken($gray-500, 5%);
   }
-
-  // .light & {
-  //   color: $black;
-  //   border: 1px solid $gray-300;
-  //   background-color: $gray-100;
-
-  //   &:hover {
-  //     background-color: darken($gray-100, 5%);
-  //   }
-  // }
 
   &.btn-primary {
     background-color: $blue;
