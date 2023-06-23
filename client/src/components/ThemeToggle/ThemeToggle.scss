@@ -8,7 +8,7 @@
     text-transform: uppercase;
     font-size: 13px;
     font-weight: 600;
-    color: $gray-500;
+    color: $zinc-500;
   }
 
   #theme-toggle {
@@ -18,7 +18,7 @@
     padding: 4px;
     margin-right: 12px;
     border-radius: 16px;
-    border: 2px solid $gray-500;
+    border: 2px solid $zinc-500;
     cursor: pointer;
     position: relative;
 
@@ -36,7 +36,7 @@
 
       #theme-toggle-dot {
         left: 4px;
-        background-color: $gray-100;
+        background-color: $zinc-100;
       }
     }
 
@@ -45,7 +45,7 @@
 
       #theme-toggle-dot {
         left: 26px;
-        background-color: $gray-500;
+        background-color: $zinc-500;
       }
     }
   }

@@ -57,7 +57,11 @@ const App = () => {
               <Route path="unauthorized" element={<Unauthorized />} />
             </Route>
 
-            <Route element={<AuthenticatedRoute allowedRoles={['admin']} />}>
+            <Route
+              element={
+                <AuthenticatedRoute allowedRoles={['admin', 'super-admin']} />
+              }
+            >
               <Route path="admin" element={<Admin />} />
             </Route>
           </Route>
