@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import useRefreshToken from './useRefreshToken'
 import useAuth from './useAuth'
 import { AxiosError, AxiosHeaders } from 'axios'
-import useLogout from './useLogout'
+import { DEFAULT_AUTH_STATE } from '@context/AuthProvider'
 
 type FailedResponseQueueType = {
   resolve: (value: unknown) => void
@@ -11,9 +11,8 @@ type FailedResponseQueueType = {
 }
 
 const useAxiosPrivate = () => {
-  const { logout } = useLogout()
   const { refresh } = useRefreshToken()
-  const { auth } = useAuth()
+  const { auth, setAuth } = useAuth()
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -28,6 +27,7 @@ const useAxiosPrivate = () => {
             ...authorizationHeader,
           } as unknown as AxiosHeaders
         }
+
         return config
       },
       (error) => Promise.reject(error)
@@ -103,7 +103,13 @@ const useAxiosPrivate = () => {
                   error.response.status === 401
                 ) {
                   console.log('access token not refreshed')
-                  logout()
+
+                  try {
+                    await axiosPrivate.post('/auth/logout')
+                    setAuth(DEFAULT_AUTH_STATE)
+                  } catch (err) {
+                    console.error(err)
+                  }
                 }
 
                 reject(error)

@@ -1,0 +1,49 @@
+@import '@styles/variables';
+
+.tabs {
+  position: relative;
+
+  .tabs-list {
+    padding: 0 8px;
+
+    li {
+      list-style: none;
+      margin: 0;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+  }
+
+  &.horizontal {
+    display: flex;
+    flex-direction: column;
+    margin: 0 -24px;
+
+    .tabs-list {
+      display: flex;
+      border-bottom: 1px solid $zinc-600;
+    }
+  }
+
+  &.vertical {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .tab {
+    display: none;
+    padding: 24px;
+    flex: 1;
+
+    &.active {
+      display: block;
+    }
+  }
+
+  .tab-slider {
+    height: 3px;
+    position: absolute;
+    background-color: $blue;
+    transition: width 300ms $curve, left 200ms $curve;
+  }
+}

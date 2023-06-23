@@ -7,6 +7,7 @@ import ChannelsRouter from './routers/channels.router'
 import VerifyRouter from './routers/verify.router'
 import Server from './server'
 import MessagesRouter from './routers/messages.router'
+import UsersRouter from './routers/users.router'
 
 const server = new Server([
   { path: '/auth', routerClass: new AuthRouter() },
@@ -16,6 +17,7 @@ const server = new Server([
   { path: '/messages', routerClass: new MessagesRouter() },
   { path: '/google', routerClass: new GoogleRouter() },
   { path: '/reset', routerClass: new ResetRouter() },
+  { path: '/users', routerClass: new UsersRouter() },
 ])
 
 server.initialize().then(() => {

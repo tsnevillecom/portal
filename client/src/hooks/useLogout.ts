@@ -1,9 +1,10 @@
-import { axiosPrivate } from '../api/axios'
 import { DEFAULT_AUTH_STATE } from '../context/AuthProvider'
 import useAuth from './useAuth'
+import useAxiosPrivate from './useAxiosPrivate'
 
 const useLogout = () => {
   const { setAuth } = useAuth()
+  const axiosPrivate = useAxiosPrivate()
 
   const logout = async () => {
     try {

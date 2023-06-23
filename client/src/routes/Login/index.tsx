@@ -9,13 +9,13 @@ import {
   GoogleOAuthProvider,
 } from '@react-oauth/google'
 import { BsGoogle } from 'react-icons/bs'
-import { axiosPrivate } from '@api/axios'
 import FormControl from '@components/FormControl'
 import ErrorMessage from '@components/ErrorMessage'
 import { Errors, Rules } from '@types'
 import { validateForm } from '@utils/validateForm'
 import _ from 'lodash'
 import Button from '@components/Button'
+import useAxiosPrivate from '@hooks/useAxiosPrivate'
 const LOGIN_URL = '/auth'
 
 interface IHandleLogin {
@@ -24,6 +24,7 @@ interface IHandleLogin {
 }
 
 const Login = () => {
+  const axiosPrivate = useAxiosPrivate()
   const { setAuth, persist, setPersist } = useAuth()
   const navigate = useNavigate()
 

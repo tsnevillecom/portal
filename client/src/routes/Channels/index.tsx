@@ -157,7 +157,7 @@ const Channels = () => {
   }
 
   return (
-    <Page id="chat" flex={true} isLoading={isLoading}>
+    <Page id="chat" layout={'horizontal'} isLoading={isLoading}>
       <Sidebar id="chat-channels" side="left">
         <div id="chat-channels-header">
           <h4>Channels</h4>

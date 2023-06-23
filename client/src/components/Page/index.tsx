@@ -5,7 +5,7 @@ import Spinner from '@components/Spinner'
 
 interface IPage {
   isLoading?: boolean
-  flex?: boolean
+  layout?: 'horizontal' | 'vertical'
   id: string
   title?: string
   children: ReactNode
@@ -16,11 +16,11 @@ const Page: React.FC<IPage> = ({
   title,
   children,
   id,
-  flex = false,
+  layout = 'vertical',
 }) => {
   const cx = {
     page: true,
-    flex,
+    [layout]: true,
   }
   const classes = classNames(cx)
 

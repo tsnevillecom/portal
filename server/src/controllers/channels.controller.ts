@@ -66,6 +66,8 @@ class ChannelsController {
   }
 
   public createChannel = async (req, res) => {
+    console.log(req.user)
+
     const channel = new Channel(req.body)
 
     try {

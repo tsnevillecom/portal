@@ -6,7 +6,7 @@ import {
   TokenResponse,
   useGoogleLogin,
 } from '@react-oauth/google'
-import axios, { axiosPrivate } from '@api/axios'
+import axios from '@api/axios'
 import useAuth from '@hooks/useAuth'
 import { BsGoogle } from 'react-icons/bs'
 import PasswordMeter from '@components/PasswordMeter'
@@ -19,11 +19,13 @@ import _ from 'lodash'
 import ResendEmail from '@components/ResendEmail'
 import Button from '@components/Button'
 import { AxiosError } from 'axios'
+import useAxiosPrivate from '@hooks/useAxiosPrivate'
 
 const SignUpForm = () => {
   const { setAuth, persist, setPersist } = useAuth()
   const navigate = useNavigate()
   const [token, setToken] = useState<string | null>(null)
+  const axiosPrivate = useAxiosPrivate()
   const [resendStatus, setResendStatus] = useState<'success' | 'error' | null>(
     null
   )

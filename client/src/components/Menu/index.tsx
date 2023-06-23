@@ -9,7 +9,7 @@ import { RxCaretDown } from 'react-icons/rx'
 import Sidebar from '@components/Sidebar'
 
 const Menu = () => {
-  const { isAdmin, isSuperAdmin, auth } = useAuth()
+  const { isAdmin, auth } = useAuth()
   const [open, setOpen] = useState(true)
 
   return (
@@ -59,14 +59,6 @@ const Menu = () => {
                 <BiShield />
               </span>
               <span>Admin</span>
-            </NavLink>
-          )}
-          {isSuperAdmin && (
-            <NavLink to="/admin">
-              <span>
-                <BiShield />
-              </span>
-              <span>Super Admin</span>
             </NavLink>
           )}
         </nav>
