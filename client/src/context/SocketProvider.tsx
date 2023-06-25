@@ -68,6 +68,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
     const socket = io('http://localhost:3333', {
       transports: ['websocket'],
       reconnection: false,
+      autoConnect: false,
     })
 
     socket.on('connect', () => {

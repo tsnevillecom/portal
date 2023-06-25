@@ -15,8 +15,15 @@
 
     .chat-channel {
       padding: 8px 24px;
-      color: rgba($white, 0.7);
+      margin: 0 8px;
+      color: $zinc-400;
       cursor: pointer;
+      border-radius: 16px;
+
+      span {
+        margin-left: 0;
+        transition: margin-left 120ms ease-out;
+      }
 
       &.active {
         font-weight: 600;
@@ -24,8 +31,11 @@
       }
 
       &:hover {
-        background-color: rgba($white, 0.07);
-        color: $white;
+        background-color: $zinc-800;
+
+        span {
+          margin-left: 2px;
+        }
       }
     }
   }
@@ -40,9 +50,18 @@
       font-weight: 600;
     }
 
+    &-empty {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      justify-content: center;
+      color: $zinc-500;
+      font-size: 0.8rem;
+    }
+
     &-thread {
       flex: 1;
-      padding: 16px;
+      padding: 16px 8px;
       display: flex;
       flex-direction: column-reverse;
       overflow-x: hidden;
@@ -71,22 +90,79 @@
     }
 
     .chat-channel-message {
-      margin: 8px 0;
-      padding: 8px 12px;
+      // margin: 8px 0;
+      padding: 8px;
+      // padding: 8px 12px;
       border-radius: 12px;
       color: $white;
-      max-width: 80%;
-      font-size: 0.9rem;
+      // max-width: 80%;
       line-height: 1.4rem;
       white-space: pre-wrap;
+      display: flex;
 
-      &.sender {
-        align-self: flex-end;
+      &:hover {
+        background-color: rgba($white, 0.1);
       }
 
-      &.receiver {
-        align-self: flex-start;
+      &-avatar {
+        width: 30px;
+        height: 30px;
+        background-color: $blue;
+        border-radius: 30px;
+        margin-right: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 600;
       }
+
+      &-body {
+        flex: 1;
+
+        .chat-channel-message-details {
+          display: flex;
+          flex-direction: row;
+          font-size: 0.8rem;
+          align-items: flex-end;
+
+          .chat-channel-message-member {
+            cursor: pointer;
+            margin-right: 16px;
+            font-weight: 600;
+            font-size: 0.9rem;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+
+          .chat-channel-message-date {
+            opacity: 0.3;
+            font-size: 0.7rem;
+          }
+        }
+
+        .chat-channel-message-content {
+          font-size: 0.9rem;
+          color: $zinc-300;
+          font-weight: 300;
+        }
+      }
+
+      // &.sender {
+      //   align-self: flex-end;
+      //   .chat-channel-message-member {
+      //     color: $blue;
+      //   }
+      // }
+
+      // &.receiver {
+      //   align-self: flex-start;
+      //   .chat-channel-message-member {
+      //     color: $zinc-400;
+      //   }
+      // }
     }
   }
 
@@ -118,15 +194,15 @@
         }
       }
 
-      .chat-channel-message {
-        &.sender {
-          background-color: $blue-600;
-        }
+      // .chat-channel-message {
+      //   &.sender {
+      //     background-color: $blue-600;
+      //   }
 
-        &.receiver {
-          background-color: $zinc-700;
-        }
-      }
+      //   &.receiver {
+      //     background-color: $zinc-700;
+      //   }
+      // }
     }
   }
 
@@ -148,15 +224,15 @@
         }
       }
 
-      .chat-channel-message {
-        &.sender {
-          background-color: $blue-500;
-        }
+      // .chat-channel-message {
+      //   &.sender {
+      //     background-color: $blue-500;
+      //   }
 
-        &.receiver {
-          background-color: $zinc-500;
-        }
-      }
+      //   &.receiver {
+      //     background-color: $zinc-500;
+      //   }
+      // }
     }
   }
 }

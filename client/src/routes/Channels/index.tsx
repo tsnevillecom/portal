@@ -18,6 +18,12 @@ import { useNavigate, useParams } from 'react-router'
 import ChatForm from '@components/ChatForm'
 import Sidebar from '@components/Sidebar'
 
+import { BiChat } from 'react-icons/bi'
+
+import dayjs from 'dayjs'
+import localizedFormat from 'dayjs/plugin/localizedFormat'
+dayjs.extend(localizedFormat)
+
 interface Message {
   body: string
   channelId: string
@@ -46,7 +52,7 @@ const Channels = () => {
   const [typing, setTyping] = useState<User | null>(null)
   const [activeChannel, setActiveChannel] = useState<Channel | null>(null)
   const [messages, setMessages] = useState<Record<string, Message[]>>({})
-  const [openDetails, setOpenDetails] = useState(true)
+  const [openDetails, setOpenDetails] = useState(false)
 
   const chatThreadRef = useRef<HTMLDivElement>(null)
   const messageRef = useRef<HTMLTextAreaElement>(null)
@@ -128,11 +134,11 @@ const Channels = () => {
     } catch (error) {
       console.log(error)
     }
-
-    setIsLoading(false)
   }
 
   const getMessages = async (activeChannel: Channel) => {
+    if (!isLoading) setIsLoading(true)
+
     try {
       const response = await axiosPrivate(
         `/channels/${activeChannel._id}/messages`
@@ -140,12 +146,14 @@ const Channels = () => {
       setMessages((previousMessages) => {
         return {
           ...previousMessages,
-          [activeChannel._id]: response.data,
+          [activeChannel._id]: response.data || [],
         }
       })
     } catch (error) {
       console.log(error)
     }
+
+    setIsLoading(false)
   }
 
   const renderBody = (body: string) => {
@@ -178,7 +186,7 @@ const Channels = () => {
               key={i}
               onClick={() => setActiveChannel(channel)}
             >
-              {channel.name}
+              <span>{channel.name}</span>
             </div>
           )
         })}
@@ -187,32 +195,66 @@ const Channels = () => {
       {activeChannel && (
         <div id="chat-channel">
           <div id="chat-channel-header">{activeChannel.name}</div>
-          <div id="chat-channel-thread" ref={chatThreadRef}>
-            <div id="chat-channel-messages">
-              {activeChannel &&
-                messages[activeChannel._id] &&
-                messages[activeChannel._id].map((message) => {
-                  const cx = {
-                    'chat-channel-message': true,
-                    sender: auth.user?._id === message.createdBy,
-                    receiver: auth.user?._id !== message.createdBy,
-                  }
 
-                  const classes = classNames(cx)
+          {!!messages[activeChannel._id] &&
+            !!messages[activeChannel._id].length && (
+              <div id="chat-channel-thread" ref={chatThreadRef}>
+                <div id="chat-channel-messages">
+                  {activeChannel &&
+                    messages[activeChannel._id] &&
+                    messages[activeChannel._id].map((message) => {
+                      const createdByMember = _.find(
+                        activeChannel.members,
+                        (member) => member._id === message.createdBy
+                      ) as User
 
-                  return (
-                    <div
-                      key={message._id}
-                      onClick={() => setOpenDetails(!openDetails)}
-                      className={classes}
-                      dangerouslySetInnerHTML={{
-                        __html: renderBody(message.body),
-                      }}
-                    />
-                  )
-                })}
-            </div>
-          </div>
+                      const createdByMemberName = `${createdByMember.firstName} ${createdByMember.lastName}`
+                      const cx = {
+                        'chat-channel-message': true,
+                        sender: auth.user?._id === message.createdBy,
+                        receiver: auth.user?._id !== message.createdBy,
+                      }
+
+                      const classes = classNames(cx)
+
+                      return (
+                        <div key={message._id} className={classes}>
+                          <div className="chat-channel-message-avatar">
+                            {createdByMemberName.charAt(0).toUpperCase()}
+                          </div>
+                          <div className="chat-channel-message-body">
+                            <div className="chat-channel-message-details">
+                              <div
+                                className="chat-channel-message-member"
+                                onClick={() => setOpenDetails(!openDetails)}
+                              >
+                                {createdByMemberName}
+                              </div>
+
+                              <div className="chat-channel-message-date">
+                                {dayjs(message.updatedAt).format('LT')}
+                              </div>
+                            </div>
+                            <div
+                              className="chat-channel-message-content"
+                              dangerouslySetInnerHTML={{
+                                __html: renderBody(message.body),
+                              }}
+                            />
+                          </div>
+                        </div>
+                      )
+                    })}
+                </div>
+              </div>
+            )}
+
+          {!messages[activeChannel._id] ||
+            (!messages[activeChannel._id].length && (
+              <div id="chat-channel-empty">
+                <BiChat /> No messages
+              </div>
+            ))}
 
           {typing && (
             <div id="chat-channel-typing">
