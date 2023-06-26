@@ -4,6 +4,7 @@ import config from './config'
 import cookieParser from 'cookie-parser'
 import express, { Application as ExpressApplication } from 'express'
 import cors from 'cors'
+import session from 'express-session'
 import bodyParser from 'body-parser'
 import connectDatabase from './db'
 import corsOptions from './config/corsOptions'
@@ -15,6 +16,8 @@ import Channel from './models/channel'
 import User from './models/user'
 import cookie from 'cookie'
 import Message from './models/message'
+import { sessions } from './_constants'
+var sessionStore = new session.MemoryStore()
 
 class Server {
   private port: number
@@ -55,7 +58,9 @@ class Server {
 
   private handleSocketConnection(): void {
     this.io.use(async (socket, next) => {
-      var cookies = cookie.parse(socket.handshake.headers.cookie)
+      const cookies = cookie.parse(socket.handshake.headers.cookie)
+
+      console.log(cookies)
 
       try {
         const refreshToken = cookies.refreshToken
@@ -124,6 +129,22 @@ class Server {
     // app.use(logger)
     this.app.use(this.validateCredentials)
     this.app.use(cors(corsOptions))
+    this.app.use(
+      session({
+        secret: config.REFRESH_TOKEN_SECRET,
+        saveUninitialized: false,
+        name: sessions.SESSION_KEY,
+        store: sessionStore,
+        cookie: {
+          secure: this.env === 'production' ? config.SECURE_COOKIE : 'auto',
+          maxAge: config.REFRESH_TOKEN_EXPIRY,
+          sameSite: this.env === 'production' ? 'none' : 'lax',
+          httpOnly: true,
+        },
+        resave: false,
+        rolling: true,
+      })
+    )
     this.app.use(cookieParser())
     this.app.use(bodyParser.urlencoded({ extended: false }))
     this.app.use(express.static(path.join(__dirname, 'client', 'build')))

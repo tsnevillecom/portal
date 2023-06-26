@@ -9,7 +9,7 @@ import React, {
 } from 'react'
 import { io, Socket } from 'socket.io-client'
 import useAuth from '@hooks/useAuth'
-import useRefreshToken from '@hooks/useRefreshToken'
+import useRefreshSession from '@hooks/useRefreshSession'
 import { ToastContext } from './ToastContext'
 
 export type ISocketContext = {
@@ -28,7 +28,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { auth } = useAuth()
   const { addToast } = useContext(ToastContext)
 
-  const { refresh } = useRefreshToken()
+  const { refresh } = useRefreshSession()
   const resetAttempts = useRef(0)
 
   const [connected, setConnected] = useState<boolean>(false)

@@ -3,14 +3,15 @@ import User from '../models/user'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { errors } from '../_constants'
+import { errors, sessions } from '../_constants'
+import cookieParser from 'cookie-parser'
 
 class AuthController {
   public me = async (req, res) => {
-    res.send(req.user)
+    res.send(req.session.user)
   }
 
-  public checkToken = async (req, res) => {
+  public checkSession = async (req, res) => {
     res.sendStatus(204)
   }
 
@@ -39,21 +40,34 @@ class AuthController {
       foundUser.refreshTokens = []
       await foundUser.save()
 
-      res.clearCookie('refreshToken', {
-        httpOnly: true,
-        sameSite: 'None',
-        secure: config.SECURE_COOKIE,
+      req.session.destroy(() => {
+        res.clearCookie(sessions.SESSION_KEY, { path: '/' })
+        res.clearCookie('refreshToken', {
+          httpOnly: true,
+          sameSite: 'None',
+          secure: config.SECURE_COOKIE,
+        })
+        res.sendStatus(204)
       })
-
-      res.sendStatus(204)
     } catch (error) {
       res.status(500).send({ message: errors.INTERNAL_ERROR })
     }
   }
 
   public logout = async (req, res) => {
+    console.log('old:', req.sessionID)
+
     const cookies = req.cookies
+
+    // const sesh = cookies[sessions.SESSION_KEY]
+    // const decodedSesh = cookieParser.signedCookie(
+    //   sesh,
+    //   config.REFRESH_TOKEN_SECRET
+    // )
+
     if (!cookies?.refreshToken) return res.sendStatus(204)
+
+    errors.REGISTRATION_FAILED
 
     const refreshToken = cookies.refreshToken
     const foundUser = await User.findOne({
@@ -75,12 +89,17 @@ class AuthController {
       })
       await foundUser.save()
 
-      res.clearCookie('refreshToken', {
-        httpOnly: true,
-        sameSite: 'None',
-        secure: config.SECURE_COOKIE,
+      req.session.destroy(() => {
+        res.clearCookie(sessions.SESSION_KEY, { path: '/' })
+
+        console.log('store', req.sessionStore)
+        res.clearCookie('refreshToken', {
+          httpOnly: true,
+          sameSite: 'None',
+          secure: config.SECURE_COOKIE,
+        })
+        res.sendStatus(204)
       })
-      res.sendStatus(204)
     } catch (error) {
       console.log(error)
       res.status(500).send({ message: errors.INTERNAL_ERROR })
@@ -141,6 +160,8 @@ class AuthController {
         sameSite: 'None',
         secure: config.SECURE_COOKIE,
       })
+
+      delete req.session.refreshToken
     }
 
     try {
@@ -160,6 +181,9 @@ class AuthController {
 
       const accessToken = await foundUser.newAccessToken()
 
+      req.session.refreshToken = refreshToken
+      req.session.user = foundUser
+
       res.send({ user: foundUser, accessToken })
     } catch (error) {
       console.log(error)
@@ -168,6 +192,8 @@ class AuthController {
   }
 
   public refresh = async (req, res) => {
+    console.log(req.sessionStore, req.sessionID)
+
     const userAgent = req.headers['user-agent'] || ''
     const cookies = req.cookies
     if (!cookies?.refreshToken) {
@@ -175,6 +201,7 @@ class AuthController {
     }
 
     const refreshToken = cookies.refreshToken
+
     res.clearCookie('refreshToken', {
       httpOnly: true,
       sameSite: 'None',
@@ -209,6 +236,7 @@ class AuthController {
         }
       )
 
+      req.session.destroy()
       return res.status(403).send({ message: errors.FORBIDDEN })
     }
 
@@ -251,6 +279,9 @@ class AuthController {
             sameSite: 'None', //cross-site cookie
             maxAge: config.REFRESH_TOKEN_EXPIRY, //cookie expiry: set to match rT
           })
+
+          req.session.refreshToken = newRefreshToken
+          req.session.user = foundUser
 
           res.send({ user: foundUser, accessToken })
         } catch (error) {

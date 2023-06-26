@@ -4,7 +4,6 @@ import React, {
   useEffect,
   useState,
   useCallback,
-  RefObject,
   MutableRefObject,
 } from 'react'
 import './ChatForm.scss'

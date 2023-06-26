@@ -14,9 +14,9 @@ class AuthRouter {
   private registerRoutes() {
     this.router.get('/me', this.authenticate, this.authController.me)
     this.router.get(
-      '/checkToken',
+      '/checkSession',
       this.authenticate,
-      this.authController.checkToken
+      this.authController.checkSession
     )
     this.router.get('/refresh', this.authController.refresh)
     this.router.post('/logout', this.authController.logout)

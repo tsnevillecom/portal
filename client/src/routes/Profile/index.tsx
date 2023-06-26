@@ -3,25 +3,27 @@ import { Link } from 'react-router-dom'
 import './Profile.scss'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import useLogout from '@hooks/useLogout'
-import useRefreshToken from '@hooks/useRefreshToken'
+import useRefreshSession from '@hooks/useRefreshSession'
 import Page from '@components/Page'
 
 const Profile = () => {
   const axiosPrivate = useAxiosPrivate()
   const { logoutall } = useLogout()
-  const { refresh } = useRefreshToken()
+  const { refresh } = useRefreshSession()
 
   const getMe = async () => {
     try {
-      await axiosPrivate('/auth/me')
+      const response = await axiosPrivate('/auth/me')
+      console.log(response.data)
     } catch (error) {
       console.log(error)
     }
   }
 
-  const checktoken = async () => {
+  const checkSession = async () => {
     try {
-      await axiosPrivate('/auth/checktoken')
+      await axiosPrivate('/auth/checkSession')
+      console.log('session good')
     } catch (error) {
       console.log(error)
     }
@@ -33,7 +35,7 @@ const Profile = () => {
 
       <a onClick={getMe}>Me</a>
 
-      <a onClick={checktoken}>Check Token</a>
+      <a onClick={checkSession}>Check Token</a>
 
       <a onClick={logoutall}>Logout All</a>
 

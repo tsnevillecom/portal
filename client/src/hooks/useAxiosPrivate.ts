@@ -1,6 +1,6 @@
 import { axiosPrivate } from '../api/axios'
 import { useEffect } from 'react'
-import useRefreshToken from './useRefreshToken'
+import useRefreshSession from './useRefreshSession'
 import useAuth from './useAuth'
 import { AxiosError, AxiosHeaders } from 'axios'
 import { DEFAULT_AUTH_STATE } from '@context/AuthProvider'
@@ -11,7 +11,7 @@ type FailedResponseQueueType = {
 }
 
 const useAxiosPrivate = () => {
-  const { refresh } = useRefreshToken()
+  const { refresh } = useRefreshSession()
   const { auth, setAuth } = useAuth()
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const useAxiosPrivate = () => {
           isRefreshingToken = true
 
           return new Promise((resolve, reject) => {
-            const refreshToken = async () => {
+            const refreshSession = async () => {
               console.log('refreshing access token')
 
               try {
@@ -118,7 +118,7 @@ const useAxiosPrivate = () => {
               isRefreshingToken = false
             }
 
-            refreshToken()
+            refreshSession()
           })
         }
         return Promise.reject(error)

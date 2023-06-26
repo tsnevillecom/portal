@@ -16,4 +16,8 @@ const errors = Object.freeze({
   UPDATE_PASSWORD: 'UPDATE_PASSWORD',
 })
 
-export { errors }
+const sessions = Object.freeze({
+  SESSION_KEY: 'portal.session',
+})
+
+export { errors, sessions }

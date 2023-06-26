@@ -1,20 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { Outlet } from 'react-router-dom'
-import useRefreshToken from '@hooks/useRefreshToken'
+import useRefreshSession from '@hooks/useRefreshSession'
 import useAuth from '@hooks/useAuth'
 import Spinner from '@components/Spinner'
 import _ from 'lodash'
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true)
-  const { refresh } = useRefreshToken()
+  const { refresh } = useRefreshSession()
   const { auth, persist } = useAuth()
   const ignoreRef = useRef(false)
 
   useEffect(() => {
     const debounceLoadingFalse = _.debounce(() => setIsLoading(false), 500)
 
-    const verifyRefreshToken = async () => {
+    const verifySession = async () => {
       if (ignoreRef.current) return
       ignoreRef.current = true
 
@@ -31,8 +31,8 @@ const PersistLogin = () => {
       }
     }
 
-    // Avoids unwanted call to verifyRefreshToken
-    !auth.accessToken && persist ? verifyRefreshToken() : debounceLoadingFalse()
+    // Avoids unwanted call to verifySession
+    !auth.accessToken && persist ? verifySession() : debounceLoadingFalse()
   }, [])
 
   if (persist && isLoading) return <Spinner />

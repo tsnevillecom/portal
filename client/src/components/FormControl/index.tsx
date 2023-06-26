@@ -102,8 +102,6 @@ const FormControl: React.FC<FormControlProps> = ({
   const handleOnChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    console.log('handleOnChange', forRef?.current?.value)
-
     const target = e.currentTarget
 
     switch (type) {
