@@ -1,8 +1,8 @@
-import Channel from '../models/channel'
-import User from '../models/user'
+import Channel from '../models/channel.model'
+import User from '../models/user.model'
 import crypto from 'crypto'
 import { errors } from '../_constants'
-import EmailToken from '../models/emailToken'
+import EmailToken from '../models/emailToken.model'
 import EmailUtil from '../utils/email.util'
 
 class UsersController {

@@ -1,4 +1,10 @@
 class TimeUtil {
+  public secondsFromNow = (sec: number): Date => {
+    var dateObject = new Date()
+    dateObject.setTime(dateObject.getTime() + 1000 * sec)
+    return dateObject
+  }
+
   public minutesFromNow = (min: number): Date => {
     var dateObject = new Date()
     dateObject.setTime(dateObject.getTime() + 1000 * 60 * min)

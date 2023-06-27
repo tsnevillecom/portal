@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongodb'
-import Channel from '../models/channel'
-import User from '../models/user'
-import Message from '../models/message'
+import Channel from '../models/channel.model'
+import User from '../models/user.model'
+import Message from '../models/message.model'
 
 class ChannelsController {
   public getAllChannels = async (req, res) => {

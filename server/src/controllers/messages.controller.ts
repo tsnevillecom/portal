@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb'
-import Message from '../models/message'
+import Message from '../models/message.model'
 
 class MessagesController {
   public getMessage = async (req, res) => {

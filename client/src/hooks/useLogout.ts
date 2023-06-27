@@ -1,3 +1,4 @@
+import axios from '@api/axios'
 import { DEFAULT_AUTH_STATE } from '../context/AuthProvider'
 import useAuth from './useAuth'
 import useAxiosPrivate from './useAxiosPrivate'
@@ -8,7 +9,7 @@ const useLogout = () => {
 
   const logout = async () => {
     try {
-      await axiosPrivate.post('/auth/logout')
+      await axios.post('/auth/logout')
       setAuth(DEFAULT_AUTH_STATE)
     } catch (err) {
       console.error(err)

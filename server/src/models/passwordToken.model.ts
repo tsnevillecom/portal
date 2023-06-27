@@ -16,13 +16,15 @@ const PasswordTokenSchema = new Schema(
     },
     expireAt: {
       type: Date,
-      required: true,
-      default: () => new TimeUtil().minutesFromNow(expires),
-      index: { expires: `${expires}m` },
     },
   },
   { timestamps: true }
 )
+
+PasswordTokenSchema.pre('save', async function (next) {
+  this.expireAt = new TimeUtil().minutesFromNow(expires)
+  next()
+})
 
 const PasswordToken = model('PasswordToken', PasswordTokenSchema)
 export default PasswordToken

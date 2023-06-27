@@ -1,14 +1,15 @@
 import config from '../config'
-import User from '../models/user'
+import User from '../models/user.model'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { errors, sessions } from '../_constants'
 import cookieParser from 'cookie-parser'
+import RefreshToken from '../models/refreshToken.model'
 
 class AuthController {
   public me = async (req, res) => {
-    res.send(req.session.user)
+    res.send(req.user)
   }
 
   public checkSession = async (req, res) => {
@@ -16,90 +17,44 @@ class AuthController {
   }
 
   public logoutAll = async (req, res) => {
-    const cookies = req.cookies
-    if (!cookies?.refreshToken) {
-      return res.status(401).send({ message: errors.UNAUTHORIZED })
-    }
+    const user = req.user
 
-    const refreshToken = cookies.refreshToken
-    const foundUser = await User.findOne({
-      'refreshTokens.refreshToken': refreshToken,
-    }).exec()
+    try {
+      const foundTokens = await RefreshToken.deleteMany({
+        userId: user._id,
+      }).exec()
 
-    if (!foundUser) {
       res.clearCookie('refreshToken', {
         httpOnly: true,
         sameSite: 'None',
         secure: config.SECURE_COOKIE,
       })
 
-      return res.status(401).send({ message: errors.UNAUTHORIZED })
-    }
-
-    try {
-      foundUser.refreshTokens = []
-      await foundUser.save()
-
-      req.session.destroy(() => {
-        res.clearCookie(sessions.SESSION_KEY, { path: '/' })
-        res.clearCookie('refreshToken', {
-          httpOnly: true,
-          sameSite: 'None',
-          secure: config.SECURE_COOKIE,
-        })
-        res.sendStatus(204)
-      })
+      res.sendStatus(204)
     } catch (error) {
       res.status(500).send({ message: errors.INTERNAL_ERROR })
     }
   }
 
   public logout = async (req, res) => {
-    console.log('old:', req.sessionID)
+    console.log(req.session.refreshToken)
 
     const cookies = req.cookies
-
-    // const sesh = cookies[sessions.SESSION_KEY]
-    // const decodedSesh = cookieParser.signedCookie(
-    //   sesh,
-    //   config.REFRESH_TOKEN_SECRET
-    // )
-
     if (!cookies?.refreshToken) return res.sendStatus(204)
 
-    errors.REGISTRATION_FAILED
+    try {
+      await RefreshToken.findOneAndDelete({
+        token: cookies.refreshToken,
+      }).exec()
 
-    const refreshToken = cookies.refreshToken
-    const foundUser = await User.findOne({
-      'refreshTokens.refreshToken': refreshToken,
-    }).exec()
-
-    if (!foundUser) {
       res.clearCookie('refreshToken', {
         httpOnly: true,
         sameSite: 'None',
         secure: config.SECURE_COOKIE,
       })
-      return res.sendStatus(204)
-    }
 
-    try {
-      foundUser.refreshTokens = foundUser.refreshTokens.filter((rt) => {
-        return rt.refreshToken !== refreshToken
-      })
-      await foundUser.save()
-
-      req.session.destroy(() => {
-        res.clearCookie(sessions.SESSION_KEY, { path: '/' })
-
-        console.log('store', req.sessionStore)
-        res.clearCookie('refreshToken', {
-          httpOnly: true,
-          sameSite: 'None',
-          secure: config.SECURE_COOKIE,
-        })
-        res.sendStatus(204)
-      })
+      // req.session.destroy()
+      res.sendStatus(204)
     } catch (error) {
       console.log(error)
       res.status(500).send({ message: errors.INTERNAL_ERROR })
@@ -137,42 +92,34 @@ class AuthController {
       return res.status(401).send({ message: errors.UNAUTHORIZED })
     }
 
-    let newRefreshTokenArray = !cookies?.refreshToken
-      ? foundUser.refreshTokens
-      : foundUser.refreshTokens.filter(
-          (rt) => rt.refreshToken !== cookies.refreshToken
-        )
-
     //Detect resuse
     if (cookies?.refreshToken) {
-      const foundUserWithToken = await User.findOne({
-        'refreshTokens.refreshToken': cookies.refreshToken,
+      const foundToken = await RefreshToken.findOneAndDelete({
+        token: cookies.refreshToken,
       }).exec()
 
-      // Detected refresh token reuse!
-      if (!foundUserWithToken) {
-        console.log('attempted refresh token reuse at login!')
-        newRefreshTokenArray = []
-      }
+      console.log('token reuse', foundToken)
 
       res.clearCookie('refreshToken', {
         httpOnly: true,
         sameSite: 'None',
         secure: config.SECURE_COOKIE,
       })
-
-      delete req.session.refreshToken
     }
 
     try {
-      const refreshToken = await foundUser.newRefreshToken()
-      foundUser.refreshTokens = [
-        ...newRefreshTokenArray,
-        { refreshToken, userAgent },
-      ]
-      await foundUser.save()
+      const newRefreshToken = await foundUser.newRefreshToken()
+      const refreshToken = await new RefreshToken({
+        userId: foundUser._id,
+        token: newRefreshToken,
+        userAgent,
+      })
 
-      res.cookie('refreshToken', refreshToken, {
+      await refreshToken.save()
+
+      req.session.refreshToken = newRefreshToken
+
+      res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true, //accessible only by web server
         secure: config.SECURE_COOKIE, //https
         sameSite: 'None', //cross-site cookie
@@ -180,10 +127,6 @@ class AuthController {
       })
 
       const accessToken = await foundUser.newAccessToken()
-
-      req.session.refreshToken = refreshToken
-      req.session.user = foundUser
-
       res.send({ user: foundUser, accessToken })
     } catch (error) {
       console.log(error)
@@ -192,15 +135,15 @@ class AuthController {
   }
 
   public refresh = async (req, res) => {
-    console.log(req.sessionStore, req.sessionID)
-
+    console.log(req.session.refreshToken)
     const userAgent = req.headers['user-agent'] || ''
     const cookies = req.cookies
+
     if (!cookies?.refreshToken) {
       return res.status(401).send({ message: errors.UNAUTHORIZED })
     }
 
-    const refreshToken = cookies.refreshToken
+    const refreshTokenCookie = cookies.refreshToken
 
     res.clearCookie('refreshToken', {
       httpOnly: true,
@@ -208,14 +151,14 @@ class AuthController {
       secure: config.SECURE_COOKIE,
     })
 
-    const foundUser = await User.findOne({
-      'refreshTokens.refreshToken': refreshToken,
+    const foundRefreshToken = await RefreshToken.findOne({
+      token: refreshTokenCookie,
     }).exec()
 
     // Detected refresh token reuse!
-    if (!foundUser) {
+    if (!foundRefreshToken) {
       jwt.verify(
-        refreshToken,
+        refreshTokenCookie,
         config.REFRESH_TOKEN_SECRET,
         async (err, decoded) => {
           if (err) {
@@ -223,15 +166,17 @@ class AuthController {
           }
 
           console.log('attempted refresh token reuse!')
+
           const _id = decoded._id
           const hackedUser = await User.findOne({
             _id,
           }).exec()
 
           if (hackedUser) {
-            hackedUser.refreshTokens = []
-            const result = await hackedUser.save()
-            console.log('hacked user', result)
+            console.log('hacked user', hackedUser)
+            await RefreshToken.deleteMany({
+              user: _id,
+            }).exec()
           }
         }
       )
@@ -240,49 +185,45 @@ class AuthController {
       return res.status(403).send({ message: errors.FORBIDDEN })
     }
 
-    const newRefreshTokenArray = foundUser.refreshTokens.filter(
-      (rt) => rt.refreshToken !== refreshToken
-    )
+    const foundUser = await User.findOne({
+      _id: foundRefreshToken?.userId,
+    }).exec()
 
     // evaluate jwt
     jwt.verify(
-      refreshToken,
+      foundRefreshToken.token,
       config.REFRESH_TOKEN_SECRET,
       async (err, decoded) => {
         try {
           if (err) {
             console.log('expired refresh token')
-            foundUser.refreshTokens = [...newRefreshTokenArray]
-            await foundUser.save()
             return res.status(403).send({ message: errors.FORBIDDEN })
           }
+
+          await foundRefreshToken.delete()
 
           if (foundUser._id.toString() !== decoded._id) {
             return res.status(403).send({ message: errors.FORBIDDEN })
           }
-
-          // Refresh token still valid
           const accessToken = await foundUser.newAccessToken()
           const newRefreshToken = await foundUser.newRefreshToken()
 
-          // Saving refreshToken on current user
-          foundUser.refreshTokens = [
-            ...newRefreshTokenArray,
-            { refreshToken: newRefreshToken, userAgent },
-          ]
-          await foundUser.save()
-
-          // Creates Secure Cookie with refresh token
           res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true, //accessible only by web server
             secure: config.SECURE_COOKIE, //https
             sameSite: 'None', //cross-site cookie
-            maxAge: config.REFRESH_TOKEN_EXPIRY, //cookie expiry: set to match rT
+            maxAge: config.REFRESH_TOKEN_EXPIRY,
+          })
+
+          const refreshToken = await new RefreshToken({
+            userId: foundUser._id,
+            token: newRefreshToken,
+            userAgent,
           })
 
           req.session.refreshToken = newRefreshToken
-          req.session.user = foundUser
 
+          await refreshToken.save()
           res.send({ user: foundUser, accessToken })
         } catch (error) {
           console.log(error)

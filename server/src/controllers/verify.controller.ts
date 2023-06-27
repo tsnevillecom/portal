@@ -1,5 +1,5 @@
-import EmailToken from '../models/emailToken'
-import User from '../models/user'
+import EmailToken from '../models/emailToken.model'
+import User from '../models/user.model'
 import crypto from 'crypto'
 import { errors } from '../_constants'
 import EmailUtil from '../utils/email.util'

@@ -5,17 +5,11 @@ import jwt from 'jsonwebtoken'
 import ROLES from '../config/roles'
 import config from '../config'
 
-interface IRefreshToken {
-  refreshToken: string
-  userAgent: string
-}
-
 interface IUser {
   firstName: string
   lastName: string
   email: string
   password: string
-  refreshTokens: IRefreshToken[]
   isVerified: boolean
   active: boolean
   deleted: boolean
@@ -61,23 +55,6 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       trim: true,
       minlength: 8,
     },
-    refreshTokens: [
-      {
-        refreshToken: {
-          type: String,
-          required: true,
-        },
-        userAgent: {
-          type: String,
-          required: true,
-        },
-        createdAt: {
-          type: Date,
-          required: true,
-          default: Date.now,
-        },
-      },
-    ],
     isVerified: {
       type: Boolean,
       default: false,
@@ -109,7 +86,7 @@ UserSchema.virtual('fullName').get(function () {
 })
 
 UserSchema.methods.newAccessToken = async function () {
-  const user = this.toJSON()
+  const user = this
   const accessToken = jwt.sign(
     {
       user,
@@ -133,10 +110,7 @@ UserSchema.methods.toJSON = function () {
   const user = this
   const userObj = user.toObject()
   delete userObj.password
-  delete userObj.refreshTokens
   delete userObj.createdAt
-  delete userObj.updatedAt
-  delete userObj.deleted
   delete userObj.__v
   return userObj
 }

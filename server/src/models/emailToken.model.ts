@@ -16,13 +16,15 @@ const EmailTokenSchema = new Schema(
     },
     expireAt: {
       type: Date,
-      required: true,
-      default: () => new TimeUtil().daysFromNow(expires),
-      index: { expires: `${expires}d` },
     },
   },
   { timestamps: true }
 )
+
+EmailTokenSchema.pre('save', async function (next) {
+  this.expireAt = new TimeUtil().daysFromNow(expires)
+  next()
+})
 
 const EmailToken = model('EmailToken', EmailTokenSchema)
 export default EmailToken

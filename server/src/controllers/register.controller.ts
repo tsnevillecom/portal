@@ -1,6 +1,6 @@
 import crypto from 'crypto'
-import EmailToken from '../models/emailToken'
-import User from '../models/user'
+import EmailToken from '../models/emailToken.model'
+import User from '../models/user.model'
 import EmailUtil from '../utils/email.util'
 import { errors } from '../_constants'
 

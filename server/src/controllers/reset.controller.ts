@@ -1,6 +1,6 @@
 import crypto from 'crypto'
-import PasswordToken from '../models/passwordToken'
-import User from '../models/user'
+import PasswordToken from '../models/passwordToken.model'
+import User from '../models/user.model'
 import EmailUtil from '../utils/email.util'
 import { ERRORS } from '../_constants'
 

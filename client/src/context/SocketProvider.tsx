@@ -22,7 +22,7 @@ export const SocketContext = createContext<ISocketContext>({
   socket: null,
 })
 
-const MAX_REFRESH_ATTEMPTS = 4
+const MAX_REFRESH_ATTEMPTS = 1
 
 export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const { auth } = useAuth()
@@ -36,11 +36,11 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null)
 
   const socketRef = useRef<Socket | null>(null)
-  const socketTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const socketResetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     return () => {
-      if (socketTimerRef.current) clearTimeout(socketTimerRef.current)
+      if (socketResetTimerRef.current) clearTimeout(socketResetTimerRef.current)
       if (socketRef.current) socketRef.current.disconnect()
     }
   }, [])
@@ -67,30 +67,60 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
 
     const socket = io('http://localhost:3333', {
       transports: ['websocket'],
-      reconnection: false,
+      reconnection: true,
+      reconnectionAttempts: 10,
+      reconnectionDelay: 2000,
       autoConnect: false,
     })
 
     socket.on('connect', () => {
       setConnected(true)
       if (!subscribed) joinChannels(socket)
-      if (socketTimerRef.current) clearTimeout(socketTimerRef.current)
     })
 
     socket.on('connect_error', () => {
       console.log('connection failed')
-      reconnect()
+      addToast('Attempting to establish a socket connection.')
+    })
+
+    socket.io.on('error', (error) => {
+      console.log('error:', error.message)
     })
 
     socket.on('disconnect', (reason) => disconnect(reason))
+
+    socket.io.on('reconnect', (attempt) => {
+      addToast(
+        `Socket reconnected after ${attempt} attempt(s).`,
+        'success',
+        true,
+        5000
+      )
+    })
+
+    socket.io.on('reconnect_attempt', (attempt) => {
+      console.log('attempting to reconnect socket:', attempt)
+    })
+
+    socket.io.on('reconnect_error', (error) => {
+      console.log('socket reconnect error:', error.message)
+    })
+
+    socket.io.on('reconnect_failed', () => {
+      console.log('reconnect failed')
+      addToast('Could not establish socket connection. Try reloading the page.')
+    })
 
     socket.on('user_joined', ({ joined }) => {
       if (joined) {
         console.log('subscribing user to channels')
         setSubscribed(true)
       } else {
-        console.log('socket resetting')
-        setTimeout(() => resetSocket(), 2000)
+        console.log('refreshing socket session')
+        socketResetTimerRef.current = setTimeout(
+          () => refreshSocketSession(),
+          2000
+        )
       }
     })
 
@@ -103,7 +133,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
     socket.emit('join_channels')
   }
 
-  const resetSocket = async () => {
+  const refreshSocketSession = async () => {
     if (socketRef.current) {
       socketRef.current.disconnect()
       socketRef.current = null
@@ -116,28 +146,16 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
     if (resetAttempts.current <= MAX_REFRESH_ATTEMPTS) {
       refresh()
     } else {
-      addToast('Could not establish socket connection')
+      addToast('Could not establish socket connection. Try reloading the page.')
       resetAttempts.current = 0
     }
-  }
-
-  const reconnect = () => {
-    socketTimerRef.current = setTimeout(() => {
-      console.log('attempting to reconnect')
-      socketRef.current?.connect()
-    }, 3000)
   }
 
   const disconnect = (reason?: string) => {
     console.log('socket disconnected:', reason)
     setConnected(false)
-
-    if (reason === 'io client disconnect') {
-      setSubscribed(false)
-      setSocket(null)
-    } else {
-      reconnect()
-    }
+    setSubscribed(false)
+    setSocket(null)
   }
 
   const contextValue = useMemo(

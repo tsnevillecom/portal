@@ -1,5 +1,5 @@
 import ROLES from '../config/roles'
-import User from '../models/user'
+import User from '../models/user.model'
 
 class UsersSeed {
   public seed = async (): Promise<void> => {

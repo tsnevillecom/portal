@@ -20,7 +20,11 @@ class AuthRouter {
     )
     this.router.get('/refresh', this.authController.refresh)
     this.router.post('/logout', this.authController.logout)
-    this.router.post('/logoutall', this.authController.logoutAll)
+    this.router.post(
+      '/logoutall',
+      this.authenticate,
+      this.authController.logoutAll
+    )
     this.router.post('/', this.authController.login)
   }
 }

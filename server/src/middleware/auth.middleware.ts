@@ -12,6 +12,7 @@ class AuthMiddleware {
       const accessToken = authHeader.split(' ')[1]
       jwt.verify(accessToken, config.ACCESS_TOKEN_SECRET, (err, decoded) => {
         if (err) return res.sendStatus(403) //invalid token
+
         req['user'] = decoded.user
         req['accessToken'] = accessToken
         next()

@@ -1,6 +1,6 @@
 import ROLES from '../config/roles'
-import Channel from '../models/channel'
-import User from '../models/user'
+import Channel from '../models/channel.model'
+import User from '../models/user.model'
 
 class ChannelsSeed {
   public seed = async (): Promise<void> => {
