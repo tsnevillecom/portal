@@ -9,7 +9,7 @@ const useLogout = () => {
 
   const logout = async () => {
     try {
-      await axios.post('/auth/logout')
+      await axiosPrivate.post('/auth/logout')
       setAuth(DEFAULT_AUTH_STATE)
     } catch (err) {
       console.error(err)

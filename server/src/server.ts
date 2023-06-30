@@ -1,5 +1,6 @@
 import { Server as SocketIOServer } from 'socket.io'
-import { createServer, Server as HTTPServer } from 'http'
+import fs from 'fs'
+import https, { Server as HTTPSServer } from 'https'
 import config from './config'
 import cookieParser from 'cookie-parser'
 import express, { Application as ExpressApplication } from 'express'
@@ -26,7 +27,7 @@ class Server {
   private env: string
 
   private app: ExpressApplication
-  private httpServer: HTTPServer
+  private httpsServer: HTTPSServer
   public io: SocketIOServer
 
   private validateCredentials = new CredentialsMiddleware().validateCredentials
@@ -38,7 +39,13 @@ class Server {
     this.env = process.env.NODE_ENV || 'development'
 
     this.app = express()
-    this.httpServer = createServer(this.app)
+    this.httpsServer = https.createServer(
+      {
+        key: fs.readFileSync(__dirname + '/key.pem'),
+        cert: fs.readFileSync(__dirname + '/cert.pem'),
+      },
+      this.app
+    )
 
     this.registerMiddleware()
     this.registerRouters(routers)
@@ -50,7 +57,7 @@ class Server {
   }
 
   private async initializeSocket() {
-    this.io = new SocketIOServer(this.httpServer, {
+    this.io = new SocketIOServer(this.httpsServer, {
       pingInterval: 10000,
       pingTimeout: 30000,
     })
@@ -135,12 +142,12 @@ class Server {
         secret: config.SESSION_SECRET,
         saveUninitialized: false,
         name: sessions.SESSION_KEY,
-        // cookie: {
-        //   secure: this.env === 'production' ? config.SECURE_COOKIE : 'auto',
-        //   maxAge: config.REFRESH_TOKEN_EXPIRY,
-        //   sameSite: this.env === 'production' ? 'none' : 'lax',
-        //   httpOnly: true,
-        // },
+        cookie: {
+          secure: true,
+          maxAge: 2343242342,
+          sameSite: 'none',
+          httpOnly: true,
+        },
         resave: false,
         rolling: true,
       })
@@ -148,7 +155,6 @@ class Server {
 
     this.app.use(cookieParser())
     this.app.use(bodyParser.urlencoded({ extended: false }))
-    this.app.use(express.static(path.join(__dirname, 'client', 'build')))
     this.app.use(express.json())
   }
 
@@ -161,9 +167,9 @@ class Server {
   }
 
   public listen() {
-    this.httpServer.listen(this.port, this.host, () => {
+    this.httpsServer.listen(this.port, this.host, () => {
       console.log(
-        `🚀 App listening on the port http://${this.host}:${this.port}`
+        `🚀 App listening on the port https://${this.host}:${this.port}`
       )
     })
   }

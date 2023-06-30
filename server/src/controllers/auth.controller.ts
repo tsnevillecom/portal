@@ -39,12 +39,12 @@ class AuthController {
   public logout = async (req, res) => {
     console.log(req.session.refreshToken)
 
-    const cookies = req.cookies
-    if (!cookies?.refreshToken) return res.sendStatus(204)
+    const token = req.session.refreshToken
+    if (!token) return res.sendStatus(204)
 
     try {
       await RefreshToken.findOneAndDelete({
-        token: cookies.refreshToken,
+        token,
       }).exec()
 
       res.clearCookie('refreshToken', {
@@ -53,7 +53,7 @@ class AuthController {
         secure: config.SECURE_COOKIE,
       })
 
-      // req.session.destroy()
+      req.session.destroy()
       res.sendStatus(204)
     } catch (error) {
       console.log(error)
@@ -118,6 +118,7 @@ class AuthController {
       await refreshToken.save()
 
       req.session.refreshToken = newRefreshToken
+      console.log(req.session)
 
       res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true, //accessible only by web server
@@ -135,7 +136,7 @@ class AuthController {
   }
 
   public refresh = async (req, res) => {
-    console.log(req.session.refreshToken)
+    console.log(req.session)
     const userAgent = req.headers['user-agent'] || ''
     const cookies = req.cookies
 

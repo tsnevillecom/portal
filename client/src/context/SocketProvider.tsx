@@ -12,6 +12,11 @@ import useAuth from '@hooks/useAuth'
 import useRefreshSession from '@hooks/useRefreshSession'
 import { ToastContext } from './ToastContext'
 
+const WS_URL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_WS_SECURE
+    : process.env.REACT_APP_WS
+
 export type ISocketContext = {
   connected: boolean
   socket: Socket | null
@@ -65,7 +70,7 @@ export const SocketProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const connect = () => {
     if (socketRef.current) return
 
-    const socket = io('http://localhost:3333', {
+    const socket = io(WS_URL as string, {
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 10,
