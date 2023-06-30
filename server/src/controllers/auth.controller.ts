@@ -3,8 +3,7 @@ import User from '../models/user.model'
 import validator from 'validator'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import { errors, sessions } from '../_constants'
-import cookieParser from 'cookie-parser'
+import { errors } from '../_constants'
 import RefreshToken from '../models/refreshToken.model'
 
 class AuthController {
@@ -37,14 +36,15 @@ class AuthController {
   }
 
   public logout = async (req, res) => {
-    console.log(req.session.refreshToken)
-
     const token = req.session.refreshToken
-    if (!token) return res.sendStatus(204)
+    const user = req.session.user
+
+    if (!(token || user)) return res.sendStatus(204)
 
     try {
       await RefreshToken.findOneAndDelete({
         token,
+        userId: user._id,
       }).exec()
 
       res.clearCookie('refreshToken', {
@@ -118,7 +118,7 @@ class AuthController {
       await refreshToken.save()
 
       req.session.refreshToken = newRefreshToken
-      console.log(req.session)
+      req.session.user = foundUser
 
       res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true, //accessible only by web server
@@ -136,7 +136,6 @@ class AuthController {
   }
 
   public refresh = async (req, res) => {
-    console.log(req.session)
     const userAgent = req.headers['user-agent'] || ''
     const cookies = req.cookies
 

@@ -9,7 +9,6 @@ import bodyParser from 'body-parser'
 import connectDatabase from './db'
 import corsOptions from './config/corsOptions'
 import limiter from 'express-rate-limit'
-import path from 'path'
 import CredentialsMiddleware from './middleware/credentials.middleware'
 import InvalidPathMiddleware from './middleware/invalidPath.middleware'
 import Channel from './models/channel.model'
@@ -144,7 +143,7 @@ class Server {
         name: sessions.SESSION_KEY,
         cookie: {
           secure: true,
-          maxAge: 2343242342,
+          expires: false,
           sameSite: 'none',
           httpOnly: true,
         },
