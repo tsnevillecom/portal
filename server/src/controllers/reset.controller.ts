@@ -2,7 +2,7 @@ import crypto from 'crypto'
 import PasswordToken from '../models/passwordToken.model'
 import User from '../models/user.model'
 import EmailUtil from '../utils/email.util'
-import { ERRORS } from '../_constants'
+import { errors } from '../_constants'
 
 class ResetController {
   private sendPasswordResetEmail = new EmailUtil().sendPasswordResetEmail
@@ -16,13 +16,13 @@ class ResetController {
       console.log(foundToken)
       if (!foundToken) {
         return res.status(401).send({
-          message: ERRORS.EXPIRED_TOKEN,
+          message: errors.EXPIRED_TOKEN,
         })
       }
 
       res.sendStatus(204)
     } catch (error) {
-      res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
+      res.status(500).send({ message: errors.INTERNAL_ERROR })
     }
   }
 
@@ -31,7 +31,7 @@ class ResetController {
     const user = await User.findOne({ email }).exec()
     if (!user) {
       return res.status(404).send({
-        message: ERRORS.NOT_FOUND,
+        message: errors.NOT_FOUND,
       })
     }
 
@@ -48,11 +48,11 @@ class ResetController {
     } catch (error) {
       if (token) await token.remove()
 
-      if (error.message === ERRORS.SEND_EMAIL_FAILED) {
+      if (error.message === errors.SEND_EMAIL_FAILED) {
         return res.status(401).send({ message: error.message })
       }
 
-      res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
+      res.status(500).send({ message: errors.INTERNAL_ERROR })
     }
   }
 
@@ -64,14 +64,14 @@ class ResetController {
       const foundToken = await PasswordToken.findOne({ token })
       if (!foundToken) {
         return res.status(401).send({
-          message: ERRORS.EXPIRED_TOKEN,
+          message: errors.EXPIRED_TOKEN,
         })
       }
 
       const user = await User.findOne({ _id: foundToken._userId })
       if (!user) {
         return res.status(404).send({
-          message: ERRORS.NOT_FOUND,
+          message: errors.NOT_FOUND,
         })
       }
 
@@ -89,7 +89,7 @@ class ResetController {
       )
       res.status(200).send({ user })
     } catch (error) {
-      res.status(500).send({ message: ERRORS.INTERNAL_ERROR })
+      res.status(500).send({ message: errors.INTERNAL_ERROR })
     }
   }
 }

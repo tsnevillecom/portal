@@ -39,7 +39,7 @@ class AuthController {
     const token = req.session.refreshToken
     const user = req.session.user
 
-    if (!(token || user)) return res.sendStatus(204)
+    if (!token || !user) return res.sendStatus(204)
 
     try {
       await RefreshToken.findOneAndDelete({
@@ -62,6 +62,8 @@ class AuthController {
   }
 
   public login = async (req, res) => {
+    console.log('login')
+
     const cookies = req.cookies
     const { email, password } = req.body
     const userAgent = req.headers['user-agent'] || ''
@@ -98,7 +100,7 @@ class AuthController {
         token: cookies.refreshToken,
       }).exec()
 
-      console.log('token reuse', foundToken)
+      if (foundToken) console.log('token reuse', foundToken)
 
       res.clearCookie('refreshToken', {
         httpOnly: true,

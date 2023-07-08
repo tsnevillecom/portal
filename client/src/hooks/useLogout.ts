@@ -1,4 +1,3 @@
-import axios from '@api/axios'
 import { DEFAULT_AUTH_STATE } from '../context/AuthProvider'
 import useAuth from './useAuth'
 import useAxiosPrivate from './useAxiosPrivate'

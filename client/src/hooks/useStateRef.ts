@@ -25,6 +25,7 @@ const useStateRef: UseStateRef = <S>(initialState?: S | (() => S)) => {
   const [state, setState] = useState(initialState)
   const ref = useRef(state)
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const dispatch: typeof setState = useCallback((setStateAction: any) => {
     ref.current = isFunction(setStateAction)
       ? setStateAction(ref.current)

@@ -2,6 +2,7 @@ import axios from 'axios'
 import config from '../config'
 import User from '../models/user.model'
 import { errors } from '../_constants'
+import RefreshToken from '../models/refreshToken.model'
 
 class GoogleController {
   public login = async (req, res) => {
@@ -16,23 +17,13 @@ class GoogleController {
         return res.status(404).send({ message: errors.NOT_FOUND })
       }
 
-      let newRefreshTokenArray = !cookies?.refreshToken
-        ? foundUser.refreshTokens
-        : foundUser.refreshTokens.filter(
-            (rt) => rt.refreshToken !== cookies.refreshToken
-          )
-
       //Detect resuse
       if (cookies?.refreshToken) {
-        const foundUserWithToken = await User.findOne({
-          'refreshTokens.refreshToken': cookies.refreshToken,
+        const foundToken = await RefreshToken.findOneAndDelete({
+          token: cookies.refreshToken,
         }).exec()
 
-        // Detected refresh token reuse!
-        if (!foundUserWithToken) {
-          console.log('attempted refresh token reuse at login! (google)')
-          newRefreshTokenArray = []
-        }
+        if (foundToken) console.log('token reuse (google)', foundToken)
 
         res.clearCookie('refreshToken', {
           httpOnly: true,
@@ -41,15 +32,19 @@ class GoogleController {
         })
       }
 
-      const refreshToken = await foundUser.newRefreshToken()
-      foundUser.refreshTokens = [
-        ...newRefreshTokenArray,
-        { refreshToken, userAgent },
-      ]
+      const newRefreshToken = await foundUser.newRefreshToken()
+      const refreshToken = await new RefreshToken({
+        userId: foundUser._id,
+        token: newRefreshToken,
+        userAgent,
+      })
 
-      await foundUser.save()
+      await refreshToken.save()
 
-      res.cookie('refreshToken', refreshToken, {
+      req.session.refreshToken = newRefreshToken
+      req.session.user = foundUser
+
+      res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true, //accessible only by web server
         secure: config.SECURE_COOKIE, //https
         sameSite: 'None', //cross-site cookie
@@ -103,12 +98,18 @@ class GoogleController {
         isVerified: googleUser.email_verified,
       })
 
-      const refreshToken = await user.newRefreshToken()
-      user.refreshTokens = [{ refreshToken, userAgent }]
-
       const newUser = await user.save()
 
-      res.cookie('refreshToken', refreshToken, {
+      const newRefreshToken = await user.newRefreshToken()
+      const refreshToken = await new RefreshToken({
+        userId: newUser._id,
+        token: newRefreshToken,
+        userAgent,
+      })
+
+      await refreshToken.save()
+
+      res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true, //accessible only by web server
         secure: config.SECURE_COOKIE, //https
         sameSite: 'None', //cross-site cookie
