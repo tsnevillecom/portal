@@ -3,7 +3,10 @@ import fs from 'fs'
 import https, { Server as HTTPSServer } from 'https'
 import config from './config'
 import cookieParser from 'cookie-parser'
-import express, { Application as ExpressApplication } from 'express'
+import express, {
+  Application as ExpressApplication,
+  Router as ExpressRouter,
+} from 'express'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import connectDatabase from './db'
@@ -26,6 +29,7 @@ class Server {
   private env: string
 
   private app: ExpressApplication
+  private router: ExpressRouter
   private httpsServer: HTTPSServer
   public io: SocketIOServer
 
@@ -38,6 +42,7 @@ class Server {
     this.env = process.env.NODE_ENV || 'development'
 
     this.app = express()
+    this.router = express.Router()
     this.httpsServer = https.createServer(
       {
         key: fs.readFileSync(__dirname + '/key.pem'),
@@ -149,6 +154,7 @@ class Server {
         },
         resave: false,
         rolling: true,
+        env: this.env,
       })
     )
 
@@ -159,10 +165,11 @@ class Server {
 
   private registerRouters(descriptors: any[]) {
     descriptors.forEach((descriptor) => {
-      this.app.use(descriptor.path, descriptor.routerClass.router)
+      this.router.use(descriptor.path, descriptor.routerClass.router)
     })
 
-    this.app.use(this.sendInvalidPathError)
+    this.router.use(this.sendInvalidPathError)
+    this.app.use('/api/v1', this.router)
   }
 
   public listen() {
