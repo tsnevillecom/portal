@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npm run build && export NODE_ENV=production node build/index.js",
+    "start": "npm run build && export NODE_ENV=production && node build/index.js",
     "dev": "export NODE_ENV=development && nodemon index.js",
-    "build": "tsc",
+    "build": "tsc && npm run copy",
+    "copy": "cp src/production.env build/",
     "seed": "export NODE_ENV=development && ts-node src/seed/index.ts",
     "test": "jest --forceExit --detectOpenHandles",
     "lint": "eslint --ignore-path .gitignore --ext .ts src/",
