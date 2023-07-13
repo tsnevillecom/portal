@@ -1,6 +1,5 @@
 import { Server as SocketIOServer } from 'socket.io'
-import fs from 'fs'
-import https, { Server as HTTPSServer } from 'https'
+import { createServer, Server as HTTPServer } from 'http'
 import config from './config'
 import cookieParser from 'cookie-parser'
 import express, {
@@ -30,7 +29,7 @@ class Server {
 
   private app: ExpressApplication
   private router: ExpressRouter
-  private httpsServer: HTTPSServer
+  private httpServer: HTTPServer
   public io: SocketIOServer
 
   private validateCredentials = new CredentialsMiddleware().validateCredentials
@@ -43,13 +42,7 @@ class Server {
 
     this.app = express()
     this.router = express.Router()
-    this.httpsServer = https.createServer(
-      {
-        key: fs.readFileSync(__dirname + '/key.pem'),
-        cert: fs.readFileSync(__dirname + '/cert.pem'),
-      },
-      this.app
-    )
+    this.httpServer = createServer(this.app)
 
     this.registerMiddleware()
     this.registerRouters(routers)
@@ -61,7 +54,7 @@ class Server {
   }
 
   private async initializeSocket() {
-    this.io = new SocketIOServer(this.httpsServer, {
+    this.io = new SocketIOServer(this.httpServer, {
       pingInterval: 10000,
       pingTimeout: 30000,
     })
@@ -173,9 +166,9 @@ class Server {
   }
 
   public listen() {
-    this.httpsServer.listen(this.port, this.host, () => {
+    this.httpServer.listen(this.port, this.host, () => {
       console.log(
-        `🚀 App listening on the port https://${this.host}:${this.port}`
+        `🚀 App listening on the port http://${this.host}:${this.port}`
       )
     })
   }
