@@ -21,6 +21,8 @@ import RefreshToken from './models/refreshToken.model'
 // sessions
 import session from 'express-session'
 import { sessions } from './_constants'
+import { Redis } from 'ioredis'
+import RedisStore from 'connect-redis'
 
 class Server {
   private port: number
@@ -31,6 +33,8 @@ class Server {
   private router: ExpressRouter
   private httpServer: HTTPServer
   public io: SocketIOServer
+  public redisClient: Redis
+  public redisStore: RedisStore
 
   private validateCredentials = new CredentialsMiddleware().validateCredentials
   private sendInvalidPathError = new InvalidPathMiddleware().sendError
@@ -44,6 +48,7 @@ class Server {
     this.router = express.Router()
     this.httpServer = createServer(this.app)
 
+    this.initializeRedisStore()
     this.registerMiddleware()
     this.registerRouters(routers)
   }
@@ -51,6 +56,22 @@ class Server {
   public async initialize() {
     connectDatabase()
     this.initializeSocket()
+  }
+
+  private async initializeRedisStore() {
+    this.redisClient = new Redis()
+    this.redisClient
+      .on('ready', () => {
+        console.log('Connected to Redis')
+      })
+      .on('error', (err) => {
+        console.log('Connected to Redis failed')
+      })
+
+    this.redisStore = new RedisStore({
+      client: this.redisClient,
+      prefix: 'portal:',
+    })
   }
 
   private async initializeSocket() {
@@ -134,20 +155,26 @@ class Server {
     this.app.use(this.validateCredentials)
     this.app.use(cors(corsOptions))
 
+    // this.app.use(
+    //   session({
+    //     secret: 'keyboard cat',
+    //   })
+    // )
+
     this.app.use(
       session({
         secret: config.SESSION_SECRET,
         saveUninitialized: false,
         name: sessions.SESSION_KEY,
+        store: this.redisStore,
         cookie: {
-          secure: true,
+          secure: this.env === 'production',
           expires: false,
-          sameSite: 'none',
+          SameSite: 'none',
           httpOnly: true,
         },
         resave: false,
         rolling: true,
-        env: this.env,
       })
     )
 

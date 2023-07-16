@@ -62,8 +62,6 @@ class AuthController {
   }
 
   public login = async (req, res) => {
-    console.log('login')
-
     const cookies = req.cookies
     const { email, password } = req.body
     const userAgent = req.headers['user-agent'] || ''
