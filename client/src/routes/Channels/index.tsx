@@ -47,6 +47,7 @@ const Channels = () => {
   const { auth } = useContext(AuthContext)
   const { socket } = useContext(SocketContext)
 
+  const [pageLoaded, setPageLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [channels, setChannels] = useState<Channel[]>([])
   const [typing, setTyping] = useState<User | null>(null)
@@ -131,6 +132,7 @@ const Channels = () => {
     try {
       const response = await axiosPrivate('/channels/member')
       setChannels(response.data)
+      setPageLoaded(true)
     } catch (error) {
       console.log(error)
     }
@@ -165,7 +167,7 @@ const Channels = () => {
   }
 
   return (
-    <Page id="chat" layout={'horizontal'} isLoading={isLoading}>
+    <Page id="chat" layout={'horizontal'} isLoading={!pageLoaded}>
       <Sidebar id="chat-channels" side="left">
         <div id="chat-channels-header">
           <h4>Channels</h4>
@@ -195,66 +197,67 @@ const Channels = () => {
       {activeChannel && (
         <div id="chat-channel">
           <div id="chat-channel-header">{activeChannel.name}</div>
+          <div id="chat-channel-body">
+            {!!messages[activeChannel._id] &&
+              !!messages[activeChannel._id].length && (
+                <div id="chat-channel-thread" ref={chatThreadRef}>
+                  <div id="chat-channel-messages">
+                    {activeChannel &&
+                      messages[activeChannel._id] &&
+                      messages[activeChannel._id].map((message) => {
+                        const createdByMember = _.find(
+                          activeChannel.members,
+                          (member) => member._id === message.createdBy
+                        ) as User
 
-          {!!messages[activeChannel._id] &&
-            !!messages[activeChannel._id].length && (
-              <div id="chat-channel-thread" ref={chatThreadRef}>
-                <div id="chat-channel-messages">
-                  {activeChannel &&
-                    messages[activeChannel._id] &&
-                    messages[activeChannel._id].map((message) => {
-                      const createdByMember = _.find(
-                        activeChannel.members,
-                        (member) => member._id === message.createdBy
-                      ) as User
+                        const createdByMemberName = `${createdByMember.firstName} ${createdByMember.lastName}`
+                        const cx = {
+                          'chat-channel-message': true,
+                          sender: auth.user?._id === message.createdBy,
+                          receiver: auth.user?._id !== message.createdBy,
+                        }
 
-                      const createdByMemberName = `${createdByMember.firstName} ${createdByMember.lastName}`
-                      const cx = {
-                        'chat-channel-message': true,
-                        sender: auth.user?._id === message.createdBy,
-                        receiver: auth.user?._id !== message.createdBy,
-                      }
+                        const classes = classNames(cx)
 
-                      const classes = classNames(cx)
-
-                      return (
-                        <div key={message._id} className={classes}>
-                          <div className="chat-channel-message-avatar">
-                            {createdByMemberName.charAt(0).toUpperCase()}
-                          </div>
-                          <div className="chat-channel-message-body">
-                            <div className="chat-channel-message-details">
-                              <div
-                                className="chat-channel-message-member"
-                                onClick={() => setOpenDetails(!openDetails)}
-                              >
-                                {createdByMemberName}
-                              </div>
-
-                              <div className="chat-channel-message-date">
-                                {dayjs(message.updatedAt).format('LT')}
-                              </div>
+                        return (
+                          <div key={message._id} className={classes}>
+                            <div className="chat-channel-message-avatar">
+                              {createdByMemberName.charAt(0).toUpperCase()}
                             </div>
-                            <div
-                              className="chat-channel-message-content"
-                              dangerouslySetInnerHTML={{
-                                __html: renderBody(message.body),
-                              }}
-                            />
-                          </div>
-                        </div>
-                      )
-                    })}
-                </div>
-              </div>
-            )}
+                            <div className="chat-channel-message-body">
+                              <div className="chat-channel-message-details">
+                                <div
+                                  className="chat-channel-message-member"
+                                  onClick={() => setOpenDetails(!openDetails)}
+                                >
+                                  {createdByMemberName}
+                                </div>
 
-          {!messages[activeChannel._id] ||
-            (!messages[activeChannel._id].length && (
-              <div id="chat-channel-empty">
-                <BiChat /> No messages
-              </div>
-            ))}
+                                <div className="chat-channel-message-date">
+                                  {dayjs(message.updatedAt).format('LT')}
+                                </div>
+                              </div>
+                              <div
+                                className="chat-channel-message-content"
+                                dangerouslySetInnerHTML={{
+                                  __html: renderBody(message.body),
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )
+                      })}
+                  </div>
+                </div>
+              )}
+
+            {!messages[activeChannel._id] ||
+              (!messages[activeChannel._id].length && (
+                <div id="chat-channel-empty">
+                  <BiChat /> No messages
+                </div>
+              ))}
+          </div>
 
           {typing && (
             <div id="chat-channel-typing">

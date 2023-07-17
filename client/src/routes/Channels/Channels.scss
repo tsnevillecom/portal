@@ -50,6 +50,11 @@
       font-weight: 600;
     }
 
+    &-body {
+      display: flex;
+      flex: 1;
+    }
+
     &-empty {
       display: flex;
       flex: 1;
@@ -90,12 +95,9 @@
     }
 
     .chat-channel-message {
-      // margin: 8px 0;
       padding: 8px;
-      // padding: 8px 12px;
       border-radius: 12px;
       color: $white;
-      // max-width: 80%;
       line-height: 1.4rem;
       white-space: pre-wrap;
       display: flex;
@@ -150,19 +152,17 @@
         }
       }
 
-      // &.sender {
-      //   align-self: flex-end;
-      //   .chat-channel-message-member {
-      //     color: $blue;
-      //   }
-      // }
+      &.sender {
+        .chat-channel-message-avatar {
+          background-color: $blue;
+        }
+      }
 
-      // &.receiver {
-      //   align-self: flex-start;
-      //   .chat-channel-message-member {
-      //     color: $zinc-400;
-      //   }
-      // }
+      &.receiver {
+        .chat-channel-message-avatar {
+          background-color: $zinc-600;
+        }
+      }
     }
   }
 
