@@ -39,6 +39,8 @@ class AuthController {
     const token = req.session.refreshToken
     const user = req.session.user
 
+    console.log(req.session)
+
     if (!token || !user) return res.sendStatus(204)
 
     try {
@@ -98,6 +100,8 @@ class AuthController {
         token: cookies.refreshToken,
       }).exec()
 
+      console.log(foundToken)
+
       if (foundToken) console.log('token reuse', foundToken)
 
       res.clearCookie('refreshToken', {
@@ -105,6 +109,8 @@ class AuthController {
         sameSite: 'None',
         secure: config.SECURE_COOKIE,
       })
+
+      console.log(res)
     }
 
     try {
@@ -138,6 +144,8 @@ class AuthController {
   public refresh = async (req, res) => {
     const userAgent = req.headers['user-agent'] || ''
     const cookies = req.cookies
+
+    console.log(req.session)
 
     if (!cookies?.refreshToken) {
       return res.status(401).send({ message: errors.UNAUTHORIZED })
