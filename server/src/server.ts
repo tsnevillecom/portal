@@ -65,7 +65,7 @@ class Server {
         console.log('Connected to Redis')
       })
       .on('error', (err) => {
-        console.log('Connected to Redis failed')
+        console.log('Connecting to Redis failed')
       })
 
     this.redisStore = new RedisStore({
@@ -155,18 +155,13 @@ class Server {
     this.app.use(this.validateCredentials)
     this.app.use(cors(corsOptions))
 
-    // this.app.use(
-    //   session({
-    //     secret: 'keyboard cat',
-    //   })
-    // )
-
     this.app.use(
       session({
         secret: config.SESSION_SECRET,
         saveUninitialized: false,
         name: sessions.SESSION_KEY,
         store: this.redisStore,
+        proxy: this.env === 'production',
         cookie: {
           secure: this.env === 'production',
           expires: false,
