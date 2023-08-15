@@ -1,0 +1,52 @@
+@import '@styles/variables';
+
+.nav-tabs {
+  position: relative;
+
+  .nav-tabs-list {
+    padding: 0 8px;
+
+    a,
+    a:hover,
+    a:visited,
+    a:active:hover,
+    a:visited:hover {
+      margin: 0;
+      padding: 8px 16px;
+      color: $white;
+    }
+  }
+
+  &.horizontal {
+    display: flex;
+    flex-direction: column;
+    margin: 0 -24px;
+
+    .nav-tabs-list {
+      display: flex;
+      border-bottom: 1px solid $zinc-600;
+    }
+  }
+
+  &.vertical {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .nav-tab {
+    display: none;
+    padding: 24px;
+    flex: 1;
+
+    &.active {
+      display: block;
+    }
+  }
+
+  .nav-tab-slider {
+    height: 3px;
+    position: absolute;
+    background-color: $blue;
+    transition: width 300ms $curve, left 200ms $curve;
+  }
+}

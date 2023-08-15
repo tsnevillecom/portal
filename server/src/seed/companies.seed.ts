@@ -32,10 +32,18 @@ class CompaniesSeed {
         accountId: '0000000003',
         createdBy: admin._id,
       },
+      {
+        name: 'Zeta Company',
+        accountId: '0000000004',
+        createdBy: admin._id,
+        deleted: true,
+      },
     ]
 
     for (const company of companies) {
-      const foundCompany = await User.exists({ accountId: company.accountId })
+      const foundCompany = await Company.exists({
+        accountId: company.accountId,
+      })
 
       if (foundCompany) {
         console.log(`${company.name} exists`)

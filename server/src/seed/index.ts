@@ -3,6 +3,7 @@ import mongoose from 'mongoose'
 import UsersSeed from './users.seed'
 import ChannelsSeed from './channels.seed'
 import CompaniesSeed from './companies.seed'
+import LocationsSeed from './locations.seed'
 
 class Seed {
   public async initialize() {
@@ -18,6 +19,7 @@ class Seed {
         await new UsersSeed().seed()
         await new ChannelsSeed().seed()
         await new CompaniesSeed().seed()
+        await new LocationsSeed().seed()
         db.close()
         resolve(null)
       })

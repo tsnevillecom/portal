@@ -28,6 +28,11 @@ class CompaniessRouter {
       this.companiesContoller.getUsersByCompanyId
     )
     this.router.get(
+      '/:id/locations',
+      this.authenticate,
+      this.companiesContoller.getLocationsByCompanyId
+    )
+    this.router.get(
       '/:id',
       this.authenticate,
       this.companiesContoller.getCompany

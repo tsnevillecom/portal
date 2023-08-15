@@ -1,6 +1,6 @@
 import Button from '@components/Button'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
-import './Channels.scss'
+import './Chat.scss'
 import { Channel, User } from '@types'
 import _ from 'lodash'
 import React, {
@@ -39,7 +39,7 @@ interface Typing {
   member: User
 }
 
-const Channels = () => {
+const Chat = () => {
   const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
 
@@ -130,7 +130,7 @@ const Channels = () => {
 
   const init = async () => {
     try {
-      const response = await axiosPrivate('/channels/member')
+      const response = await axiosPrivate('/channel/member')
       setChannels(response.data)
       setPageLoaded(true)
     } catch (error) {
@@ -143,7 +143,7 @@ const Channels = () => {
 
     try {
       const response = await axiosPrivate(
-        `/channels/${activeChannel._id}/messages`
+        `/channel/${activeChannel._id}/messages`
       )
       setMessages((previousMessages) => {
         return {
@@ -281,4 +281,4 @@ const Channels = () => {
   )
 }
 
-export default Channels
+export default Chat

@@ -1,11 +1,13 @@
 import { ObjectId } from 'mongodb'
 import Company from '../models/company.model'
 import User from '../models/user.model'
+import Location from '../models/location.model'
+import { log } from 'console'
 
 class CompaniesController {
   public getAllCompanies = async (req, res) => {
     try {
-      const companys = await Company.find({ deleted: false }).exec()
+      const companys = await Company.find().exec()
       res.status(200).send(companys)
     } catch (error) {
       res.status(404).send({ message: error.message })
@@ -20,6 +22,22 @@ class CompaniesController {
         companyId: companyId,
       }).exec()
       res.status(200).send(users)
+    } catch (error) {
+      res.status(404).send({ message: error.message })
+    }
+  }
+
+  public getLocationsByCompanyId = async (req, res) => {
+    const companyId = req.params.id
+
+    console.log(companyId)
+
+    try {
+      const locations = await Location.find({
+        deleted: false,
+        companyId: companyId,
+      }).exec()
+      res.status(200).send(locations)
     } catch (error) {
       res.status(404).send({ message: error.message })
     }

@@ -9,14 +9,16 @@ import Server from './server'
 import MessagesRouter from './routers/messages.router'
 import UsersRouter from './routers/users.router'
 import CompaniessRouter from './routers/companies.router'
+import LocationsRouter from './routers/locations.router'
 
 const server = new Server([
   { path: '/auth', routerClass: new AuthRouter() },
   { path: '/register', routerClass: new RegisterRouter() },
   { path: '/verify', routerClass: new VerifyRouter() },
-  { path: '/channels', routerClass: new ChannelsRouter() },
+  { path: '/channel', routerClass: new ChannelsRouter() },
   { path: '/company', routerClass: new CompaniessRouter() },
   { path: '/messages', routerClass: new MessagesRouter() },
+  { path: '/location', routerClass: new LocationsRouter() },
   { path: '/google', routerClass: new GoogleRouter() },
   { path: '/reset', routerClass: new ResetRouter() },
   { path: '/users', routerClass: new UsersRouter() },

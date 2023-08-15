@@ -13,6 +13,10 @@ section.page {
   &.vertical {
     padding: 24px;
     flex-direction: column;
+
+    > section.page.vertical {
+      padding: 24px 0;
+    }
   }
 
   #page-disabled,

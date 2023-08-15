@@ -11,8 +11,15 @@ const CompanySchema = new Schema(
     accountId: {
       type: String,
       required: true,
+      unique: true,
       trim: true,
     },
+    locations: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Location',
+      },
+    ],
     createdBy: {
       type: Schema.Types.ObjectId,
       ref: 'User',

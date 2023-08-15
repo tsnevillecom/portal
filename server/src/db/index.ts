@@ -8,10 +8,12 @@ const connectDatabase = async () => {
     .once('open', () => console.log('Connected to database'))
     .on('error', (err) => console.error('Failed connecting to database:', err))
 
-  await mongoose.connect(config.DATABASE_URL, {
+  const db = await mongoose.connect(config.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
   } as ConnectOptions)
+
+  console.log(db.models)
 }
 
 export default connectDatabase

@@ -21,8 +21,11 @@ import ResetPasswordVerify from '@routes/ResetPasswordVerify'
 import ResetPasswordEmail from '@routes/ResetPasswordEmail'
 import AccountVerified from '@routes/AccountVerified'
 import ExpiredLink from '@routes/ExpiredLink'
-import Channels from '@routes/Channels'
+import Chat from '@routes/Chat'
 import useTheme from '@hooks/useTheme'
+import AdminChatChannels from '@routes/AdminChatChannels'
+import AdminUsers from '@routes/AdminUsers'
+import AdminCompanies from '@routes/AdminCompanies'
 
 const App = () => {
   useTheme()
@@ -52,8 +55,8 @@ const App = () => {
             <Route element={<AuthenticatedRoute allowedRoles={[]} />}>
               <Route path="/" element={<Home />} />
               <Route path="profile" element={<Profile />} />
-              <Route path="chat" element={<Channels />} />
-              <Route path="chat/:channel" element={<Channels />} />
+              <Route path="chat" element={<Chat />} />
+              <Route path="chat/:channel" element={<Chat />} />
               <Route path="unauthorized" element={<Unauthorized />} />
             </Route>
 
@@ -62,7 +65,11 @@ const App = () => {
                 <AuthenticatedRoute allowedRoles={['admin', 'super-admin']} />
               }
             >
-              <Route path="admin" element={<Admin />} />
+              <Route path="admin" element={<Admin />}>
+                <Route path="users" element={<AdminUsers />} />
+                <Route path="companies" element={<AdminCompanies />} />
+                <Route path="chat-channels" element={<AdminChatChannels />} />
+              </Route>
             </Route>
           </Route>
         </Route>

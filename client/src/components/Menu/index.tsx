@@ -10,7 +10,7 @@ import Sidebar from '@components/Sidebar'
 
 const Menu = () => {
   const { isAdmin, auth } = useAuth()
-  const [open, setOpen] = useState(true)
+  const [open, setOpen] = useState(false)
 
   return (
     <Sidebar id="menu">

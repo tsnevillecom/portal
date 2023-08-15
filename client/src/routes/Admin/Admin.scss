@@ -15,8 +15,12 @@
       tr {
         border-bottom: 1px solid $zinc-800;
 
-        &:hover {
+        &:nth-child(even) {
           background-color: $zinc-800;
+        }
+
+        &:hover {
+          background-color: $zinc-700;
           cursor: pointer;
         }
       }

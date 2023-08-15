@@ -10,7 +10,7 @@ class UsersController {
 
   public getUsers = async (req, res) => {
     try {
-      const users = await User.find({ deleted: false }).exec()
+      const users = await User.find().exec()
       res.status(200).send(users)
     } catch (error) {
       res.status(404).send({ message: error.message })
