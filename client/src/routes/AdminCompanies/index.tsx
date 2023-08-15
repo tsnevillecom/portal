@@ -16,7 +16,7 @@ const AdminCompanies = () => {
 
   const getCompanies = async () => {
     try {
-      const response = await axiosPrivate('/company')
+      const response = await axiosPrivate('/companies')
       setCompanies(response.data)
     } catch (error) {
       console.log(error)
@@ -27,7 +27,7 @@ const AdminCompanies = () => {
 
   const getLocations = async (id: string) => {
     try {
-      const response = await axiosPrivate(`/company/${id}/locations`)
+      const response = await axiosPrivate(`/companies/${id}/locations`)
       setLocations(response.data)
     } catch (error) {
       console.log(error)

@@ -15,7 +15,7 @@ const AdminChatChannels = () => {
 
   const getChatChannels = async () => {
     try {
-      const response = await axiosPrivate('/channel')
+      const response = await axiosPrivate('/channels')
       setChannels(response.data)
     } catch (error) {
       console.log(error)

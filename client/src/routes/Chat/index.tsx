@@ -130,7 +130,7 @@ const Chat = () => {
 
   const init = async () => {
     try {
-      const response = await axiosPrivate('/channel/member')
+      const response = await axiosPrivate('/channels/member')
       setChannels(response.data)
       setPageLoaded(true)
     } catch (error) {
@@ -143,7 +143,7 @@ const Chat = () => {
 
     try {
       const response = await axiosPrivate(
-        `/channel/${activeChannel._id}/messages`
+        `/channels/${activeChannel._id}/messages`
       )
       setMessages((previousMessages) => {
         return {
