@@ -19,6 +19,7 @@ interface iTabs {
 
 interface iTab {
   name: string
+  id?: string
   onActivate?: () => void
 }
 
@@ -113,6 +114,7 @@ const Tabs = ({
           return cloneElement<MergedProps>(child, {
             className: tabClasses,
             key: `tab_${index}`,
+            ...(!!child.props.id && { id: child.props.id }),
           })
         }
         return null
@@ -125,7 +127,12 @@ export default Tabs
 
 export const Tab = ({
   className,
+  id,
   children,
 }: PropsWithChildren<MergedProps>) => {
-  return <div className={className}>{children}</div>
+  return (
+    <div {...(id && { id })} className={className}>
+      {children}
+    </div>
+  )
 }

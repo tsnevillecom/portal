@@ -45,7 +45,7 @@ const Channels = () => {
 
   const { channel } = useParams<{ channel: string | undefined }>()
   const { auth } = useContext(AuthContext)
-  const { socket } = useContext(SocketContext)
+  const { socket, connected } = useContext(SocketContext)
 
   const [pageLoaded, setPageLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -167,7 +167,12 @@ const Channels = () => {
   }
 
   return (
-    <Page id="chat" layout={'horizontal'} isLoading={!pageLoaded}>
+    <Page
+      id="chat"
+      layout={'horizontal'}
+      disabled={!connected}
+      isLoading={!pageLoaded}
+    >
       <Sidebar id="chat-channels" side="left">
         <div id="chat-channels-header">
           <h4>Channels</h4>

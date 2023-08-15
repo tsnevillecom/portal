@@ -2,9 +2,11 @@ import './Page.scss'
 import React, { ReactNode } from 'react'
 import { classNames } from '@utils/classNames.util'
 import Spinner from '@components/Spinner'
+import { HiOutlineShieldExclamation } from 'react-icons/hi'
 
 interface IPage {
   isLoading?: boolean
+  disabled?: boolean
   layout?: 'horizontal' | 'vertical'
   id: string
   title?: string
@@ -13,6 +15,7 @@ interface IPage {
 
 const Page: React.FC<IPage> = ({
   isLoading,
+  disabled,
   title,
   children,
   id,
@@ -20,6 +23,7 @@ const Page: React.FC<IPage> = ({
 }) => {
   const cx = {
     page: true,
+    disabled: !!disabled,
     [layout]: true,
   }
   const classes = classNames(cx)
@@ -27,12 +31,18 @@ const Page: React.FC<IPage> = ({
   return (
     <section id={id} className={classes}>
       {isLoading && (
-        <div id="loader">
+        <div id="page-loader">
           <Spinner size={60} />
         </div>
       )}
 
-      {!isLoading && (
+      {disabled && (
+        <div id="page-disabled">
+          <HiOutlineShieldExclamation size={60} />
+        </div>
+      )}
+
+      {!isLoading && !disabled && (
         <>
           {!!title && <h1>{title}</h1>}
           {children}

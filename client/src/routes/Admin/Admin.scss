@@ -1,0 +1,31 @@
+@import '@styles/variables';
+
+#admin-route {
+  table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+      tr {
+        border-bottom: 2px solid $zinc-700;
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid $zinc-800;
+
+        &:hover {
+          background-color: $zinc-800;
+          cursor: pointer;
+        }
+      }
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 8px 12px;
+    }
+  }
+}

@@ -8,12 +8,14 @@ import VerifyRouter from './routers/verify.router'
 import Server from './server'
 import MessagesRouter from './routers/messages.router'
 import UsersRouter from './routers/users.router'
+import CompaniessRouter from './routers/companies.router'
 
 const server = new Server([
   { path: '/auth', routerClass: new AuthRouter() },
   { path: '/register', routerClass: new RegisterRouter() },
   { path: '/verify', routerClass: new VerifyRouter() },
   { path: '/channels', routerClass: new ChannelsRouter() },
+  { path: '/company', routerClass: new CompaniessRouter() },
   { path: '/messages', routerClass: new MessagesRouter() },
   { path: '/google', routerClass: new GoogleRouter() },
   { path: '/reset', routerClass: new ResetRouter() },

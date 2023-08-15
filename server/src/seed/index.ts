@@ -2,6 +2,7 @@ import connectDatabase from '../db'
 import mongoose from 'mongoose'
 import UsersSeed from './users.seed'
 import ChannelsSeed from './channels.seed'
+import CompaniesSeed from './companies.seed'
 
 class Seed {
   public async initialize() {
@@ -16,6 +17,7 @@ class Seed {
       db.once('open', async () => {
         await new UsersSeed().seed()
         await new ChannelsSeed().seed()
+        await new CompaniesSeed().seed()
         db.close()
         resolve(null)
       })
