@@ -1,8 +1,13 @@
 section.page {
   width: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
   position: relative;
+  overflow-y: hidden;
+  overflow-x: hidden;
+
+  &.scrollable {
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
 
   &.horizontal {
     display: flex;
@@ -15,9 +20,12 @@ section.page {
     padding: 24px;
 
     > section.page.vertical {
-      padding: 24px 0;
-      overflow-y: hidden;
-      overflow-x: hidden;
+      width: auto;
+      height: 100%;
+      margin: 0 -24px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
     }
   }
 
@@ -28,11 +36,20 @@ section.page {
 
     h1 {
       margin-bottom: 0;
+      flex: 1;
     }
 
     > a {
       display: flex;
       margin-right: 6px;
+    }
+
+    .actions {
+      display: flex;
+
+      > *:not(:first-child) {
+        margin-left: 8px;
+      }
     }
   }
 

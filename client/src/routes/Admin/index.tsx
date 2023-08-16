@@ -15,7 +15,7 @@ const Admin = () => {
   })
 
   return (
-    <Page id="admin-route" title="Admin">
+    <Page id="admin-route" title="Admin" scrollable={false}>
       <NavTabs
         links={[
           { name: 'Users', to: 'users' },

@@ -170,6 +170,7 @@ const Chat = () => {
     <Page
       id="chat"
       layout={'horizontal'}
+      scrollable={false}
       disabled={!connected}
       isLoading={!pageLoaded}
     >

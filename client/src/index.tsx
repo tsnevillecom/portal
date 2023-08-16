@@ -6,6 +6,7 @@ import { AuthProvider } from './context/AuthProvider'
 import App from './App'
 import { ToastProvider } from './context/ToastContext'
 import { SocketProvider } from '@context/SocketProvider'
+import { ModalProvider } from '@context/ModalProvider'
 
 const container = document.getElementById('root')
 const root = createRoot(container as Element)
@@ -27,13 +28,15 @@ const root = createRoot(container as Element)
 root.render(
   <BrowserRouter>
     <ToastProvider>
-      <AuthProvider>
-        <SocketProvider>
-          <Routes>
-            <Route path="/*" element={<App />} />
-          </Routes>
-        </SocketProvider>
-      </AuthProvider>
+      <ModalProvider>
+        <AuthProvider>
+          <SocketProvider>
+            <Routes>
+              <Route path="/*" element={<App />} />
+            </Routes>
+          </SocketProvider>
+        </AuthProvider>
+      </ModalProvider>
     </ToastProvider>
   </BrowserRouter>
 )

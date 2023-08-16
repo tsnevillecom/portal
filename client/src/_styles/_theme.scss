@@ -203,6 +203,19 @@ body {
       &:hover {
         color: $blue-500;
       }
+
+      &.danger {
+        color: $red;
+
+        &:hover {
+          color: $red-400;
+        }
+      }
+    }
+
+    a:focus,
+    a:focus-visible {
+      outline: none;
     }
 
     #root {

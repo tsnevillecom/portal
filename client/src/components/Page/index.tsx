@@ -1,5 +1,5 @@
 import './Page.scss'
-import React, { ReactNode } from 'react'
+import React, { ReactElement, ReactNode } from 'react'
 import { classNames } from '@utils/classNames.util'
 import { Link } from 'react-router-dom'
 import { BiSolidLeftArrowCircle } from 'react-icons/bi'
@@ -9,25 +9,30 @@ import { HiOutlineShieldExclamation } from 'react-icons/hi'
 interface IPage {
   isLoading?: boolean
   disabled?: boolean
+  scrollable?: boolean
   layout?: 'horizontal' | 'vertical'
+  actions?: ReactElement[] | ReactElement
   id: string
   title?: string
-  back?: boolean
+  showBack?: boolean
   children: ReactNode
 }
 
 const Page: React.FC<IPage> = ({
   isLoading,
   disabled,
+  actions,
   title,
   children,
   id,
-  back = false,
+  showBack = false,
+  scrollable = true,
   layout = 'vertical',
 }) => {
   const cx = {
     page: true,
     disabled: !!disabled,
+    scrollable: scrollable,
     [layout]: true,
   }
   const classes = classNames(cx)
@@ -48,14 +53,15 @@ const Page: React.FC<IPage> = ({
 
       {!isLoading && !disabled && (
         <>
-          {(back || !!title) && (
+          {(showBack || !!title) && (
             <div className="page-header">
-              {back && (
+              {showBack && (
                 <Link to={-1 as any}>
                   <BiSolidLeftArrowCircle size={30} />
                 </Link>
               )}
               {!!title && <h1>{title}</h1>}
+              {actions && <div className="actions">{actions}</div>}
             </div>
           )}
           {children}

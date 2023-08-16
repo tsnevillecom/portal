@@ -82,9 +82,10 @@
     }
   }
 
-  &:focus {
-    box-shadow: 0 0 5px $blue;
-    border: 1px solid $blue;
+  &:focus,
+  &:focus-visible {
+    box-shadow: 0 0 5px $white;
+    border: 1px solid $white;
   }
 
   span {

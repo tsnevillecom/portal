@@ -27,12 +27,16 @@ import AdminChatChannels from '@routes/AdminChatChannels'
 import AdminUsers from '@routes/AdminUsers'
 import AdminCompanies from '@routes/AdminCompanies'
 import AdminCompany from '@routes/AdminCompany'
+import ModalRoot from './modals/ModalRoot'
 
 const App = () => {
   useTheme()
 
   return (
     <>
+      <ModalRoot />
+      <Toasts />
+
       <Routes>
         <Route element={<PersistLogin />}>
           <Route element={<UnauthenticatedLayout />}>
@@ -81,8 +85,6 @@ const App = () => {
           <Route path="*" element={<Missing />} />
         </Route>
       </Routes>
-
-      <Toasts />
     </>
   )
 }

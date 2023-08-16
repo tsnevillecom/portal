@@ -3,15 +3,20 @@ import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import './AdminCompany.scss'
 import { Company } from '@types'
 import _ from 'lodash'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import dayjs from 'dayjs'
 import Button from '@components/Button'
 import { BiSolidLocationPlus } from 'react-icons/bi'
-import { GrEdit } from 'react-icons/gr'
+import { AiFillDelete } from 'react-icons/ai'
+import { MdModeEditOutline } from 'react-icons/md'
+import { IoIosCloseCircle } from 'react-icons/io'
+import { HiCheckCircle } from 'react-icons/hi'
+import { ModalContext } from '@context/ModalProvider'
 
 const AdminCompany = () => {
   const params = useParams()
+  const { showModal, hideModal } = useContext(ModalContext)
   const axiosPrivate = useAxiosPrivate()
   const [company, setCompany] = useState<Company | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -31,27 +36,53 @@ const AdminCompany = () => {
   }
 
   return (
-    <Page id="admin-company" title="Company" isLoading={isLoading} back={true}>
+    <Page
+      id="admin-company"
+      title={company?.name}
+      isLoading={isLoading}
+      showBack={true}
+      actions={[
+        <Button size="sm" id="edit-company" key="edit">
+          <MdModeEditOutline size={16} />
+          Edit Company
+        </Button>,
+        <Button
+          style="danger"
+          size="sm"
+          id="edit-company"
+          key="delete"
+          disabled={company?.deleted}
+        >
+          <AiFillDelete size={16} />
+          Delete Company
+        </Button>,
+      ]}
+    >
       {company && (
         <>
-          <Button size="sm" id="edit-company">
-            <GrEdit size={16} />
-            Edit
-          </Button>
-
           <div className="company">
-            <div>
-              <div className="company-name">{company.name}</div>
-              <div className="company-account-id">
-                <strong>Account ID:</strong> {company.accountId}
-              </div>
+            <div className="company-status">
+              {company?.deleted ? (
+                <IoIosCloseCircle size={16} color="#dc2626" />
+              ) : (
+                <HiCheckCircle size={16} color="#16a34a" />
+              )}
+              <span>
+                <strong>Status:</strong>{' '}
+                {company?.deleted ? 'Deleted' : 'Active'}
+              </span>
             </div>
-            <div>
-              <div className="company-updated-at">
+            <div className="company-account-id">
+              <span>
+                <strong>Account ID:</strong> {company.accountId}
+              </span>
+            </div>
+            <div className="company-updated-at">
+              <span>
+                {' '}
                 <strong>Last updated:</strong>{' '}
                 {dayjs(company.updatedAt).format('MMMM D, YYYY h:mm A')}
-              </div>
-              <div className="company-id">{company._id}</div>
+              </span>
             </div>
           </div>
 
@@ -61,7 +92,7 @@ const AdminCompany = () => {
             <h3>Locations</h3>
             <Button size="sm">
               <BiSolidLocationPlus size={16} />
-              New
+              New Location
             </Button>
           </div>
 
@@ -84,6 +115,22 @@ const AdminCompany = () => {
                   </div>
 
                   <div className="location-phone">{location.phone}</div>
+                  <div className="location-actions">
+                    <a
+                      onClick={() =>
+                        showModal({
+                          name: 'TEST_MODAL',
+                          data: { some: 'shit' },
+                        })
+                      }
+                    >
+                      Edit
+                    </a>
+                    <span>|</span>
+                    <a className="danger" onClick={hideModal}>
+                      Delete
+                    </a>
+                  </div>
                 </div>
               )
             })}
