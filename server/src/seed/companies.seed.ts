@@ -13,27 +13,27 @@ class CompaniesSeed {
 
     const companies = [
       {
-        name: 'Alpha Company',
+        name: 'Alpha Dental',
         accountId: '0000000000',
         createdBy: admin._id,
       },
       {
-        name: 'Beta Company',
+        name: 'Beta Dental',
         accountId: '0000000001',
         createdBy: admin._id,
       },
       {
-        name: 'Kappa Company',
+        name: 'Kappa Dental',
         accountId: '0000000002',
         createdBy: admin._id,
       },
       {
-        name: 'Delta Company',
+        name: 'Delta Dental',
         accountId: '0000000003',
         createdBy: admin._id,
       },
       {
-        name: 'Zeta Company',
+        name: 'Zeta Dental',
         accountId: '0000000004',
         createdBy: admin._id,
         deleted: true,

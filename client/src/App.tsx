@@ -26,6 +26,7 @@ import useTheme from '@hooks/useTheme'
 import AdminChatChannels from '@routes/AdminChatChannels'
 import AdminUsers from '@routes/AdminUsers'
 import AdminCompanies from '@routes/AdminCompanies'
+import AdminCompany from '@routes/AdminCompany'
 
 const App = () => {
   useTheme()
@@ -68,6 +69,7 @@ const App = () => {
               <Route path="admin" element={<Admin />}>
                 <Route path="users" element={<AdminUsers />} />
                 <Route path="companies" element={<AdminCompanies />} />
+                <Route path="companies/:id" element={<AdminCompany />} />
                 <Route path="chat-channels" element={<AdminChatChannels />} />
               </Route>
             </Route>

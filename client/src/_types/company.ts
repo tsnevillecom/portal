@@ -1,10 +1,11 @@
-import { User } from './user'
+import { User, Location } from './'
 
 export type Company = {
   _id: string
   name: string
   accountId: string
-  locations: string[]
+  locations: Location[]
   createdBy: User
   deleted: boolean
+  updatedAt: string
 }

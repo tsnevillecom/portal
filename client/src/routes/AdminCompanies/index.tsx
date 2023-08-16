@@ -3,11 +3,13 @@ import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import { Company } from '@types'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { MdNavigateNext } from 'react-icons/md'
 
 const AdminCompanies = () => {
+  const navigate = useNavigate()
   const axiosPrivate = useAxiosPrivate()
   const [companies, setCompanies] = useState<Company[]>([])
-  const [locations, setLocations] = useState<Company[]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -21,17 +23,7 @@ const AdminCompanies = () => {
     } catch (error) {
       console.log(error)
     }
-
     setIsLoading(false)
-  }
-
-  const getLocations = async (id: string) => {
-    try {
-      const response = await axiosPrivate(`/companies/${id}/locations`)
-      setLocations(response.data)
-    } catch (error) {
-      console.log(error)
-    }
   }
 
   return (
@@ -51,7 +43,7 @@ const AdminCompanies = () => {
               <tr
                 key={company._id}
                 className="row"
-                onClick={() => getLocations(company._id)}
+                onClick={() => navigate(`/admin/companies/${company._id}`)}
               >
                 <td>{company.name}</td>
                 <td>{company.accountId}</td>

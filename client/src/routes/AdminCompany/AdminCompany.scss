@@ -1,0 +1,88 @@
+@import '@styles/variables';
+
+#admin-company {
+  hr {
+    margin: 24px 0;
+  }
+
+  #edit-company {
+    position: absolute;
+    top: 24px;
+    right: 0;
+  }
+
+  .company {
+    display: flex;
+    flex-direction: column;
+
+    > div {
+      display: flex;
+      align-items: center;
+
+      &:first-child {
+        margin-bottom: 4px;
+      }
+    }
+
+    .company-updated-at {
+      width: 100%;
+      color: $zinc-500;
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    .company-name {
+      flex: 1;
+      color: $white;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .company-account-id {
+      font-size: 14px;
+      font-weight: 300;
+    }
+
+    .company-id {
+      color: $zinc-500;
+      font-size: 14px;
+      font-weight: 300;
+    }
+  }
+
+  .company-locations-header {
+    display: flex;
+
+    h3 {
+      flex: 1;
+    }
+  }
+
+  .company-locations {
+    .location {
+      color: $zinc-400;
+
+      &:not(:last-child) {
+        margin-bottom: 24px;
+      }
+
+      .location-name {
+        color: $white;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .location-address {
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .not-found {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: $zinc-400;
+  }
+}

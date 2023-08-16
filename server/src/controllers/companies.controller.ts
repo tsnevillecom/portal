@@ -30,8 +30,6 @@ class CompaniesController {
   public getLocationsByCompanyId = async (req, res) => {
     const companyId = req.params.id
 
-    console.log(companyId)
-
     try {
       const locations = await Location.find({
         deleted: false,
@@ -47,7 +45,9 @@ class CompaniesController {
     const id = req.params.id
 
     try {
-      const company = await Company.findOne({ _id: id }).exec()
+      const company = await Company.findOne({ _id: id })
+        .populate('locations')
+        .exec()
       res.status(200).send(company)
     } catch (error) {
       res.status(404).send({ message: error.message })

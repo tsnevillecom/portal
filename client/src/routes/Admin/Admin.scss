@@ -20,7 +20,7 @@
         }
 
         &:hover {
-          background-color: $zinc-700;
+          background-color: rgba($blue-700, 0.5);
           cursor: pointer;
         }
       }
@@ -30,6 +30,10 @@
     td {
       text-align: left;
       padding: 8px 12px;
+
+      &.action {
+        width: 48px;
+      }
     }
   }
 }

@@ -1,6 +1,7 @@
 import React, { ReactNode, MouseEvent } from 'react'
 import './Button.scss'
 import { CgSpinner } from 'react-icons/cg'
+import { classNames } from '@utils/classNames.util'
 
 interface ButtonProps {
   children: string | ReactNode
@@ -12,12 +13,14 @@ interface ButtonProps {
   name?: string
   id?: string
   classes?: string
+  size?: 'sm' | 'md' | 'lg'
 }
 
 const defaultProps: ButtonProps = {
   children: '',
   style: 'primary',
   type: 'button',
+  size: 'md',
   disabled: false,
   loading: false,
 }
@@ -25,6 +28,7 @@ const defaultProps: ButtonProps = {
 const Button = ({
   children,
   style,
+  size,
   type,
   onClick,
   disabled,
@@ -33,13 +37,21 @@ const Button = ({
   loading,
   classes,
 }: ButtonProps) => {
+  const cx = {
+    btn: true,
+    [`btn-${style}`]: true,
+    [`btn-${size}`]: true,
+    'btn-loading': loading,
+    [`${classes}`]: !!classes,
+  }
+
+  const buttonClasses = classNames(cx)
+
   const buttonAttr = {
     type,
     name,
     id,
-    className: `btn btn-${style} ${loading ? 'btn-loading' : ''} ${
-      classes ? classes : ''
-    }`,
+    className: buttonClasses,
     ...(onClick && {
       onClick: (e: MouseEvent<HTMLButtonElement>) => onClick(e),
     }),
