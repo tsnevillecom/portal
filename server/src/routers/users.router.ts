@@ -20,15 +20,15 @@ class UsersRouter {
       this.authenticate,
       this.usersController.updateUser
     )
-    this.router.delete(
-      '/:id',
+    this.router.post(
+      '/deactivate/:id',
       this.authenticate,
-      this.usersController.deleteUser
+      this.usersController.deactivateUser
     )
     this.router.patch(
-      '/reinstate/:id',
+      '/reactivate/:id',
       this.authenticate,
-      this.usersController.reinstateUser
+      this.usersController.reactivateeUser
     )
   }
 }

@@ -5,7 +5,7 @@ import PasswordMeter from '@components/PasswordMeter'
 import FormControl from '@components/FormControl'
 import { Errors, Rules } from '@types'
 import _ from 'lodash'
-import { validateForm } from '@utils/validateForm'
+import { validateForm } from '@utils/validateForm.util'
 import axios from '@api/axios'
 import ErrorMessage from '@components/ErrorMessage'
 import SuccessMessage from '@components/SuccessMessage'
@@ -134,7 +134,9 @@ const ResetPasswordVerify = () => {
 
           <PasswordMeter password={password} />
 
-          <Button type="submit" loading={isSubmitting}>Reset Password</Button>
+          <Button type="submit" loading={isSubmitting}>
+            Reset Password
+          </Button>
         </form>
       </>
     )

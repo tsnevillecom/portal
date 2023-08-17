@@ -75,7 +75,7 @@ class AuthController {
     }
 
     const foundUser = await User.findOne({ email }).exec()
-    if (!foundUser || foundUser.deleted) {
+    if (!foundUser || !foundUser.active) {
       return res.status(404).send({ message: errors.NOT_FOUND })
     }
 

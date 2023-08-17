@@ -1,4 +1,3 @@
-import Channel from '../models/channel.model'
 import User from '../models/user.model'
 import crypto from 'crypto'
 import { errors } from '../_constants'
@@ -74,11 +73,11 @@ class UsersController {
     }
   }
 
-  public deleteUser = async (req, res) => {
+  public deactivateUser = async (req, res) => {
     const id = req.params.id
     try {
       const user = await User.findOne({ _id: id }).exec()
-      user.deleted = true
+      user.active = false
       await user.save()
       res.sendStatus(204)
     } catch (error) {
@@ -86,11 +85,11 @@ class UsersController {
     }
   }
 
-  public reinstateUser = async (req, res) => {
+  public reactivateeUser = async (req, res) => {
     const id = req.params.id
     try {
-      const user = await Channel.findOne({ _id: id, deleted: true }).exec()
-      user.deleted = false
+      const user = await User.findOne({ _id: id, active: false }).exec()
+      user.active = true
       await user.save()
       res.sendStatus(204)
     } catch (error) {

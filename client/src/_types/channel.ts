@@ -5,7 +5,7 @@ export type Channel = {
   name: string
   members: User[]
   createdBy: User
-  deleted: boolean
+  active: boolean
   createdAt: string
   updatedAt: string
 }

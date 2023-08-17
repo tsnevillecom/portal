@@ -106,7 +106,7 @@ class Server {
       socket.on('join_channels', async () => {
         const channels = await Channel.find({
           members: { $in: [socket['userId']] },
-          deleted: false,
+          active: true,
         }).distinct('_id')
 
         socket.join(channels.map((c) => c.toString()))

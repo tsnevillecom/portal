@@ -13,6 +13,11 @@ const LocationSchema = new Schema(
       ref: 'Company',
       required: true,
     },
+    taxId: {
+      type: String,
+      required: true,
+      trim: true,
+    },
     phone: {
       type: String,
       trim: true,
@@ -56,9 +61,9 @@ const LocationSchema = new Schema(
       ref: 'User',
       required: true,
     },
-    deleted: {
+    active: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   { timestamps: true }

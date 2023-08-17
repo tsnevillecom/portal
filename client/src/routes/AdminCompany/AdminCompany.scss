@@ -7,6 +7,7 @@
 
   .company {
     display: flex;
+    align-items: center;
 
     > div {
       width: 100%;
@@ -15,11 +16,15 @@
       flex: 1;
     }
 
-    .company-updated-at {
-      color: $zinc-500;
-      font-size: 14px;
+    .company-status {
+      justify-content: flex-start;
+      font-size: 16px;
       font-weight: 300;
-      justify-content: flex-end;
+
+      svg {
+        margin-right: 4px;
+        vertical-align: text-top;
+      }
     }
 
     .company-account-id {
@@ -28,15 +33,11 @@
       justify-content: center;
     }
 
-    .company-status {
-      justify-content: flex-start;
+    .company-updated-at {
+      color: $zinc-500;
       font-size: 14px;
       font-weight: 300;
-
-      svg {
-        margin-right: 4px;
-        vertical-align: text-top;
-      }
+      justify-content: flex-end;
     }
   }
 
@@ -66,8 +67,18 @@
         color: $white;
         font-weight: 700;
         margin-bottom: 8px;
+        font-size: 18px;
       }
 
+      .location-tax-id {
+        margin-bottom: 8px;
+
+        strong {
+          color: $white;
+        }
+      }
+
+      .location-description,
       .location-address,
       .location-phone {
         margin-bottom: 8px;

@@ -38,10 +38,10 @@ class ChannelsSeed {
         members: [superAdmin._id, admin._id, user._id],
       },
       {
-        name: 'Deleted',
+        name: 'Inactive',
         createdBy: superAdmin._id,
         members: [superAdmin._id, admin._id],
-        deleted: true,
+        active: false,
       },
     ]
 

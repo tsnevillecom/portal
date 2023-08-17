@@ -1,4 +1,3 @@
-import { ObjectId } from 'mongodb'
 import Company from '../models/company.model'
 import User from '../models/user.model'
 import Location from '../models/location.model'
@@ -25,13 +24,17 @@ class CompaniesController {
   }
 
   public createLocation = async (req, res) => {
+    const companyId = req.body.companyId
     const location = new Location(req.body)
 
     try {
+      const company = await Company.findById(companyId)
       const user = await User.findOne({ email: req.user.email }).exec()
       location.createdBy = user._id
-      await location.save()
-      res.send(location)
+      const newLocation = await location.save()
+      company.locations.push(newLocation._id)
+      company.save()
+      res.send(newLocation)
     } catch (error) {
       res.status(500).send(error)
     }
@@ -50,15 +53,24 @@ class CompaniesController {
     }
   }
 
-  public deleteLocation = async (req, res) => {
+  public deactivateLocation = async (req, res) => {
     const id = req.params.id
     try {
-      if (!ObjectId.isValid(id)) {
-        return res.status(404).send()
-      }
+      const location = await Location.findOne({ _id: id, active: true }).exec()
+      location.active = false
+      await location.save()
+      res.sendStatus(204)
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  }
 
-      const location = await Location.findOne({ _id: id }).exec()
-      await location.remove()
+  public reactivateLocation = async (req, res) => {
+    const id = req.params.id
+    try {
+      const location = await Location.findOne({ _id: id, active: false }).exec()
+      location.active = true
+      await location.save()
       res.sendStatus(204)
     } catch (error) {
       res.status(500).json({ message: error.message })

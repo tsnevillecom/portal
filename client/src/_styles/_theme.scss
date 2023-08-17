@@ -216,6 +216,23 @@ body {
           color: $red-400;
         }
       }
+
+      &.disabled {
+        color: $zinc;
+        pointer-events: none;
+
+        &:hover {
+          color: $zinc;
+        }
+      }
+
+      &.success {
+        color: $green-600;
+
+        &:hover {
+          color: $green-500;
+        }
+      }
     }
 
     a:focus,

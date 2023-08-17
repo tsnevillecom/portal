@@ -7,6 +7,7 @@ const CompanySchema = new Schema(
       required: true,
       trim: true,
       minlength: 4,
+      unique: true,
     },
     accountId: {
       type: String,
@@ -25,9 +26,9 @@ const CompanySchema = new Schema(
       ref: 'User',
       required: true,
     },
-    deleted: {
+    active: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   { timestamps: true }

@@ -36,7 +36,7 @@ class CompaniesSeed {
         name: 'Zeta Dental',
         accountId: '0000000004',
         createdBy: admin._id,
-        deleted: true,
+        active: false,
       },
     ]
 

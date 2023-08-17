@@ -42,10 +42,15 @@ class CompaniessRouter {
       this.authenticate,
       this.companiesContoller.updateCompany
     )
-    this.router.delete(
-      '/:id',
+    this.router.post(
+      '/deactivate/:id',
       this.authenticate,
-      this.companiesContoller.deleteCompany
+      this.companiesContoller.deactivateCompany
+    )
+    this.router.post(
+      '/reactivate/:id',
+      this.authenticate,
+      this.companiesContoller.reactivateCompany
     )
   }
 }

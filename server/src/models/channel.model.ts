@@ -20,9 +20,9 @@ const ChannelSchema = new Schema(
       ref: 'User',
       required: true,
     },
-    deleted: {
+    active: {
       type: Boolean,
-      default: false,
+      default: true,
     },
   },
   { timestamps: true }

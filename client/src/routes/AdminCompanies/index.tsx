@@ -34,7 +34,7 @@ const AdminCompanies = () => {
             <th>Name</th>
             <th>Account ID</th>
             <th>Location(s)</th>
-            <th>Is deleted?</th>
+            <th>Is active?</th>
           </tr>
         </thead>
         <tbody>
@@ -48,7 +48,7 @@ const AdminCompanies = () => {
                 <td>{company.name}</td>
                 <td>{company.accountId}</td>
                 <td>{company.locations.length}</td>
-                <td>{company.deleted.toString()}</td>
+                <td>{company.active.toString()}</td>
               </tr>
             )
           })}

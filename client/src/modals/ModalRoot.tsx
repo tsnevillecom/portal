@@ -1,10 +1,16 @@
 import React, { FunctionComponent, useContext } from 'react'
 import { ModalContext } from '@context/ModalProvider'
 import { ModalProps } from 'src/_types'
-import ConfirmationModal from './ConfirmDeleteModal'
+import ConfirmDeactivateModal from './ConfirmDeactivateModal'
+import EditLocationModal from './EditLocationModal'
+import ConfirmReactivateModal from './ConfirmReactivateModaltsx'
+import NewLocationModal from './NewLocationModal'
 
 const MODALS_MAP: { [name: string]: FunctionComponent } = {
-  CONFIRMATION: ConfirmationModal,
+  CONFIRM_DEACTIVATE: ConfirmDeactivateModal,
+  CONFIRM_REACTIVATE: ConfirmReactivateModal,
+  EDIT_LOCATION: EditLocationModal,
+  NEW_LOCATION: NewLocationModal,
 }
 
 const ModalRoot = () => {

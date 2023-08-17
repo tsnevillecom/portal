@@ -34,6 +34,9 @@ class LocationsSeed {
         const location = {
           name: `${company.name} - ${city}`,
           companyId: company._id,
+          taxId: `${faker.finance.accountNumber(
+            2
+          )}-${faker.finance.accountNumber(8)}`,
           phone: faker.phone.number(),
           address1: faker.location.streetAddress(),
           address2: `Suite ${faker.location.buildingNumber()}`,
@@ -43,7 +46,7 @@ class LocationsSeed {
           countryCode: 'US',
           description: faker.lorem.paragraph({ min: 0, max: 5 }),
           createdBy: admin._id,
-          deleted: false,
+          active: true,
         }
 
         const newLocation = await new Location(location).save()

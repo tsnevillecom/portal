@@ -5,7 +5,14 @@ import { classNames } from '@utils/classNames.util'
 
 interface ButtonProps {
   children: string | ReactNode
-  style: 'primary' | 'danger' | 'warning' | 'secondary' | 'link' | 'muted'
+  style:
+    | 'primary'
+    | 'danger'
+    | 'warning'
+    | 'secondary'
+    | 'link'
+    | 'muted'
+    | 'success'
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
@@ -52,9 +59,13 @@ const Button = ({
     name,
     id,
     className: buttonClasses,
-    ...(onClick && {
-      onClick: (e: MouseEvent<HTMLButtonElement>) => onClick(e),
+    ...(loading && {
+      onClick: (e: MouseEvent<HTMLButtonElement>) => e.preventDefault(),
     }),
+    ...(!loading &&
+      onClick && {
+        onClick: (e: MouseEvent<HTMLButtonElement>) => onClick(e),
+      }),
     ...(disabled && { disabled }),
   }
 

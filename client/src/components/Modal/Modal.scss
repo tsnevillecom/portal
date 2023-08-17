@@ -24,6 +24,10 @@
     max-height: calc(100% - 64px);
     background-color: $zinc-800;
 
+    > form {
+      overflow: hidden;
+    }
+
     .modal-header {
       padding: 24px;
       display: flex;
@@ -44,6 +48,10 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
+
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
     }
 
     .modal-footer {
@@ -67,5 +75,19 @@
     bottom: 0;
     right: 0;
     left: 0;
+  }
+
+  .dark & {
+    .modal-content {
+      .modal-body {
+        &::-webkit-scrollbar-track {
+          background-color: rgba($white, 0.1);
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: rgba($white, 0.2);
+        }
+      }
+    }
   }
 }

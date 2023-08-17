@@ -74,8 +74,8 @@
 
     textarea {
       color: $zinc-300;
-      border: 1px solid $zinc-700;
-      background-color: rgba($black, 0.5);
+      border: 1px solid rgba($black, 0.5);
+      background-color: rgba($white, 0.1);
 
       &:focus {
         box-shadow: 0 0 3px rgba($zinc-500, 0.3);
@@ -97,6 +97,7 @@
     input[type='password'],
     input[type='email'],
     textarea {
+      color: $gray;
       border: 1px solid $gray-300;
       background-color: $white;
 
@@ -108,10 +109,6 @@
       &::placeholder {
         color: $gray-500;
       }
-    }
-
-    textarea {
-      color: $gray;
     }
   }
 

@@ -31,7 +31,7 @@ const AdminChatChannels = () => {
           <tr>
             <th>Name</th>
             <th>Created by</th>
-            <th>Is deleted?</th>
+            <th>Is active?</th>
           </tr>
         </thead>
         <tbody>
@@ -42,7 +42,7 @@ const AdminChatChannels = () => {
                 <td>
                   {channel.createdBy.firstName} {channel.createdBy.lastName}
                 </td>
-                <td>{channel.deleted.toString()}</td>
+                <td>{channel.active.toString()}</td>
               </tr>
             )
           })}

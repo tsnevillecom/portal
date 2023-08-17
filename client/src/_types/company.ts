@@ -6,6 +6,6 @@ export type Company = {
   accountId: string
   locations: Location[]
   createdBy: User
-  deleted: boolean
+  active: boolean
   updatedAt: string
 }

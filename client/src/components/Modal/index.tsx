@@ -11,6 +11,7 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ title, closeable = true, children }) => {
   const { hideModal } = useContext(ModalContext)
+
   return (
     <>
       <div className="modal">

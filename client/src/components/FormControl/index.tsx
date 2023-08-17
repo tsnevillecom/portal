@@ -47,7 +47,7 @@ const defaultProps: FormControlProps = {
   value: '',
   autoComplete: 'off',
   togglePassword: false,
-  rows: 1,
+  rows: 3,
   maxRows: 4,
 }
 

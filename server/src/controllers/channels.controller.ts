@@ -6,7 +6,7 @@ import Message from '../models/message.model'
 class ChannelsController {
   public getAllChannels = async (req, res) => {
     try {
-      const channels = await Channel.find({ deleted: false }).exec()
+      const channels = await Channel.find({ active: true }).exec()
       res.status(200).send(channels)
     } catch (error) {
       res.status(404).send({ message: error.message })
@@ -17,7 +17,7 @@ class ChannelsController {
     const userId = req.user._id
     try {
       const channels = await Channel.find({
-        deleted: false,
+        active: true,
         members: { $in: [userId] },
       }).exec()
       res.status(200).send(channels)
@@ -94,15 +94,24 @@ class ChannelsController {
     }
   }
 
-  public deleteChannel = async (req, res) => {
+  public deactivateChannel = async (req, res) => {
     const id = req.params.id
     try {
-      if (!ObjectId.isValid(id)) {
-        return res.status(404).send()
-      }
+      const channel = await Channel.findOne({ _id: id, active: true }).exec()
+      channel.active = false
+      await channel.save()
+      res.sendStatus(204)
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  }
 
-      const channel = await Channel.findOne({ _id: id }).exec()
-      await channel.remove()
+  public reactivateChannel = async (req, res) => {
+    const id = req.params.id
+    try {
+      const channel = await Channel.findOne({ _id: id, active: false }).exec()
+      channel.active = true
+      await channel.save()
       res.sendStatus(204)
     } catch (error) {
       res.status(500).json({ message: error.message })

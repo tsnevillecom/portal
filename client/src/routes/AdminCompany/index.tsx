@@ -1,7 +1,7 @@
 import Page from '@components/Page'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import './AdminCompany.scss'
-import { Company } from '@types'
+import { Company, Location } from '@types'
 import _ from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -13,10 +13,11 @@ import { MdModeEditOutline } from 'react-icons/md'
 import { IoIosCloseCircle } from 'react-icons/io'
 import { HiCheckCircle } from 'react-icons/hi'
 import { ModalContext } from '@context/ModalProvider'
+import { formatText } from '@utils/formatText.util'
 
 const AdminCompany = () => {
   const params = useParams()
-  const { showModal, hideModal } = useContext(ModalContext)
+  const { showModal } = useContext(ModalContext)
   const axiosPrivate = useAxiosPrivate()
   const [company, setCompany] = useState<Company | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -26,13 +27,45 @@ const AdminCompany = () => {
   }, [])
 
   const getCompany = async () => {
+    if (!isLoading) setIsLoading(true)
+
     try {
       const response = await axiosPrivate(`/companies/${params.id}`)
       setCompany(response.data)
     } catch (error) {
       console.log(error)
     }
+
     setIsLoading(false)
+  }
+
+  const companyActivation = async () => {
+    setIsLoading(true)
+
+    try {
+      await axiosPrivate.post(
+        `/companies/${company?.active ? 'deactivate' : 'reactivate'}/${
+          params.id
+        }`
+      )
+      await getCompany()
+    } catch (error) {
+      console.log(error)
+      setIsLoading(false)
+    }
+  }
+
+  const locationActivation = async (location: Location) => {
+    try {
+      await axiosPrivate.post(
+        `/locations/${location?.active ? 'deactivate' : 'reactivate'}/${
+          location._id
+        }`
+      )
+      await getCompany()
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
@@ -47,20 +80,21 @@ const AdminCompany = () => {
           Edit Company
         </Button>,
         <Button
-          style="danger"
+          style={company?.active ? 'danger' : 'success'}
           size="sm"
           id="edit-company"
           key="delete"
-          disabled={company?.deleted}
           onClick={() =>
             showModal({
-              name: 'CONFIRMATION',
-              data: { obj: company },
+              name: company?.active
+                ? 'CONFIRM_DEACTIVATE'
+                : 'CONFIRM_REACTIVATE',
+              data: { obj: company, onConfirm: companyActivation },
             })
           }
         >
           <AiFillDelete size={16} />
-          Delete Company
+          {company?.active ? 'Deactivate' : 'Reactivate'}
         </Button>,
       ]}
     >
@@ -68,14 +102,14 @@ const AdminCompany = () => {
         <>
           <div className="company">
             <div className="company-status">
-              {company?.deleted ? (
-                <IoIosCloseCircle size={16} color="#dc2626" />
+              {company?.active ? (
+                <HiCheckCircle size={20} color="#16a34a" />
               ) : (
-                <HiCheckCircle size={16} color="#16a34a" />
+                <IoIosCloseCircle size={20} color="#dc2626" />
               )}
               <span>
                 <strong>Status:</strong>{' '}
-                {company?.deleted ? 'Deleted' : 'Active'}
+                {company?.active ? 'Active' : 'Deactivated'}
               </span>
             </div>
             <div className="company-account-id">
@@ -96,7 +130,15 @@ const AdminCompany = () => {
 
           <div className="company-locations-header">
             <h3>Locations</h3>
-            <Button size="sm">
+            <Button
+              size="sm"
+              onClick={() =>
+                showModal({
+                  name: 'NEW_LOCATION',
+                  data: { companyId: company._id, onSuccess: getCompany },
+                })
+              }
+            >
               <BiSolidLocationPlus size={16} />
               New Location
             </Button>
@@ -104,9 +146,19 @@ const AdminCompany = () => {
 
           <div className="company-locations">
             {_.map(company.locations, (location) => {
+              const enabledActivation =
+                location.active &&
+                _.filter(company.locations, (loc) => {
+                  return !!loc.active
+                }).length > 1
+
               return (
                 <div key={location._id} className="location">
                   <div className="location-name">{location.name}</div>
+
+                  <div className="location-tax-id">
+                    <strong>Tax ID:</strong> {location.taxId}
+                  </div>
 
                   <div className="location-address">
                     <div className="location-address-1">
@@ -121,28 +173,55 @@ const AdminCompany = () => {
                   </div>
 
                   <div className="location-phone">{location.phone}</div>
+
+                  {location.description && (
+                    <div
+                      className="location-description"
+                      dangerouslySetInnerHTML={{
+                        __html: formatText(location.description),
+                      }}
+                    />
+                  )}
+
                   <div className="location-actions">
                     <a
                       onClick={() =>
                         showModal({
-                          name: 'CONFIRMATION',
-                          data: { some: 'shit' },
+                          name: 'EDIT_LOCATION',
+                          data: { location, onSuccess: getCompany },
                         })
                       }
                     >
                       Edit
                     </a>
                     <span>|</span>
-                    <a className="danger" onClick={hideModal}>
-                      Delete
+                    <a
+                      className={
+                        location.active
+                          ? enabledActivation
+                            ? 'danger'
+                            : 'disabled'
+                          : 'success'
+                      }
+                      onClick={() =>
+                        showModal({
+                          name: location?.active
+                            ? 'CONFIRM_DEACTIVATE'
+                            : 'CONFIRM_REACTIVATE',
+                          data: {
+                            obj: location,
+                            onConfirm: () => locationActivation(location),
+                          },
+                        })
+                      }
+                    >
+                      {location?.active ? 'Deactivate' : 'Reactivate'}
                     </a>
                   </div>
                 </div>
               )
             })}
           </div>
-
-          <hr />
         </>
       )}
 

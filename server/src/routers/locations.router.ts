@@ -32,10 +32,15 @@ class LocationsRouter {
       this.authenticate,
       this.locationsController.updateLocation
     )
-    this.router.delete(
-      '/:id',
+    this.router.post(
+      '/deactivate/:id',
       this.authenticate,
-      this.locationsController.deleteLocation
+      this.locationsController.deactivateLocation
+    )
+    this.router.post(
+      '/reactivate/:id',
+      this.authenticate,
+      this.locationsController.reactivateLocation
     )
   }
 }

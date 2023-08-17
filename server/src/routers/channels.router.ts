@@ -42,10 +42,15 @@ class ChannelsRouter {
       this.authenticate,
       this.channelsController.updateChannel
     )
-    this.router.delete(
-      '/:id',
+    this.router.post(
+      '/deactivate/:id',
       this.authenticate,
-      this.channelsController.deleteChannel
+      this.channelsController.deactivateChannel
+    )
+    this.router.post(
+      '/reactivate/:id',
+      this.authenticate,
+      this.channelsController.reactivateChannel
     )
 
     //Channel Members

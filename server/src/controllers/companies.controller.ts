@@ -7,7 +7,7 @@ import { log } from 'console'
 class CompaniesController {
   public getAllCompanies = async (req, res) => {
     try {
-      const companys = await Company.find().exec()
+      const companys = await Company.find().sort({ name: 1 }).exec()
       res.status(200).send(companys)
     } catch (error) {
       res.status(404).send({ message: error.message })
@@ -18,7 +18,7 @@ class CompaniesController {
     const companyId = req.params.id
     try {
       const users = await User.find({
-        deleted: false,
+        active: true,
         companyId: companyId,
       }).exec()
       res.status(200).send(users)
@@ -32,7 +32,7 @@ class CompaniesController {
 
     try {
       const locations = await Location.find({
-        deleted: false,
+        active: true,
         companyId: companyId,
       }).exec()
       res.status(200).send(locations)
@@ -46,7 +46,7 @@ class CompaniesController {
 
     try {
       const company = await Company.findOne({ _id: id })
-        .populate('locations')
+        .populate({ path: 'locations', options: { sort: { name: 1 } } })
         .exec()
       res.status(200).send(company)
     } catch (error) {
@@ -55,7 +55,6 @@ class CompaniesController {
   }
 
   public createCompany = async (req, res) => {
-    console.log(req.user)
     const company = new Company(req.body)
 
     try {
@@ -81,15 +80,24 @@ class CompaniesController {
     }
   }
 
-  public deleteCompany = async (req, res) => {
+  public deactivateCompany = async (req, res) => {
     const id = req.params.id
     try {
-      if (!ObjectId.isValid(id)) {
-        return res.status(404).send()
-      }
+      const company = await Company.findOne({ _id: id, active: true }).exec()
+      company.active = false
+      await company.save()
+      res.sendStatus(204)
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  }
 
-      const company = await Company.findOne({ _id: id }).exec()
-      await company.remove()
+  public reactivateCompany = async (req, res) => {
+    const id = req.params.id
+    try {
+      const company = await Company.findOne({ _id: id, active: false }).exec()
+      company.active = true
+      await company.save()
       res.sendStatus(204)
     } catch (error) {
       res.status(500).json({ message: error.message })

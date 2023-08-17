@@ -12,7 +12,7 @@ interface IUser {
   password: string
   isVerified: boolean
   active: boolean
-  deleted: boolean
+  online: boolean
   avatar: string
   role: string
   fullName: string
@@ -59,13 +59,13 @@ const UserSchema = new Schema<IUser, UserModel, IUserMethods>(
       type: Boolean,
       default: false,
     },
+    online: {
+      type: Boolean,
+      default: false,
+    },
     active: {
       type: Boolean,
       default: true,
-    },
-    deleted: {
-      type: Boolean,
-      default: false,
     },
     avatar: {
       type: String,
