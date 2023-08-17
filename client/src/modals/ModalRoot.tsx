@@ -1,15 +1,10 @@
 import React, { FunctionComponent, useContext } from 'react'
 import { ModalContext } from '@context/ModalProvider'
 import { ModalProps } from 'src/_types'
-
-const Test: React.FC = (modalData) => {
-  console.log(modalData)
-
-  return <div style={{ color: 'yellow' }}>Test</div>
-}
+import ConfirmationModal from './ConfirmDeleteModal'
 
 const MODALS_MAP: { [name: string]: FunctionComponent } = {
-  TEST_MODAL: Test,
+  CONFIRMATION: ConfirmationModal,
 }
 
 const ModalRoot = () => {

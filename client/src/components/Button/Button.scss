@@ -52,6 +52,16 @@
     }
   }
 
+  &.btn-muted {
+    background-color: $zinc-700;
+    color: $white;
+    border-color: $zinc-700;
+
+    &:hover {
+      background-color: darken($zinc-700, 5%);
+    }
+  }
+
   &.btn-success {
     background-color: $green;
     color: $white;
@@ -82,11 +92,11 @@
     }
   }
 
-  &:focus,
-  &:focus-visible {
-    box-shadow: 0 0 5px $white;
-    border: 1px solid $white;
-  }
+  // &:focus,
+  // &:focus-visible {
+  //   box-shadow: 0 0 5px $white;
+  //   border: 1px solid $white;
+  // }
 
   span {
     flex: 1;

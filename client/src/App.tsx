@@ -28,6 +28,7 @@ import AdminUsers from '@routes/AdminUsers'
 import AdminCompanies from '@routes/AdminCompanies'
 import AdminCompany from '@routes/AdminCompany'
 import ModalRoot from './modals/ModalRoot'
+import Modal from '@components/Modal'
 
 const App = () => {
   useTheme()

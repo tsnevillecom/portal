@@ -1,0 +1,71 @@
+@import '@styles/variables';
+@import '@styles/mixins';
+
+.modal {
+  @include z-index(modal);
+  display: flex;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+
+  .modal-content {
+    display: flex;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-direction: column;
+    position: relative;
+    z-index: 907;
+    width: 100%;
+    max-width: 640px;
+    max-height: calc(100% - 64px);
+    background-color: $zinc-800;
+
+    .modal-header {
+      padding: 24px;
+      display: flex;
+      background-color: $zinc-900;
+
+      h1 {
+        margin: 0;
+        flex: 1;
+      }
+
+      .modal-close {
+        cursor: pointer;
+      }
+    }
+
+    .modal-body {
+      padding: 24px;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      background-color: rgba($zinc-900, 0.1);
+      border-top: 1px solid $zinc-900;
+      display: flex;
+      justify-content: flex-end;
+
+      .btn {
+        margin-left: 8px;
+      }
+    }
+  }
+
+  .modal-bg {
+    background-color: rgba($black, 0.8);
+    z-index: 906;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+  }
+}

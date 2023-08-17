@@ -39,8 +39,8 @@ a {
 
 hr {
   height: 1px;
-  border: none;
   margin: 8px 0;
+  border: 0;
 }
 
 ul {
@@ -140,6 +140,28 @@ form {
   overflow: hidden;
   border-top: 6px solid $blue;
 
+  p {
+    margin-bottom: 8px;
+    line-height: 1.6;
+
+    &:only-child,
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &.small {
+      font-size: 14px;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    &.callout {
+      text-align: center;
+      margin: 8px 0;
+    }
+  }
+
   main {
     display: flex;
     flex-direction: column;
@@ -147,23 +169,6 @@ form {
     flex: 1;
     overflow: hidden;
     position: relative;
-
-    p {
-      margin-bottom: 8px;
-      line-height: 1.6;
-
-      &.small {
-        font-size: 14px;
-        line-height: 1.2;
-        margin-bottom: 16px;
-        text-align: center;
-      }
-
-      &.callout {
-        text-align: center;
-        margin: 8px 0;
-      }
-    }
 
     &.unauthenticated {
       display: flex;
@@ -192,7 +197,7 @@ body {
     background-color: #1a1a1a;
 
     hr {
-      background-color: rgba($white, 0.2);
+      border-top: 1px solid rgba($white, 0.2);
     }
 
     a,

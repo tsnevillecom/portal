@@ -5,7 +5,7 @@ import { classNames } from '@utils/classNames.util'
 
 interface ButtonProps {
   children: string | ReactNode
-  style: 'primary' | 'danger' | 'warning' | 'secondary' | 'link'
+  style: 'primary' | 'danger' | 'warning' | 'secondary' | 'link' | 'muted'
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean

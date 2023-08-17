@@ -52,6 +52,12 @@ const AdminCompany = () => {
           id="edit-company"
           key="delete"
           disabled={company?.deleted}
+          onClick={() =>
+            showModal({
+              name: 'CONFIRMATION',
+              data: { obj: company },
+            })
+          }
         >
           <AiFillDelete size={16} />
           Delete Company
@@ -119,7 +125,7 @@ const AdminCompany = () => {
                     <a
                       onClick={() =>
                         showModal({
-                          name: 'TEST_MODAL',
+                          name: 'CONFIRMATION',
                           data: { some: 'shit' },
                         })
                       }
