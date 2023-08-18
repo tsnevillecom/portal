@@ -115,9 +115,12 @@ const AdminLocation = () => {
               <div className="location-description-label">
                 <strong>Description</strong>
               </div>
-              <div className="location-description">
-                {formatText(location.description)}
-              </div>
+              <div
+                className="location-description"
+                dangerouslySetInnerHTML={{
+                  __html: formatText(location.description),
+                }}
+              />
             </>
           )}
         </div>
