@@ -4,7 +4,7 @@ import Modal from '@components/Modal'
 import ModalBody from '@components/Modal/ModalBody'
 import ModalFooter from '@components/Modal/ModalFooter'
 import { ModalContext } from '@context/ModalProvider'
-import { Errors, NewLocation, Rules } from '@types'
+import { Company, Errors, Location, Rules } from '@types'
 import { trimObjValues } from '@utils/trimObjectValues'
 import { validateForm } from '@utils/validateForm.util'
 import _ from 'lodash'
@@ -18,24 +18,13 @@ import React, {
 import ErrorMessage from '@components/ErrorMessage'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 
-interface NewLocationModalProps {
-  companyId: string
+interface EditCompanyModalProps {
+  company: Company
   onSuccess: () => void
 }
 
-const initialLocationState = {
-  name: '',
-  taxId: '',
-  phone: '',
-  address1: '',
-  city: '',
-  state: '',
-  postalCode: '',
-  active: true,
-}
-
-const NewLocationModal: React.FC<NewLocationModalProps> = ({
-  companyId,
+const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
+  company: originalCompany,
   onSuccess,
 }) => {
   const axiosPrivate = useAxiosPrivate()
@@ -43,8 +32,9 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
 
   const nameRef = useRef<HTMLInputElement>(null)
 
+  const [isDirty, setIsDirty] = useState(false)
   const [errors, setErrors] = useState<Errors>({})
-  const [location, setLocation] = useState<NewLocation>(initialLocationState)
+  const [company, setCompany] = useState<Company>(originalCompany)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<ReactNode | string | null>(
     null
@@ -54,19 +44,28 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
     if (nameRef.current) nameRef.current.focus()
   }, [])
 
+  useEffect(() => {
+    const isDirty = !_.isEqual(originalCompany, location)
+    setIsDirty(isDirty)
+  }, [company])
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
+    if (!isDirty) {
+      hideModal()
+      return
+    }
+
     const data = {
       ...trimObjValues(location),
-      companyId,
     }
 
     const rules: Rules = {
       name: {
         required: true,
       },
-      taxId: {
+      accountId: {
         required: true,
       },
       phone: {
@@ -93,12 +92,12 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
     setIsSubmitting(true)
 
     try {
-      await axiosPrivate.post('/locations', data)
+      await axiosPrivate.patch(`/companies/${company._id}`, data)
       onSuccess()
       hideModal()
     } catch (error) {
       console.log(error)
-      setSubmitError('Could not create new location. Try again.')
+      setSubmitError('Could not update company. Try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -108,12 +107,12 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
     const { name, value } = e.target
     if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
-    const loc = { ...location, ...{ [name]: value } }
-    setLocation(loc)
+    const updatedCompanu = { ...company, ...{ [name]: value } }
+    setCompany(updatedCompanu)
   }
 
   return (
-    <Modal title="New Location">
+    <Modal title="Edit Company">
       <form onSubmit={handleSubmit}>
         <ModalBody>
           {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
@@ -122,23 +121,23 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
             label="Name"
             forRef={nameRef}
             name="name"
-            value={location.name}
+            value={company.name}
             error={errors.name}
             onChange={handleInputChange}
           />
 
           <FormControl
-            label="Tax ID"
-            name="taxId"
-            value={location.taxId}
-            error={errors.taxId}
+            label="Account ID"
+            name="accountId"
+            value={company.accountId}
+            error={errors.accountId}
             onChange={handleInputChange}
           />
 
           <FormControl
             label="Phone"
             name="phone"
-            value={location.phone}
+            value={company.phone}
             error={errors.phone}
             onChange={handleInputChange}
           />
@@ -146,7 +145,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
           <FormControl
             label="Address 1"
             name="address1"
-            value={location.address1}
+            value={company.address1}
             error={errors.address1}
             onChange={handleInputChange}
           />
@@ -155,7 +154,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
             label="Address 2"
             name="address2"
             required={false}
-            value={location.address2}
+            value={company.address2}
             error={errors.address2}
             onChange={handleInputChange}
           />
@@ -163,7 +162,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
           <FormControl
             label="City"
             name="city"
-            value={location.city}
+            value={company.city}
             error={errors.city}
             onChange={handleInputChange}
           />
@@ -171,7 +170,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
           <FormControl
             label="State"
             name="state"
-            value={location.state}
+            value={company.state}
             error={errors.state}
             onChange={handleInputChange}
           />
@@ -179,18 +178,8 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
           <FormControl
             label="Postal Code"
             name="postalCode"
-            value={location.postalCode}
+            value={company.postalCode}
             error={errors.postalCode}
-            onChange={handleInputChange}
-          />
-
-          <FormControl
-            label="Description"
-            name="description"
-            textarea={true}
-            required={false}
-            value={location.description}
-            error={errors.description}
             onChange={handleInputChange}
           />
         </ModalBody>
@@ -207,4 +196,4 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
   )
 }
 
-export default NewLocationModal
+export default EditCompanyModal

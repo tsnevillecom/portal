@@ -10,14 +10,15 @@ import Sidebar from '@components/Sidebar'
 
 const Menu = () => {
   const { isAdmin, auth } = useAuth()
-  const [open, setOpen] = useState(false)
+  const [openUserMenu, setOpenUserMenu] = useState(false)
+  const [openAdmin, setOpenAdmin] = useState(true)
 
   return (
     <Sidebar id="menu">
       <div className="sidebar-header">Portal</div>
       <div
-        className={`sidebar-user ${open ? 'open' : ''}`}
-        onClick={() => setOpen(!open)}
+        className={`sidebar-user ${openUserMenu ? 'open' : ''}`}
+        onClick={() => setOpenUserMenu(!openUserMenu)}
       >
         <span className="sidebar-user-avatar">
           <FaUserCircle />
@@ -25,7 +26,7 @@ const Menu = () => {
         <span className="sidebar-user-name">
           {auth.user?.firstName} {auth.user?.lastName}
         </span>
-        <span className="sidebar-user-caret">
+        <span className="caret">
           <RxCaretDown size={24} />
         </span>
       </div>
@@ -54,12 +55,34 @@ const Menu = () => {
             <span>Chat</span>
           </NavLink>
           {isAdmin && (
-            <NavLink to="/admin">
-              <span>
-                <BiShield />
-              </span>
-              <span>Admin</span>
-            </NavLink>
+            <div id="admin-menu" className={openAdmin ? 'open' : ''}>
+              <div
+                id="admin-menu-trigger"
+                onClick={() => setOpenAdmin(!openAdmin)}
+              >
+                <span>
+                  <BiShield />
+                </span>
+                <span id="admin-menu-trigger-text">Admin</span>
+                <span className="caret">
+                  <RxCaretDown size={24} />
+                </span>
+              </div>
+              <div id="admin-menu-items">
+                <NavLink to="/admin/users">
+                  <span>•</span>
+                  <span>Users</span>
+                </NavLink>
+                <NavLink to="/admin/companies">
+                  <span>•</span>
+                  <span>Companies</span>
+                </NavLink>
+                <NavLink to="/admin/chat-channels">
+                  <span>•</span>
+                  <span>Chat</span>
+                </NavLink>
+              </div>
+            </div>
           )}
         </nav>
       </div>

@@ -13,40 +13,34 @@ class LocationsSeed {
       role: ROLES.ADMIN,
     })
 
-    const companies = await Company.find({
-      accountId: {
-        $in: [
-          '0000000000',
-          '0000000001',
-          '0000000002',
-          '0000000003',
-          '0000000004',
-        ],
-      },
-    })
+    const companies = await Company.find()
 
     for (const company of companies) {
-      const x = Math.floor(Math.random() * 4 + 1)
+      const max = 8
+      const min = 3
+      const x = Math.floor(Math.random() * (max - min + 1) + min)
 
       for (let i = 0; i < x; i++) {
         const city = faker.location.city()
 
         const location = {
-          name: `${company.name} - ${city}`,
+          name: city,
           companyId: company._id,
           taxId: `${faker.finance.accountNumber(
             2
           )}-${faker.finance.accountNumber(8)}`,
           phone: faker.phone.number(),
           address1: faker.location.streetAddress(),
-          address2: `Suite ${faker.location.buildingNumber()}`,
+          address2:
+            Math.random() < 0.5
+              ? `Suite ${faker.location.buildingNumber()}`
+              : '',
           city: city,
           state: faker.location.state({ abbreviated: true }),
           postalCode: faker.location.zipCode(),
-          countryCode: 'US',
           description: faker.lorem.paragraph({ min: 0, max: 5 }),
           createdBy: admin._id,
-          active: true,
+          active: company.active,
         }
 
         const newLocation = await new Location(location).save()

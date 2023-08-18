@@ -32,9 +32,7 @@ const ConfirmDeactivateModal: React.FC<ConfirmDeactivateModalProps> = ({
         <Button style="muted" onClick={hideModal}>
           Cancel
         </Button>
-        <Button style="danger" onClick={confirm}>
-          Deactivate
-        </Button>
+        <Button onClick={confirm}>Deactivate</Button>
       </ModalFooter>
     </Modal>
   )

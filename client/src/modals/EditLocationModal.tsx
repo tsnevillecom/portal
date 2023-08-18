@@ -107,8 +107,8 @@ const EditLocationModal: React.FC<EditLocationModalProps> = ({
     const { name, value } = e.target
     if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
-    const loc = { ...location, ...{ [name]: value } }
-    setLocation(loc)
+    const updatedLocation = { ...location, ...{ [name]: value } }
+    setLocation(updatedLocation)
   }
 
   return (

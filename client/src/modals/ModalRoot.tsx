@@ -5,10 +5,12 @@ import ConfirmDeactivateModal from './ConfirmDeactivateModal'
 import EditLocationModal from './EditLocationModal'
 import ConfirmReactivateModal from './ConfirmReactivateModaltsx'
 import NewLocationModal from './NewLocationModal'
+import EditCompanyModal from './EditCompanyModal'
 
 const MODALS_MAP: { [name: string]: FunctionComponent } = {
   CONFIRM_DEACTIVATE: ConfirmDeactivateModal,
   CONFIRM_REACTIVATE: ConfirmReactivateModal,
+  EDIT_COMPANY: EditCompanyModal,
   EDIT_LOCATION: EditLocationModal,
   NEW_LOCATION: NewLocationModal,
 }

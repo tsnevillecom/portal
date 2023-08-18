@@ -27,7 +27,7 @@
         display: flex;
         flex-direction: column;
 
-        a {
+        > a {
           padding: 8px 16px;
           border-radius: 32px;
           color: $zinc-400;
@@ -38,7 +38,6 @@
 
           span {
             display: flex;
-            align-items: center;
 
             &:first-child {
               width: 30px;
@@ -88,7 +87,7 @@
         }
 
         &.sidebar-user-avatar,
-        &.sidebar-user-caret {
+        &.caret {
           opacity: 0.5;
         }
       }
@@ -103,6 +102,81 @@
 
       .sidebar-user-menu-items {
         padding: 24px;
+      }
+    }
+
+    #admin-menu {
+      background-color: darken($zinc-800, 5%);
+      border-radius: 16px;
+      overflow: hidden;
+      transition: height 170ms ease-out;
+      height: 40px;
+
+      &.open {
+        height: 150px;
+      }
+
+      #admin-menu-trigger {
+        padding: 8px 16px;
+        border-radius: 32px;
+        color: $zinc-400;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        span {
+          display: flex;
+
+          &:first-child {
+            width: 30px;
+            transition: width 120ms ease-out;
+          }
+
+          &#admin-menu-trigger-text {
+            flex: 1;
+          }
+        }
+      }
+
+      #admin-menu-items {
+        display: flex;
+        flex-direction: column;
+
+        > a {
+          padding: 8px 8px 8px 30px;
+          color: $zinc-400;
+          display: flex;
+          align-items: center;
+
+          span {
+            display: flex;
+
+            &:first-child {
+              width: 16px;
+              transition: width 120ms ease-out;
+            }
+          }
+
+          &.active {
+            span {
+              font-weight: 600;
+
+              &:last-child {
+                color: $white;
+              }
+            }
+          }
+
+          &:hover {
+            background-color: darken($zinc-900, 2%);
+
+            span {
+              &:first-child {
+                width: 18px;
+              }
+            }
+          }
+        }
       }
     }
 

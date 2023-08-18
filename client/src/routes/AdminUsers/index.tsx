@@ -39,7 +39,7 @@ const AdminUsers = () => {
         <tbody>
           {_.map(users, (user) => {
             return (
-              <tr key={user._id} className="row">
+              <tr key={user._id}>
                 <td>{user.lastName}</td>
                 <td>{user.firstName}</td>
                 <td>{user.email}</td>

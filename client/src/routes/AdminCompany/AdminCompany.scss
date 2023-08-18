@@ -1,8 +1,17 @@
 @import '@styles/variables';
+@import '@styles/mixins';
 
 #admin-company {
   hr {
     margin: 24px 0;
+  }
+
+  section.page.vertical {
+    border-top: 1px solid rgba($white, 0.2);
+    background-color: rgba($black, 0.2);
+    box-shadow: inset 0px 20px 10px -20px $black;
+    margin-top: 40px;
+    padding-top: 40px;
   }
 
   .company {
@@ -49,47 +58,30 @@
     }
   }
 
-  .company-locations {
-    .location {
-      color: $zinc-400;
-      padding: 12px;
-      border-radius: 8px;
+  .location {
+    .location-details {
+      margin-bottom: 24px;
 
-      &:hover {
-        background-color: rgba($white, 0.04);
-      }
-
-      &:not(:last-child) {
+      > div {
         margin-bottom: 8px;
       }
 
-      .location-name {
-        color: $white;
-        font-weight: 700;
-        margin-bottom: 8px;
-        font-size: 18px;
+      .location-address {
+        display: flex;
       }
+    }
 
-      .location-tax-id {
-        margin-bottom: 8px;
+    strong {
+      color: $white;
+      margin-right: 8px;
+    }
 
-        strong {
-          color: $white;
-        }
-      }
+    .location-description-label {
+      margin-bottom: 8px;
+    }
 
-      .location-description,
-      .location-address,
-      .location-phone {
-        margin-bottom: 8px;
-      }
-
-      .location-actions {
-        span {
-          color: $zinc-600;
-          margin: 0 8px;
-        }
-      }
+    .location-description {
+      margin-bottom: 8px;
     }
   }
 

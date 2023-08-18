@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router-dom'
 import Login from '@routes/Login'
 import Missing from '@routes/Missing'
 import Home from '@routes/Home'
-import Admin from '@routes/Admin'
 import Profile from '@routes/Profile'
 
 import MainLayout from './layouts/Main.layout'
@@ -28,7 +27,8 @@ import AdminUsers from '@routes/AdminUsers'
 import AdminCompanies from '@routes/AdminCompanies'
 import AdminCompany from '@routes/AdminCompany'
 import ModalRoot from './modals/ModalRoot'
-import Modal from '@components/Modal'
+import AdminLocations from '@routes/AdminLocations'
+import AdminLocation from '@routes/AdminLocation'
 
 const App = () => {
   useTheme()
@@ -67,16 +67,21 @@ const App = () => {
             </Route>
 
             <Route
+              path="admin"
               element={
                 <AuthenticatedRoute allowedRoles={['admin', 'super-admin']} />
               }
             >
-              <Route path="admin" element={<Admin />}>
-                <Route path="users" element={<AdminUsers />} />
-                <Route path="companies" element={<AdminCompanies />} />
-                <Route path="companies/:id" element={<AdminCompany />} />
-                <Route path="chat-channels" element={<AdminChatChannels />} />
+              <Route path="users" element={<AdminUsers />} />
+              <Route path="companies" element={<AdminCompanies />} />
+              <Route path="companies/:companyId" element={<AdminCompany />}>
+                <Route path="" element={<AdminLocations />} />
+                <Route
+                  path="locations/:locationId"
+                  element={<AdminLocation />}
+                />
               </Route>
+              <Route path="chat-channels" element={<AdminChatChannels />} />
             </Route>
           </Route>
         </Route>

@@ -77,3 +77,19 @@ const NavTabs = ({ id, layout = 'horizontal', links }: iTabs) => {
 }
 
 export default NavTabs
+
+{
+  /*
+ 
+// Example
+
+<NavTabs
+  links={[
+    { name: 'Users', to: 'users' },
+    { name: 'Companies', to: 'companies' },
+    { name: 'Chat Channels', to: 'chat-channels' },
+  ]}
+/> 
+
+*/
+}

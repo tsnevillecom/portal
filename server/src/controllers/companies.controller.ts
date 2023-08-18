@@ -32,7 +32,6 @@ class CompaniesController {
 
     try {
       const locations = await Location.find({
-        active: true,
         companyId: companyId,
       }).exec()
       res.status(200).send(locations)
@@ -86,6 +85,13 @@ class CompaniesController {
       const company = await Company.findOne({ _id: id, active: true }).exec()
       company.active = false
       await company.save()
+
+      await Location.updateMany(
+        { _id: { $in: company.locations } },
+        { $set: { active: false } },
+        { multi: true }
+      )
+
       res.sendStatus(204)
     } catch (error) {
       res.status(500).json({ message: error.message })

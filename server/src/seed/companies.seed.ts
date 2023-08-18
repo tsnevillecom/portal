@@ -1,6 +1,7 @@
 import ROLES from '../config/roles'
 import Company from '../models/company.model'
 import User from '../models/user.model'
+import { faker } from '@faker-js/faker'
 
 class CompaniesSeed {
   public seed = async (): Promise<void> => {
@@ -11,34 +12,30 @@ class CompaniesSeed {
       role: ROLES.ADMIN,
     })
 
-    const companies = [
-      {
-        name: 'Alpha Dental',
-        accountId: '0000000000',
+    const companies = []
+
+    for (let i = 0; i < 8; i++) {
+      const city = faker.location.city()
+
+      const company = {
+        name: faker.company.name(),
+        accountId: `${faker.finance.accountNumber(
+          2
+        )}-${faker.finance.accountNumber(8)}`,
+        type: Math.random() < 0.5 ? 'DSO' : 'PRIVATE',
+        phone: faker.phone.number(),
+        address1: faker.location.streetAddress(),
+        address2:
+          Math.random() < 0.5 ? `Suite ${faker.location.buildingNumber()}` : '',
+        city: city,
+        state: faker.location.state({ abbreviated: true }),
+        postalCode: faker.location.zipCode('#####'),
         createdBy: admin._id,
-      },
-      {
-        name: 'Beta Dental',
-        accountId: '0000000001',
-        createdBy: admin._id,
-      },
-      {
-        name: 'Kappa Dental',
-        accountId: '0000000002',
-        createdBy: admin._id,
-      },
-      {
-        name: 'Delta Dental',
-        accountId: '0000000003',
-        createdBy: admin._id,
-      },
-      {
-        name: 'Zeta Dental',
-        accountId: '0000000004',
-        createdBy: admin._id,
-        active: false,
-      },
-    ]
+        active: Math.random() < 0.5,
+      }
+
+      companies.push(company)
+    }
 
     for (const company of companies) {
       const foundCompany = await Company.exists({

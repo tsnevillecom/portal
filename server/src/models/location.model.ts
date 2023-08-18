@@ -20,10 +20,12 @@ const LocationSchema = new Schema(
     },
     phone: {
       type: String,
+      required: true,
       trim: true,
     },
     address1: {
       type: String,
+      required: true,
       trim: true,
     },
     address2: {
@@ -38,17 +40,20 @@ const LocationSchema = new Schema(
     state: {
       type: String,
       trim: true,
+      required: true,
       minLength: 2,
       maxLength: 2,
     },
     postalCode: {
       type: String,
       trim: true,
+      required: true,
       minLength: 5,
     },
     countryCode: {
       type: String,
       trim: true,
+      default: 'US',
       minLength: 2,
       maxLength: 2,
     },

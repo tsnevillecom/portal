@@ -37,7 +37,7 @@ const AdminChatChannels = () => {
         <tbody>
           {_.map(channels, (channel) => {
             return (
-              <tr key={channel._id} className="row">
+              <tr key={channel._id}>
                 <td>{channel.name}</td>
                 <td>
                   {channel.createdBy.firstName} {channel.createdBy.lastName}

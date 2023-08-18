@@ -14,7 +14,6 @@ interface IPage {
   actions?: ReactElement[] | ReactElement
   id: string
   title?: string
-  showBack?: boolean
   children: ReactNode
 }
 
@@ -25,7 +24,6 @@ const Page: React.FC<IPage> = ({
   title,
   children,
   id,
-  showBack = false,
   scrollable = true,
   layout = 'vertical',
 }) => {
@@ -53,13 +51,8 @@ const Page: React.FC<IPage> = ({
 
       {!isLoading && !disabled && (
         <>
-          {(showBack || !!title) && (
+          {!!title && (
             <div className="page-header">
-              {showBack && (
-                <Link to={-1 as any}>
-                  <BiSolidLeftArrowCircle size={30} />
-                </Link>
-              )}
               {!!title && <h1>{title}</h1>}
               {actions && <div className="actions">{actions}</div>}
             </div>
