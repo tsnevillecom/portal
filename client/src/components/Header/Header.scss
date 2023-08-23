@@ -10,7 +10,7 @@
   width: 100%;
   flex-shrink: 0;
   user-select: none;
-  background-color: $zinc-800;
+  background-color: var(--bg-secondary);
 
   #search {
     display: flex;
@@ -18,24 +18,27 @@
     height: 100%;
     position: relative;
     align-items: center;
+    padding-right: 24px;
   }
 
-  .btn-link {
-    height: 100%;
+  #header-menu {
     display: flex;
+    height: 100%;
     position: relative;
     align-items: center;
-    padding: 0 16px;
 
-    &:hover {
-      background: rgba($black, 0.2);
+    a,
+    a:active {
+      color: var(--tint);
+
+      &:not(:first-child) {
+        margin-left: 16px;
+      }
+
+      &:hover,
+      &:focus {
+        color: var(--tint-80);
+      }
     }
-  }
-
-  #user-menu {
-    display: flex;
-    height: 100%;
-    position: relative;
-    align-items: center;
   }
 }

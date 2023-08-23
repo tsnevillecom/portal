@@ -23,6 +23,7 @@
     top: 33px;
     right: 10px;
     cursor: pointer;
+    color: rgba($white, 0.4);
   }
 
   input[type='text'],
@@ -34,8 +35,18 @@
     outline: none;
     padding: 8px 10px;
     width: 100%;
+    display: block;
+    border: 1px solid var(--black-20);
+    background-color: var(--tint-4);
+    color: $white;
+
+    &:focus {
+      box-shadow: 0 0 5px var(--primary-color-20);
+      border: 1px solid var(--primary-color);
+    }
 
     &::placeholder {
+      color: var(--tint-50);
       font-weight: 400;
     }
   }
@@ -44,72 +55,7 @@
     font-family: 'Roboto', sans-serif;
     resize: none;
     line-height: 26px;
-    font-size: 0.9rem;
     overflow-x: hidden;
-    padding: 8px 10px;
-    display: block;
-  }
-
-  html[data-theme='dark'] & {
-    #viewPassword {
-      color: rgba($white, 0.4);
-    }
-
-    input[type='text'],
-    input[type='password'],
-    input[type='email'] {
-      border: 1px solid rgba($black, 0.5);
-      background-color: rgba($white, 0.1);
-      color: $white;
-
-      &:focus {
-        box-shadow: 0 0 5px rgba(var(--primary-color), 0.5);
-        border: 1px solid rgba(var(--primary-color), 1);
-      }
-
-      &::placeholder {
-        color: rgba($white, 0.5);
-      }
-    }
-
-    textarea {
-      color: $zinc-300;
-      border: 1px solid rgba($black, 0.5);
-      background-color: rgba($white, 0.1);
-
-      &:focus {
-        box-shadow: 0 0 3px rgba($zinc-500, 0.3);
-        border: 1px solid $zinc-500;
-      }
-
-      &::placeholder {
-        color: $zinc-500;
-      }
-    }
-  }
-
-  html[data-theme='light'] & {
-    #viewPassword {
-      color: rgba($black, 0.5);
-    }
-
-    input[type='text'],
-    input[type='password'],
-    input[type='email'],
-    textarea {
-      color: $gray;
-      border: 1px solid $gray-300;
-      background-color: $white;
-
-      &:focus {
-        box-shadow: 0 0 5px rgba(var(--primary-color), 0.5);
-        border: 1px solid rgba(var(--primary-color), 1);
-      }
-
-      &::placeholder {
-        color: $gray-500;
-      }
-    }
   }
 
   &.error {

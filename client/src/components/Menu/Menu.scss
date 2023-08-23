@@ -1,8 +1,8 @@
 @import '@styles/variables';
 
 #menu {
-  background-color: $zinc-800;
-  color: $zinc-300;
+  background-color: var(--bg-secondary);
+  color: var(--tint);
 
   > div {
     padding: 24px;
@@ -17,7 +17,6 @@
     }
 
     &.sidebar-body {
-      background-color: darken($zinc-800, 1.5%);
       padding: 8px;
       display: flex;
       flex-direction: column;
@@ -30,8 +29,8 @@
         > a {
           padding: 8px 16px;
           border-radius: 32px;
-          color: $zinc-400;
-          background-color: darken($zinc-800, 2%);
+          color: var(--tint-60);
+          background-color: var(--black-20);
           margin-bottom: 4px;
           display: flex;
           align-items: center;
@@ -46,8 +45,8 @@
           }
 
           &.active {
-            color: $white;
-            background-color: darken($zinc-800, 5%);
+            color: var(--tint);
+            background-color: var(--tint-30);
 
             span {
               font-weight: 600;
@@ -55,8 +54,7 @@
           }
 
           &:hover {
-            background-color: $zinc-500;
-            background-color: darken($zinc-800, 3.5%);
+            background-color: var(--black-30);
 
             span {
               &:first-child {
@@ -189,6 +187,132 @@
       box-shadow: inset 0px 1px 1px rgba($white, 0.1);
       display: flex;
       align-items: center;
+    }
+  }
+
+  html[data-theme='dark'] & {
+    > div {
+      &.sidebar-body {
+        background-color: var(--black-10);
+
+        nav {
+          > a {
+            color: var(--tint-60);
+            background-color: var(--black-20);
+
+            &.active {
+              color: var(--tint);
+              background-color: var(--black-30);
+            }
+
+            &:hover {
+              background-color: var(--black-30);
+            }
+          }
+        }
+      }
+
+      &.sidebar-user {
+        border-top: 1px solid rgba($black, 0.2);
+      }
+
+      &.sidebar-user-menu {
+        background-color: rgba($black, 0.2);
+      }
+
+      #admin-menu {
+        background-color: darken($zinc-800, 5%);
+
+        #admin-menu-trigger {
+          color: $zinc-400;
+        }
+
+        #admin-menu-items {
+          > a {
+            color: $zinc-400;
+
+            &.active {
+              span {
+                &:last-child {
+                  color: $white;
+                }
+              }
+            }
+
+            &:hover {
+              background-color: darken($zinc-900, 2%);
+            }
+          }
+        }
+
+        &.sidebar-theme {
+          border-top: 1px solid rgba($black, 0.2);
+          box-shadow: inset 0px 1px 1px rgba($white, 0.1);
+        }
+      }
+    }
+  }
+
+  html[data-theme='light'] & {
+    > div {
+      &.sidebar-body {
+        background-color: var(--black-10);
+
+        nav {
+          > a {
+            color: var(--tint-60);
+            background-color: var(--black-20);
+
+            &.active {
+              color: var(--tint);
+              background-color: var(--tint-30);
+            }
+
+            &:hover {
+              background-color: var(--black-30);
+            }
+          }
+        }
+      }
+
+      &.sidebar-user {
+        border-top: 1px solid rgba($black, 0.2);
+      }
+
+      &.sidebar-user-menu {
+        background-color: rgba($black, 0.2);
+      }
+
+      #admin-menu {
+        background-color: var(--primary-color);
+
+        #admin-menu-trigger {
+          color: $zinc-400;
+        }
+
+        #admin-menu-items {
+          > a {
+            color: $zinc-400;
+
+            &.active {
+              span {
+                &:last-child {
+                  color: $white;
+                }
+              }
+            }
+
+            &:hover {
+              background-color: darken($zinc-900, 2%);
+            }
+          }
+        }
+
+        &.sidebar-theme {
+          border-top: 1px solid rgba($black, 0.2);
+          box-shadow: inset 0px 1px 1px rgba($white, 0.1);
+        }
+      }
     }
   }
 }

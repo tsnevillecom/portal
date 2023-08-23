@@ -28,27 +28,26 @@ const AdminLocations = () => {
   const navigate = useNavigate()
 
   return (
-    <Page
-      id="company-locations"
-      title="Locations"
-      actions={[
-        <Button
-          key="add-location"
-          size="sm"
-          onClick={() =>
-            showModal({
-              name: 'NEW_LOCATION',
-              data: { companyId: company._id, onSuccess: getCompany },
-            })
-          }
-        >
-          <FaPlus size={16} />
-          New Location
-        </Button>,
-      ]}
-    >
+    <div id="company-locations">
       <div className="details">
         <div className="details-list">
+          <div className="details-list-header">
+            <h3>Office locations</h3>
+            <Button
+              key="add-location"
+              size="sm"
+              onClick={() =>
+                showModal({
+                  name: 'NEW_LOCATION',
+                  data: { companyId: company._id, onSuccess: getCompany },
+                })
+              }
+            >
+              <FaPlus size={16} />
+              New Location
+            </Button>
+          </div>
+
           <div className="card-list">
             {_.map(company.locations, (location) => {
               const cx = {
@@ -93,7 +92,7 @@ const AdminLocations = () => {
           <Outlet context={{ company, getCompany }} />
         </div>
       </div>
-    </Page>
+    </div>
   )
 }
 

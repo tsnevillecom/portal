@@ -6,17 +6,10 @@
     margin: 24px 0;
   }
 
-  > section.page.vertical {
-    border-top: 1px solid rgba($white, 0.2);
-    background-color: rgba($black, 0.2);
-    box-shadow: inset 0px 20px 10px -20px $black;
-    margin-top: 40px;
-    padding-top: 40px;
-  }
-
   .company {
     display: flex;
     align-items: center;
+    margin-bottom: 40px;
 
     > div {
       width: 100%;
@@ -43,7 +36,7 @@
     }
 
     .company-updated-at {
-      color: $zinc-500;
+      color: var(--muted);
       font-size: 14px;
       font-weight: 300;
       justify-content: flex-end;

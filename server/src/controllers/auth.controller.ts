@@ -37,14 +37,11 @@ class AuthController {
 
   public logout = async (req, res) => {
     const token = req.session.refreshToken
-    const user = req.session.user
-
-    if (!token || !user) return res.sendStatus(204)
+    if (!token) return res.sendStatus(204)
 
     try {
       await RefreshToken.findOneAndDelete({
         token,
-        userId: user._id,
       }).exec()
 
       res.clearCookie('refreshToken', {

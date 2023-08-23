@@ -33,51 +33,49 @@ table {
     }
   }
 
-  html[data-theme='dark'] & {
-    thead {
-      tr {
-        border-bottom: 2px solid $zinc-700;
+  thead {
+    tr {
+      border-bottom: 2px solid var(--tint-20);
 
-        th {
-          color: $white;
-        }
-      }
-    }
-
-    tbody {
-      tr {
-        border-bottom: 1px solid $zinc-800;
-
-        &:nth-child(even) {
-          background-color: $zinc-800;
-        }
-
-        &:hover {
-          background-color: var(--primary-color-20);
-        }
+      th {
+        color: var(--tint);
       }
     }
   }
 
-  html[data-theme='light'] & {
-    thead {
-      tr {
-        border-bottom: 2px solid $zinc-400;
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--tint-20);
+
+      &:nth-child(even) {
+        background-color: var(--tint-6);
       }
-    }
 
-    tbody {
-      tr {
-        border-bottom: 1px solid $zinc-400;
-
-        &:nth-child(even) {
-          background-color: $zinc-100;
-        }
-
-        &:hover {
-          background-color: var(--primary-color-20);
-        }
+      &:hover {
+        background-color: var(--primary-color-10);
       }
     }
   }
+
+  // html[data-theme='light'] & {
+  //   thead {
+  //     tr {
+  //       border-bottom: 2px solid $zinc-400;
+  //     }
+  //   }
+
+  //   tbody {
+  //     tr {
+  //       border-bottom: 1px solid $zinc-400;
+
+  //       &:nth-child(even) {
+  //         background-color: $zinc-100;
+  //       }
+
+  //       &:hover {
+  //         background-color: var(--primary-color-20);
+  //       }
+  //     }
+  //   }
+  // }
 }

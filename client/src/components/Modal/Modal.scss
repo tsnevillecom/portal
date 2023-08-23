@@ -22,7 +22,7 @@
     width: 100%;
     max-width: 640px;
     max-height: calc(100% - 64px);
-    background-color: $zinc-800;
+    background-color: var(--modal-bg);
 
     > form {
       overflow: hidden;
@@ -31,7 +31,8 @@
     .modal-header {
       padding: 24px;
       display: flex;
-      background-color: $zinc-900;
+      background-color: var(--black-10);
+      border-bottom: 1px solid var(--black-10);
 
       h1 {
         margin: 0;
@@ -56,8 +57,8 @@
 
     .modal-footer {
       padding: 16px 24px;
-      background-color: rgba($zinc-900, 0.1);
-      border-top: 1px solid $zinc-900;
+      background-color: var(--black-10);
+      border-top: 1px solid var(--black-10);
       display: flex;
       justify-content: flex-end;
 
@@ -68,7 +69,7 @@
   }
 
   .modal-bg {
-    background-color: rgba($black, 0.8);
+    background-color: var(--black-80);
     z-index: 906;
     position: fixed;
     top: 0;
@@ -81,11 +82,11 @@
     .modal-content {
       .modal-body {
         &::-webkit-scrollbar-track {
-          background-color: rgba($white, 0.1);
+          background-color: var(--tint-10);
         }
 
         &::-webkit-scrollbar-thumb {
-          background-color: rgba($white, 0.2);
+          background-color: var(--tint-20);
         }
       }
     }

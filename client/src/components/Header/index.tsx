@@ -15,15 +15,12 @@ const Header = () => {
     <header id="header">
       <div id="search"></div>
 
-      <div id="user-menu">
+      <div id="header-menu">
         <Link to="/profile">
           {`${auth.user?.firstName} ${auth.user?.lastName}`}
         </Link>
+        <a onClick={logout}>Sign Out</a>
       </div>
-
-      <Button style="link" onClick={logout}>
-        Sign Out
-      </Button>
     </header>
   )
 }

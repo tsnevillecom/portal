@@ -1,32 +1,97 @@
 @import '@styles/variables';
 
-$dark: $blue-700;
-$light: $purple-700;
+$primary: $amber-500;
+$secondary: $zinc-800;
+
+$shade-dark: $white;
+$shade-light: $zinc-800;
 
 @function alpha($color, $alpha) {
   @return rgba(red($color), green($color), blue($color), $alpha);
 }
 
+html {
+  --muted: #{$zinc-500};
+
+  --black: #{$black};
+  --black-10: #{alpha($black, 0.1)};
+  --black-20: #{alpha($black, 0.2)};
+  --black-30: #{alpha($black, 0.3)};
+  --black-40: #{alpha($black, 0.4)};
+  --black-50: #{alpha($black, 0.5)};
+  --black-60: #{alpha($black, 0.6)};
+  --black-70: #{alpha($black, 0.7)};
+  --black-80: #{alpha($black, 0.8)};
+  --black-90: #{alpha($black, 0.9)};
+
+  --white: #{$white};
+  --white-10: #{alpha($white, 0.1)};
+  --white-20: #{alpha($white, 0.2)};
+  --white-30: #{alpha($white, 0.3)};
+  --white-40: #{alpha($white, 0.4)};
+  --white-50: #{alpha($white, 0.5)};
+  --white-60: #{alpha($white, 0.6)};
+  --white-70: #{alpha($white, 0.7)};
+  --white-80: #{alpha($white, 0.8)};
+  --white-90: #{alpha($white, 0.9)};
+
+  --primary-color: #{$primary};
+  --primary-color-10: #{alpha($primary, 0.1)};
+  --primary-color-20: #{alpha($primary, 0.2)};
+  --primary-color-30: #{alpha($primary, 0.3)};
+  --primary-color-40: #{alpha($primary, 0.4)};
+  --primary-color-50: #{alpha($primary, 0.5)};
+  --primary-color-60: #{alpha($primary, 0.6)};
+  --primary-color-70: #{alpha($primary, 0.7)};
+  --primary-color-80: #{alpha($primary, 0.8)};
+  --primary-color-90: #{alpha($primary, 0.9)};
+
+  --primary-color-dark-1: #{darken($primary, 1%)};
+  --primary-color-dark-5: #{darken($primary, 5%)};
+  --primary-color-light-1: #{lighten($primary, 5%)};
+  --primary-color-light-5: #{lighten($primary, 5%)};
+}
+
 html[data-theme='light'] {
-  --primary-color: #{$light};
-  --primary-color-20: #{alpha($light, 0.2)};
-  --primary-color-50: #{alpha($light, 0.5)};
-  --primary-color-dark-1: #{darken($light, 1%)};
-  --primary-color-dark-5: #{darken($light, 5%)};
-  --primary-color-light-1: #{lighten($light, 5%)};
-  --primary-color-light-5: #{lighten($light, 5%)};
-  --secondary-color: #{$light};
+  --secondary-color: #{$secondary};
+
+  --bg: #{$white};
+  --bg-secondary: #{$zinc-200};
+  --modal-bg: #{$zinc-100};
+
+  --tint: #{$shade-light};
+  --tint-4: #{alpha($shade-light, 0.04)};
+  --tint-6: #{alpha($shade-light, 0.06)};
+  --tint-10: #{alpha($shade-light, 0.1)};
+  --tint-20: #{alpha($shade-light, 0.2)};
+  --tint-30: #{alpha($shade-light, 0.3)};
+  --tint-40: #{alpha($shade-light, 0.4)};
+  --tint-50: #{alpha($shade-light, 0.5)};
+  --tint-60: #{alpha($shade-light, 0.6)};
+  --tint-70: #{alpha($shade-light, 0.7)};
+  --tint-80: #{alpha($shade-light, 0.8)};
+  --tint-90: #{alpha($shade-light, 0.9)};
 }
 
 html[data-theme='dark'] {
-  --primary-color: #{$dark};
-  --primary-color-20: #{alpha($dark, 0.2)};
-  --primary-color-50: #{alpha($dark, 0.5)};
-  --primary-color-dark-1: #{darken($dark, 1%)};
-  --primary-color-dark-5: #{darken($dark, 5%)};
-  --primary-color-light-1: #{lighten($dark, 1%)};
-  --primary-color-light-5: #{lighten($dark, 5%)};
-  --secondary-color: #{$dark};
+  --secondary-color: #{$secondary};
+
+  --bg: #{$zinc-900};
+  --bg-secondary: #{$zinc-800};
+  --modal-bg: #{$zinc-800};
+
+  --tint: #{$shade-dark};
+  --tint-4: #{alpha($shade-dark, 0.04)};
+  --tint-6: #{alpha($shade-dark, 0.06)};
+  --tint-10: #{alpha($shade-dark, 0.1)};
+  --tint-20: #{alpha($shade-dark, 0.2)};
+  --tint-30: #{alpha($shade-dark, 0.3)};
+  --tint-40: #{alpha($shade-dark, 0.4)};
+  --tint-50: #{alpha($shade-dark, 0.5)};
+  --tint-60: #{alpha($shade-dark, 0.6)};
+  --tint-70: #{alpha($shade-dark, 0.7)};
+  --tint-80: #{alpha($shade-dark, 0.8)};
+  --tint-90: #{alpha($shade-dark, 0.9)};
 }
 
 * {
@@ -70,6 +135,7 @@ hr {
   height: 1px;
   margin: 8px 0;
   border: 0;
+  border-top: 1px solid var(--tint-20);
 }
 
 ul {
@@ -87,9 +153,13 @@ ul {
   flex-direction: column;
   padding: 16px;
   width: 450px;
+  background-color: var(--white-10);
+  border: 1px solid var(--tint-4);
+  box-shadow: 0 2px 10px var(--black-20);
 
   h1 {
     padding-bottom: 16px;
+    border-bottom: 1px solid var(--tint-20);
   }
 }
 
@@ -158,7 +228,7 @@ form {
 }
 
 .muted {
-  color: $zinc-500;
+  color: var(--muted);
 }
 
 #root {
@@ -175,29 +245,23 @@ form {
 
     .card {
       border-radius: 8px;
-      background-color: rgba($white, 0.04);
+      background-color: var(--tint-4);
       display: flex;
       margin-bottom: 4px;
       align-items: center;
 
+      &:not(.active):hover {
+        background-color: var(--tint-6);
+        cursor: pointer;
+      }
+
       &.active {
-        background-color: rgba($white, 0.1);
+        background-color: var(--primary-color-20);
       }
 
       .card-cell {
         flex: 1 1 100%;
         padding: 12px 12px;
-      }
-
-      &:not(.card-list-header):hover {
-        background-color: rgba($white, 0.06);
-        cursor: pointer;
-      }
-
-      &.card-list-header {
-        background-color: rgba($white, 0.1);
-        text-transform: uppercase;
-        font-weight: 700;
       }
     }
   }
@@ -253,14 +317,10 @@ body {
   height: 100vh;
   width: 100vw;
   overflow: hidden;
+  background-color: var(--bg);
 
   html[data-theme='dark'] & {
     color: $zinc-300;
-    background-color: #1a1a1a;
-
-    hr {
-      border-top: 1px solid rgba($white, 0.2);
-    }
 
     a,
     a:active,
@@ -301,29 +361,10 @@ body {
     a:focus-visible {
       outline: none;
     }
-
-    #root {
-      main {
-        .container-slim {
-          background-color: rgba($white, 0.1);
-          border: 1px solid rgba($white, 0.1);
-          box-shadow: 0 2px 10px rgba(black, 0.2);
-
-          h1 {
-            border-bottom: 1px solid rgba($white, 0.2);
-          }
-        }
-      }
-    }
   }
 
   html[data-theme='light'] & {
     color: $zinc-800;
-    background-color: $white;
-
-    hr {
-      background-color: rgba($black, 0.3);
-    }
 
     a,
     a:active,
@@ -332,20 +373,6 @@ body {
 
       &:hover {
         color: var(--primary-color-dark-5);
-      }
-    }
-
-    #root {
-      main {
-        .container-slim {
-          background-color: $white;
-          border: 1px solid #ccc;
-          box-shadow: 0 2px 10px rgba(black, 0.18);
-
-          h1 {
-            border-bottom: 1px solid rgba($black, 0.3);
-          }
-        }
       }
     }
   }
