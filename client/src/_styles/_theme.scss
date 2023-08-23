@@ -1,5 +1,33 @@
 @import '@styles/variables';
 
+$dark: $blue-700;
+$dark-red: red($blue-700);
+$dark-blue: blue($blue-700);
+$dark-green: green($blue-700);
+$light: $purple-700;
+
+@function ralpha($color, $alpha) {
+  @return rgba(red($color), blue($color), green($color), $alpha);
+}
+
+html[data-theme='light'] {
+  --primary-color: #{$light};
+  --primary-test: ralpha($light, 0.2);
+  --primary-color-dark-1: darken(#{$light}, 1%);
+  --primary-color-dark-5: darken(#{$light}, 5%);
+  --primary-color-light-1: lighten(#{$light}, 1%);
+  --secondary-color: #{$light};
+}
+
+html[data-theme='dark'] {
+  --primary-color: #{$dark};
+  --primary-test: ralpha(#{$dark}, 0.2);
+  --primary-color-dark-1: darken(#{$dark}, 1%);
+  --primary-color-dark-5: darken(#{$dark}, 5%);
+  --primary-color-light-1: lighten(#{$dark}, 1%);
+  --secondary-color: #{$dark};
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -101,7 +129,7 @@ form {
   padding: 2px;
 
   [type='checkbox'] {
-    accent-color: $blue;
+    accent-color: var(--primary-color);
     height: 16px;
     width: 16px;
     margin-right: 8px;
@@ -138,7 +166,40 @@ form {
   width: 100vw;
   display: flex;
   overflow: hidden;
-  border-top: 6px solid $blue;
+  border-top: 6px solid var(--primary-color);
+
+  .card-list {
+    display: flex;
+    flex-direction: column;
+
+    .card {
+      border-radius: 8px;
+      background-color: rgba($white, 0.04);
+      display: flex;
+      margin-bottom: 4px;
+      align-items: center;
+
+      &.active {
+        background-color: rgba($white, 0.1);
+      }
+
+      .card-cell {
+        flex: 1 1 100%;
+        padding: 12px 12px;
+      }
+
+      &:not(.card-list-header):hover {
+        background-color: rgba($white, 0.06);
+        cursor: pointer;
+      }
+
+      &.card-list-header {
+        background-color: rgba($white, 0.1);
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+    }
+  }
 
   p {
     margin-bottom: 8px;
@@ -192,7 +253,7 @@ body {
   width: 100vw;
   overflow: hidden;
 
-  &.dark {
+  html[data-theme='dark'] & {
     color: $zinc-300;
     background-color: #1a1a1a;
 
@@ -203,10 +264,10 @@ body {
     a,
     a:active,
     a:visited {
-      color: $blue;
+      color: var(--primary-color);
 
       &:hover {
-        color: $blue-500;
+        color: --primary-color-light-1;
       }
 
       &.danger {
@@ -255,9 +316,9 @@ body {
     }
   }
 
-  &.light {
-    color: $black;
-    background-color: $zinc-200;
+  html[data-theme='light'] & {
+    color: $zinc-800;
+    background-color: $white;
 
     hr {
       background-color: rgba($black, 0.3);
@@ -266,10 +327,10 @@ body {
     a,
     a:active,
     a:visited {
-      color: $blue;
+      color: var(--primary-color);
 
       &:hover {
-        color: $blue-800;
+        color: --primary-color-dark-1;
       }
     }
 

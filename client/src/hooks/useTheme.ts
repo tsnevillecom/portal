@@ -13,9 +13,7 @@ const useTheme = (): IUseTheme => {
   )
 
   useEffect(() => {
-    const removeClass = theme === 'dark' ? 'light' : 'dark'
-    document.body.classList.remove(removeClass)
-    document.body.classList.add(theme)
+    document.documentElement.setAttribute('data-theme', theme)
   }, [theme])
 
   const toggleTheme = () => {

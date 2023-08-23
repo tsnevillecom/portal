@@ -20,12 +20,26 @@ const AdminLocation = () => {
   const { company, getCompany } = useOutletContext<IContext>()
   const axiosPrivate = useAxiosPrivate()
   const { showModal } = useContext(ModalContext)
-  const [location] = useState<Location>(
-    _.find(
+
+  const findLocation = (): Location => {
+    const location = _.find(
       company.locations,
       (location) => location._id === params.locationId
     ) as Location
-  )
+
+    return location
+  }
+
+  const [location, setLocation] = useState<Location>(findLocation())
+
+  useEffect(() => {
+    const location = _.find(
+      company.locations,
+      (location) => location._id === params.locationId
+    ) as Location
+
+    setLocation(location)
+  }, [params])
 
   const locationActivation = async (location: Location) => {
     try {
@@ -56,7 +70,7 @@ const AdminLocation = () => {
           }
         >
           <MdModeEditOutline size={16} />
-          Edit Location
+          Edit
         </Button>,
         <Button
           key="activate-location"

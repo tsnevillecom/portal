@@ -11,7 +11,6 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { MdModeEditOutline } from 'react-icons/md'
 import { IoIosCloseCircle } from 'react-icons/io'
 import { HiCheckCircle } from 'react-icons/hi'
-import { MdLocationPin } from 'react-icons/md'
 import { ModalContext } from '@context/ModalProvider'
 
 const AdminCompany = () => {

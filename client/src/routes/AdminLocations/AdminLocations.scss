@@ -1,0 +1,28 @@
+@import '@styles/variables';
+
+#company-locations {
+  .details {
+    display: flex;
+
+    .details-list {
+      flex: 1 1 50%;
+      margin-right: 8px;
+    }
+
+    .details-panel {
+      flex: 1 1 50%;
+      background-color: rgba($white, 0.04);
+    }
+  }
+
+  .location-status {
+    display: flex;
+    align-items: center;
+    flex: 1 1 auto;
+    justify-content: flex-end;
+
+    svg {
+      margin-left: 4px;
+    }
+  }
+}

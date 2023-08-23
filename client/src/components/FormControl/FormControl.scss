@@ -63,8 +63,8 @@
       color: $white;
 
       &:focus {
-        box-shadow: 0 0 5px rgba($blue-400, 0.5);
-        border: 1px solid rgba($blue-400, 1);
+        box-shadow: 0 0 5px rgba(var(--primary-color), 0.5);
+        border: 1px solid rgba(var(--primary-color), 1);
       }
 
       &::placeholder {
@@ -102,8 +102,8 @@
       background-color: $white;
 
       &:focus {
-        box-shadow: 0 0 5px rgba($blue, 0.5);
-        border: 1px solid rgba($blue, 1);
+        box-shadow: 0 0 5px rgba(var(--primary-color), 0.5);
+        border: 1px solid rgba(var(--primary-color), 1);
       }
 
       &::placeholder {

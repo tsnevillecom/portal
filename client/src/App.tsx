@@ -75,11 +75,12 @@ const App = () => {
               <Route path="users" element={<AdminUsers />} />
               <Route path="companies" element={<AdminCompanies />} />
               <Route path="companies/:companyId" element={<AdminCompany />}>
-                <Route path="" element={<AdminLocations />} />
-                <Route
-                  path="locations/:locationId"
-                  element={<AdminLocation />}
-                />
+                <Route path="" element={<AdminLocations />}>
+                  <Route
+                    path="locations/:locationId"
+                    element={<AdminLocation />}
+                  />
+                </Route>
               </Route>
               <Route path="chat-channels" element={<AdminChatChannels />} />
             </Route>

@@ -111,7 +111,7 @@
       &-avatar {
         width: 30px;
         height: 30px;
-        background-color: $blue;
+        background-color: var(--primary-color);
         border-radius: 30px;
         margin-right: 10px;
         display: flex;
@@ -157,7 +157,7 @@
 
       &.sender {
         .chat-channel-message-avatar {
-          background-color: $blue;
+          background-color: var(--primary-color);
         }
       }
 
@@ -196,16 +196,6 @@
           background-color: rgba($white, 0.2);
         }
       }
-
-      // .chat-channel-message {
-      //   &.sender {
-      //     background-color: $blue-600;
-      //   }
-
-      //   &.receiver {
-      //     background-color: $zinc-700;
-      //   }
-      // }
     }
   }
 
@@ -226,16 +216,6 @@
           background-color: rgba($black, 0.2);
         }
       }
-
-      // .chat-channel-message {
-      //   &.sender {
-      //     background-color: $blue-500;
-      //   }
-
-      //   &.receiver {
-      //     background-color: $zinc-500;
-      //   }
-      // }
     }
   }
 }

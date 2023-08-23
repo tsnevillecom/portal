@@ -39,34 +39,36 @@ const AdminCompanies = () => {
         </Button>,
       ]}
     >
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Account ID</th>
-            <th>Type</th>
-            <th># Location(s)</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {_.map(companies, (company) => {
-            return (
-              <tr
-                key={company._id}
-                className="row"
-                onClick={() => navigate(`/admin/companies/${company._id}`)}
-              >
-                <td>{company.name}</td>
-                <td>{company.accountId}</td>
-                <td>{company.type}</td>
-                <td>{company.locations.length}</td>
-                <td>{company.active ? 'Active' : 'Deactivated'}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <div className="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Account ID</th>
+              <th>Type</th>
+              <th># Location(s)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {_.map(companies, (company) => {
+              return (
+                <tr
+                  key={company._id}
+                  className="row"
+                  onClick={() => navigate(`/admin/companies/${company._id}`)}
+                >
+                  <td>{company.name}</td>
+                  <td>{company.accountId}</td>
+                  <td>{company.type}</td>
+                  <td>{company.locations.length}</td>
+                  <td>{company.active ? 'Active' : 'Deactivated'}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </Page>
   )
 }
