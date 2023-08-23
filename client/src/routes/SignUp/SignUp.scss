@@ -20,7 +20,7 @@
     }
   }
 
-  .light & {
+  html[data-theme='light'] & {
     #register-thrid-party {
       background-color: rgba($black, 0.05);
     }

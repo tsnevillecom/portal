@@ -75,7 +75,7 @@ section.page {
     align-items: center;
   }
 
-  .dark & {
+  html[data-theme='dark'] & {
     &::-webkit-scrollbar-track {
       background-color: rgba($white, 0.1);
     }

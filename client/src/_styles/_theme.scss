@@ -1,30 +1,31 @@
 @import '@styles/variables';
 
 $dark: $blue-700;
-$dark-red: red($blue-700);
-$dark-blue: blue($blue-700);
-$dark-green: green($blue-700);
 $light: $purple-700;
 
-@function ralpha($color, $alpha) {
-  @return rgba(red($color), blue($color), green($color), $alpha);
+@function alpha($color, $alpha) {
+  @return rgba(red($color), green($color), blue($color), $alpha);
 }
 
 html[data-theme='light'] {
   --primary-color: #{$light};
-  --primary-test: ralpha($light, 0.2);
-  --primary-color-dark-1: darken(#{$light}, 1%);
-  --primary-color-dark-5: darken(#{$light}, 5%);
-  --primary-color-light-1: lighten(#{$light}, 1%);
+  --primary-color-20: #{alpha($light, 0.2)};
+  --primary-color-50: #{alpha($light, 0.5)};
+  --primary-color-dark-1: #{darken($light, 1%)};
+  --primary-color-dark-5: #{darken($light, 5%)};
+  --primary-color-light-1: #{lighten($light, 5%)};
+  --primary-color-light-5: #{lighten($light, 5%)};
   --secondary-color: #{$light};
 }
 
 html[data-theme='dark'] {
   --primary-color: #{$dark};
-  --primary-test: ralpha(#{$dark}, 0.2);
-  --primary-color-dark-1: darken(#{$dark}, 1%);
-  --primary-color-dark-5: darken(#{$dark}, 5%);
-  --primary-color-light-1: lighten(#{$dark}, 1%);
+  --primary-color-20: #{alpha($dark, 0.2)};
+  --primary-color-50: #{alpha($dark, 0.5)};
+  --primary-color-dark-1: #{darken($dark, 1%)};
+  --primary-color-dark-5: #{darken($dark, 5%)};
+  --primary-color-light-1: #{lighten($dark, 1%)};
+  --primary-color-light-5: #{lighten($dark, 5%)};
   --secondary-color: #{$dark};
 }
 
@@ -267,7 +268,7 @@ body {
       color: var(--primary-color);
 
       &:hover {
-        color: --primary-color-light-1;
+        color: var(--primary-color-light-5);
       }
 
       &.danger {
@@ -330,7 +331,7 @@ body {
       color: var(--primary-color);
 
       &:hover {
-        color: --primary-color-dark-1;
+        color: var(--primary-color-dark-5);
       }
     }
 

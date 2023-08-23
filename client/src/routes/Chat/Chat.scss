@@ -179,7 +179,7 @@
     }
   }
 
-  .dark & {
+  html[data-theme='dark'] & {
     #chat-channels {
       background-color: rgba($black, 0.2);
       border-right: 1px solid $zinc-800;
@@ -199,7 +199,7 @@
     }
   }
 
-  .light & {
+  html[data-theme='light'] & {
     #chat-channels {
       background-color: rgba($black, 0.2);
       border-right: 1px solid rgba($black, 0.2);

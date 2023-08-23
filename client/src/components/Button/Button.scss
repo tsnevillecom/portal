@@ -38,7 +38,7 @@
     border-color: var(--primary-color);
 
     &:hover {
-      background-color: --primary-color-dark-5;
+      background-color: var(--primary-color-dark-5);
     }
   }
 
@@ -139,7 +139,7 @@
   color: var(--primary-color);
 
   &:hover {
-    color: --primary-color-light-1;
+    color: var(--primary-color-light-1);
   }
 
   &:focus {

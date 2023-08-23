@@ -28,7 +28,7 @@
     }
   }
 
-  .light & {
+  html[data-theme='light'] & {
     background-color: rgba($green, 0.1);
   }
 }
