@@ -16,8 +16,8 @@ class LocationsSeed {
     const companies = await Company.find()
 
     for (const company of companies) {
-      const max = 8
-      const min = 3
+      const max = 15
+      const min = 6
       const x = Math.floor(Math.random() * (max - min + 1) + min)
 
       for (let i = 0; i < x; i++) {

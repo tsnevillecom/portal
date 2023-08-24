@@ -1,8 +1,6 @@
 import './Page.scss'
 import React, { ReactElement, ReactNode } from 'react'
 import { classNames } from '@utils/classNames.util'
-import { Link } from 'react-router-dom'
-import { BiSolidLeftArrowCircle } from 'react-icons/bi'
 import Spinner from '@components/Spinner'
 import { HiOutlineShieldExclamation } from 'react-icons/hi'
 
