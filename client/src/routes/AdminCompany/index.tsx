@@ -60,20 +60,6 @@ const AdminCompany = () => {
       isLoading={isLoading}
       actions={[
         <Button
-          size="sm"
-          id="edit-company"
-          key="edit"
-          onClick={() =>
-            showModal({
-              name: 'EDIT_COMPANY',
-              data: { company, onSuccess: getCompany },
-            })
-          }
-        >
-          <MdModeEditOutline size={16} />
-          Edit Company
-        </Button>,
-        <Button
           style="muted"
           size="sm"
           id="edit-company"
@@ -94,33 +80,88 @@ const AdminCompany = () => {
           )}
           {company?.active ? 'Deactivate' : 'Reactivate'}
         </Button>,
+        <Button
+          size="sm"
+          id="edit-company"
+          key="edit"
+          onClick={() =>
+            showModal({
+              name: 'EDIT_COMPANY',
+              data: { company, onSuccess: getCompany },
+            })
+          }
+        >
+          <MdModeEditOutline size={16} />
+          Edit Company
+        </Button>,
       ]}
     >
       {company && (
         <>
           <div className="company">
-            <div className="company-status">
-              {company?.active ? (
-                <HiCheckCircle size={20} color="#16a34a" />
-              ) : (
-                <IoIosCloseCircle size={20} color="#dc2626" />
-              )}
-              <span>
-                <strong>Status:</strong>{' '}
-                {company?.active ? 'Active' : 'Deactivated'}
-              </span>
-            </div>
-            <div className="company-account-id">
-              <span>
-                <strong>Account ID:</strong> {company.accountId}
-              </span>
-            </div>
-            <div className="company-updated-at">
-              <span>
-                {' '}
-                <strong>Last updated:</strong>{' '}
-                {dayjs(company.updatedAt).format('MMMM D, YYYY h:mm A')}
-              </span>
+            <div className="row">
+              <div className="col-sm">
+                <div className="flex-table company-details">
+                  <div className="flex-row">
+                    <div className="flex-cell">
+                      <strong>Status:</strong>
+                    </div>
+                    <div className="flex-cell">
+                      <div className="company-status">
+                        {company.active ? 'Active' : 'Deactivated'}
+
+                        {company?.active ? (
+                          <HiCheckCircle size={20} color="#16a34a" />
+                        ) : (
+                          <IoIosCloseCircle size={20} color="#dc2626" />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-row">
+                    <div className="flex-cell">
+                      <strong>Account ID:</strong>
+                    </div>
+                    <div className="flex-cell">{company.accountId}</div>
+                  </div>
+                  <div className="flex-row">
+                    <div className="flex-cell">
+                      <strong>Last updated:</strong>
+                    </div>
+                    <div className="flex-cell">
+                      {dayjs(company.updatedAt).format('MMMM D, YYYY h:mm A')}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-sm">
+                <div className="flex-table company-details">
+                  <div className="flex-row">
+                    <div className="flex-cell">
+                      <strong>Address:</strong>
+                    </div>
+                    <div className="flex-cell">
+                      <div>
+                        <div className="company-address-1">
+                          {company.address1}
+                        </div>
+                        <div className="company-address-2">
+                          {company.address2}
+                        </div>
+                        <div className="company-city-state-zip">
+                          {company.city}, {company.state} {company.postalCode}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="flex-row">
+                    <div className="flex-cell">
+                      <strong>Phone:</strong>
+                    </div>
+                    <div className="flex-cell">{company.phone}</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
 

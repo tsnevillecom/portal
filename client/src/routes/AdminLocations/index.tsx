@@ -1,5 +1,4 @@
 import Button from '@components/Button'
-import Page from '@components/Page'
 import './AdminLocations.scss'
 import { Company } from '@types'
 import _ from 'lodash'
@@ -28,11 +27,11 @@ const AdminLocations = () => {
   const navigate = useNavigate()
 
   return (
-    <div id="company-locations">
+    <div id="admin-locations">
       <div className="details">
         <div className="details-list">
           <div className="details-header">
-            <h3>Office locations</h3>
+            <h3>Locations</h3>
             <Button
               key="add-location"
               size="sm"
@@ -44,48 +43,44 @@ const AdminLocations = () => {
               }
             >
               <FaPlus size={16} />
-              New Location
+              New
             </Button>
           </div>
 
-          <div className="card-list">
-            {_.map(company.locations, (location) => {
-              const cx = {
-                card: true,
-                active: location._id === params.locationId,
-              }
+          <div className="details-list-body">
+            <div className="card-list">
+              {_.map(company.locations, (location) => {
+                const cx = {
+                  card: true,
+                  active: location._id === params.locationId,
+                }
 
-              const cardClasses = classNames(cx)
+                const cardClasses = classNames(cx)
 
-              return (
-                <div
-                  className={cardClasses}
-                  key={location._id}
-                  onClick={() =>
-                    navigate(
-                      `/admin/companies/${company._id}/locations/${location._id}`,
-                      { replace: true }
-                    )
-                  }
-                >
-                  <div className="card-cell">
-                    <div>
-                      <strong>{location.name}</strong>
+                return (
+                  <div
+                    className={cardClasses}
+                    key={location._id}
+                    onClick={() =>
+                      navigate(
+                        `/admin/companies/${company._id}/locations/${location._id}`,
+                        { replace: true }
+                      )
+                    }
+                  >
+                    <div className="card-cell">
+                      <div>
+                        <strong>{location.name}</strong>
+                      </div>
+                      <div className="card-sub-cell">{location.phone}</div>
                     </div>
-                    <div className="muted">{location.phone}</div>
+                    <div className="card-cell location-status">
+                      {location.active ? 'Active' : 'Deactivated'}
+                    </div>
                   </div>
-                  <div className="card-cell location-status">
-                    {location.active ? 'Active' : 'Deactivated'}
-
-                    {location?.active ? (
-                      <HiCheckCircle size={20} color="#16a34a" />
-                    ) : (
-                      <IoIosCloseCircle size={20} color="#dc2626" />
-                    )}
-                  </div>
-                </div>
-              )
-            })}
+                )
+              })}
+            </div>
           </div>
         </div>
 

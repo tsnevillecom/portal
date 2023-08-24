@@ -1,74 +1,11 @@
 @import '@styles/variables';
 
-#company-locations {
+#admin-locations {
   flex: 1;
   overflow: hidden;
+  min-height: 480px;
 
-  .details {
-    position: relative;
-    display: flex;
-    height: 100%;
-
-    .details-list {
-      flex: 1 1 50%;
-      padding-top: 12px;
-      margin-right: 18px;
-    }
-
-    .details-header {
-      display: flex;
-      align-items: center;
-      margin-bottom: 24px;
-
-      h3 {
-        margin: 0;
-        flex: 1;
-      }
-
-      .btn {
-        justify-self: flex-end;
-
-        &:not(:first-child) {
-          margin-left: 4px;
-        }
-      }
-    }
-
-    .details-panel {
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      border-radius: 8px;
-      flex: 1 1 50%;
-      background-color: var(--tint-4);
-
-      &.empty {
-        border: 4px dashed var(--tint-4);
-      }
-
-      .details-header {
-        padding: 12px 12px 12px 16px;
-        margin-bottom: 0;
-        border-bottom: 2px solid var(--bg);
-      }
-
-      .details-footer {
-        display: flex;
-        align-items: center;
-        border-top: 2px solid var(--bg);
-        padding: 12px 12px 12px 16px;
-        justify-content: space-between;
-
-        .btn {
-          &:not(:first-child) {
-            margin-left: 4px;
-          }
-        }
-      }
-    }
-  }
-
-  .location-status {
+  .card-cell.location-status {
     display: flex;
     align-items: center;
     flex: 1 1 auto;

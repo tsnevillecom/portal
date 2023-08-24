@@ -70,9 +70,9 @@ class CompaniesController {
     const id = req.params.id
 
     try {
-      const company = await Company.findOne({ _id: id }).exec()
-      company.name = req.body.name
-      await company.save()
+      const company = await Company.findByIdAndUpdate(id, req.body, {
+        new: true,
+      }).exec()
       res.send(company)
     } catch (error) {
       res.status(500).send(error)

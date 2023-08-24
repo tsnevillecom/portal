@@ -92,6 +92,10 @@
     }
   }
 
+  &.btn-outline {
+    background-color: transparent;
+  }
+
   span {
     flex: 1;
     display: flex;

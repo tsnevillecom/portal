@@ -21,3 +21,17 @@ $z-index: (
 @mixin z-index($key) {
   z-index: z-index($key);
 }
+
+@mixin scrollbar() {
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--tint-10);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--tint-20);
+  }
+}

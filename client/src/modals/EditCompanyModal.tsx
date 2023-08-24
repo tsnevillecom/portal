@@ -4,7 +4,7 @@ import Modal from '@components/Modal'
 import ModalBody from '@components/Modal/ModalBody'
 import ModalFooter from '@components/Modal/ModalFooter'
 import { ModalContext } from '@context/ModalProvider'
-import { Company, Errors, Location, Rules } from '@types'
+import { Company, Errors, Rules } from '@types'
 import { trimObjValues } from '@utils/trimObjectValues'
 import { validateForm } from '@utils/validateForm.util'
 import _ from 'lodash'
@@ -45,7 +45,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
   }, [])
 
   useEffect(() => {
-    const isDirty = !_.isEqual(originalCompany, location)
+    const isDirty = !_.isEqual(originalCompany, company)
     setIsDirty(isDirty)
   }, [company])
 
@@ -58,7 +58,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
     }
 
     const data = {
-      ...trimObjValues(location),
+      ...trimObjValues(company),
     }
 
     const rules: Rules = {

@@ -7,39 +7,19 @@
   }
 
   .company {
-    display: flex;
-    align-items: center;
-    padding-bottom: 24px;
-
-    > div {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      flex: 1;
-    }
+    background-color: var(--tint-4);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
 
     .company-status {
       justify-content: flex-start;
       font-size: 16px;
-      font-weight: 300;
 
       svg {
-        margin-right: 4px;
+        margin-left: 4px;
         vertical-align: text-top;
       }
-    }
-
-    .company-account-id {
-      font-size: 14px;
-      font-weight: 300;
-      justify-content: center;
-    }
-
-    .company-updated-at {
-      color: var(--muted);
-      font-size: 14px;
-      font-weight: 300;
-      justify-content: flex-end;
     }
   }
 

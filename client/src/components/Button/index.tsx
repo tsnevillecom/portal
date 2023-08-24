@@ -16,6 +16,7 @@ interface ButtonProps {
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void
   type?: 'submit' | 'reset' | 'button'
   disabled?: boolean
+  outline?: boolean
   loading?: boolean
   name?: string
   id?: string
@@ -28,6 +29,7 @@ const defaultProps: ButtonProps = {
   style: 'primary',
   type: 'button',
   size: 'md',
+  outline: false,
   disabled: false,
   loading: false,
 }
@@ -39,6 +41,7 @@ const Button = ({
   type,
   onClick,
   disabled,
+  outline,
   name,
   id,
   loading,
@@ -49,6 +52,7 @@ const Button = ({
     [`btn-${style}`]: true,
     [`btn-${size}`]: true,
     'btn-loading': loading,
+    'btn-outline': outline,
     [`${classes}`]: !!classes,
   }
 

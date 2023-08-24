@@ -55,7 +55,6 @@ const AdminCompanies = () => {
               return (
                 <tr
                   key={company._id}
-                  className="row"
                   onClick={() => navigate(`/admin/companies/${company._id}`)}
                 >
                   <td>{company.name}</td>

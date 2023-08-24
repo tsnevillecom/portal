@@ -10,6 +10,7 @@
     margin-bottom: 8px;
     font-weight: 500;
     user-select: none;
+    color: var(--tint-60);
 
     span {
       margin-left: 4px;
@@ -38,7 +39,7 @@
     display: block;
     border: 1px solid var(--black-20);
     background-color: var(--tint-4);
-    color: $white;
+    color: var(--tint);
 
     &:focus {
       box-shadow: 0 0 5px var(--primary-color-20);

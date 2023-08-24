@@ -14,6 +14,7 @@
       font-size: 32px;
       display: flex;
       align-items: center;
+      color: var(--white);
     }
 
     &.sidebar-body {
@@ -101,7 +102,7 @@
       height: 40px;
 
       &.open {
-        height: 150px;
+        height: 162px;
       }
 
       #admin-menu-trigger {
@@ -128,11 +129,14 @@
       #admin-menu-items {
         display: flex;
         flex-direction: column;
+        padding: 0 8px;
 
         > a {
-          padding: 8px 8px 8px 30px;
+          padding: 8px 8px 8px 22px;
           display: flex;
           align-items: center;
+          border-radius: 32px;
+          margin-bottom: 4px;
 
           span {
             display: flex;
@@ -219,6 +223,11 @@
               }
             }
 
+            &.active {
+              color: var(--white);
+              background-color: var(--primary-color);
+            }
+
             &:not(.active):hover {
               background-color: var(--black-20);
             }
@@ -280,6 +289,7 @@
             }
 
             &.active {
+              color: var(--white);
               background-color: var(--primary-color);
             }
 

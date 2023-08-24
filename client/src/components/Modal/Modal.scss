@@ -26,10 +26,12 @@
 
     &.fullscreen {
       max-width: calc(100% - 64px);
+      height: 100%;
     }
 
     > form {
       overflow: hidden;
+      flex: 1;
     }
 
     .modal-header {
@@ -53,18 +55,7 @@
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-
-      &::-webkit-scrollbar {
-        width: 6px;
-      }
-
-      &::-webkit-scrollbar-track {
-        background-color: var(--tint-10);
-      }
-
-      &::-webkit-scrollbar-thumb {
-        background-color: var(--tint-20);
-      }
+      @include scrollbar();
     }
 
     .modal-footer {
@@ -75,7 +66,7 @@
       justify-content: flex-end;
 
       .btn {
-        margin-left: 8px;
+        margin: 0 0 0 8px;
       }
     }
   }

@@ -1,0 +1,262 @@
+@use 'sass:math';
+
+$flexgrid-breakpoints: (
+  xs: 320px,
+  sm: 576px,
+  md: 960px,
+  lg: 1280px,
+  xl: 1800px,
+);
+
+$flexgrid-columns: 8;
+
+$flexgrid-gutters: (
+  xs: 16px,
+  sm: 16px,
+  md: 16px,
+  lg: 16px,
+);
+
+@mixin flexgrid-break($size) {
+  @media (min-width: map-get($flexgrid-breakpoints, $size)) {
+    @content;
+  }
+}
+
+/**
+ * row
+ *
+ * This is the root element of a grid object. In it, we exhibit a few main
+ * behaviours. The modifiers also help with certain behaviours.
+ *
+ * [0]  Safety net box sizing reset
+ * [1]  All rows are flex containers
+ * [2]  By default, they wrap cells to a new line for responsiveness
+ * [3]  Rows can be applied to lists as well, thus the list resets
+ * [4]  Changes the layout direction to columnar
+ * [5]  Aligns flex items to the start of the flex line
+ * [6]  Aligns flex items to the end of the flex line
+ * [7]  Aligns flex items to the center of the flex line
+ * [8]  Packs flex items around the center of the main axis
+ * [9]  Packs flex items towards the end of the main axis
+ * [10] Distributes space evenly on the main axis between flex items
+ * [11] Distributes space evenly on the main axis around flex items
+ *
+ * Example HTML:
+ *
+ * <div class="row"></div>
+ * <ul class="row"></ul>
+ * <ol class="row"></ol>
+ */
+
+.row {
+  box-sizing: border-box; /* 0 */
+  display: flex; /* 1 */
+  flex-flow: row wrap; /* 2 */
+  list-style: none; /* 3 */
+  margin: 0; /* 3 */
+  padding: 0; /* 3 */
+  width: 100%;
+}
+
+.row-column {
+  flex-direction: column; /* 4 */
+}
+
+.row-align-start {
+  align-items: flex-start; /* 5 */
+}
+
+.row-align-end {
+  align-items: flex-end; /*  6 */
+}
+
+.row-align-center {
+  align-items: center; /* 7 */
+}
+
+.row-justify-center {
+  justify-content: center; /* 8 */
+}
+
+.row-justify-end {
+  justify-content: flex-end; /* 9 */
+}
+
+.row-space-between {
+  justify-content: space-between; /* 10 */
+}
+
+.row-space-around {
+  justify-content: space-around; /* 11 */
+}
+
+/**
+ * col
+ *
+ * Cols are the content containers that live inside of rows. By default,
+ * they just fill the available space.
+ *
+ * Example HTML:
+ *
+ * <div class="row">
+ *   <div class="col">...</div>
+ *   <div class="col">...</div>
+ *   ...
+ * </div>
+ */
+
+.col {
+  flex: 1;
+}
+
+.col-auto {
+  flex: 0 1 auto;
+}
+
+/**
+ * col-[size]
+ * col-[size]-[span]
+ * col-[size]-offset-[span]
+ *
+ * For the sake of the following documentation, let's assume that the breakpoint
+ * sizes in the gridconfig remain:
+ *
+ * [xs, sm, md, lg, xl, xx]
+ *
+ * In this sequence of modifiers, there's a bit going on. We're iterating over
+ * the breakpoints in the grid configuration, and applying modifiers to the
+ * cols. We're also iterating over the number of columns in the grid
+ * configuration, and appending more modifiers to cols. Let's look at
+ * the two main modifier types:
+ *
+ * col-[size]
+ *
+ * These modifiers cause cols to break at a certain size, denoted above
+ * by [size]. By default, they occupy 100% width, and then at a certain
+ * breakpoint, they transform to fill the available space.
+ *
+ * Example HTML:
+ *
+ * <div class="row">
+ *   <div class="col-sm"></div>
+ *   <div class="col-sm"></div>
+ *   <div class="col-sm"></div>
+ *   ...
+ * </div>
+ *
+ * col-[size]-[span]
+ *
+ * These modifiers are meant to be used declaratively, and chaining them
+ * together in the markup determines how they behave at certain screen widths.
+ * When building a grid system using these modifiers, the most important part
+ * is the declarations at the smallest screen size. If these are left out, grid
+ * cells will just auto fill whatever space they take up.
+ *
+ * Example HTML:
+ *
+ * <div class="row">
+ *   <div class="col-xs-12 col-sm-4 col-lg-2"></div>
+ *   <div class="col-xs-12 col-sm-4 col-lg-8"></div>
+ *   <div class="col-xs-12 col-sm-4 col-lg-2"></div>
+ * </div>
+ *
+ * col-[size]-offset-[span]
+ *
+ * These modifiers can also be used declaratively, and chaining them together
+ * will add offsets to cols at various breakpoints. For example, at the
+ * smallest breakpoint, you can have an offset of 0 columns, at a medium
+ * breakpoint, an offset of 4 columns, and at a large breakpoint, an offset of
+ * 2 columns. Offsets are from the left, as that's where the horizontal stacking
+ * of columns begins. If at any point, you want the offset to go back to 0, you
+ * can use the offset-0 modifier.
+ *
+ * Example HTML:
+ *
+ * <div class="row gutter-xl">
+ *   <div class="col-xs-12 col-md-6 col-md-offset-6"></div>
+ *   <div class="col-xs-12 col-md-8"></div>
+ * </div>
+ *
+ * It's important to be careful that your offsets + cell spans don't overflow
+ * outside the rows...a little bit of very basic math is required!
+ */
+
+$flexgrid-cell-counter: 1;
+
+@each $key, $val in $flexgrid-breakpoints {
+  .col-#{$key} {
+    flex: 0 0 100%;
+    max-width: 100%;
+
+    @include flexgrid-break($key) {
+      flex: 1;
+    }
+  }
+
+  @for $i from 1 through $flexgrid-columns {
+    @if $flexgrid-cell-counter == 1 {
+      .col-#{$key}-#{$i} {
+        flex: 0 0 math.div($i, $flexgrid-columns) * 100%;
+        max-width: math.div($i, $flexgrid-columns) * 100%;
+      }
+    }
+  }
+
+  @include flexgrid-break($key) {
+    @for $i from 1 through $flexgrid-columns {
+      .col-#{$key}-#{$i} {
+        flex: 0 0 math.div($i, $flexgrid-columns) * 100%;
+        max-width: math.div($i, $flexgrid-columns) * 100%;
+      }
+    }
+  }
+
+  @include flexgrid-break($key) {
+    @for $i from 0 through $flexgrid-columns {
+      .col-#{$key}-offset-#{$i} {
+        margin-left: math.div($i, $flexgrid-columns) * 100%;
+      }
+    }
+  }
+
+  $flexgrid-cell-counter: $flexgrid-cell-counter + 1;
+}
+
+/**
+ * gutter-[size]
+ *
+ * Col gutters are used to give cols spacing between each other. They are
+ * optional modifiers to the grid, and come in various sizes based on the
+ * $flexgrid-gutters configuration.
+ *
+ * Example HTML:
+ *
+ * <div class="row gutter-xl">
+ *   <div class="col"></div>
+ *   <div class="col"></div>
+ *   ...
+ * </div>
+ */
+
+@each $key, $val in $flexgrid-gutters {
+  .gutter-#{$key} {
+    &:not(:first-child) {
+      margin-top: -$val;
+
+      > [class^='col'] {
+        padding-top: $val;
+      }
+    }
+
+    > [class^='col'] {
+      &:not(:first-child) {
+        padding-left: 0;
+
+        @include flexgrid-break($key) {
+          padding-left: $val;
+        }
+      }
+    }
+  }
+}
