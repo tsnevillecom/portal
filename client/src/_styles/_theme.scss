@@ -1,6 +1,6 @@
 @import '@styles/variables';
 
-$primary: $amber-500;
+$primary: $blue-600;
 $secondary: $zinc-800;
 
 $shade-dark: $white;
@@ -55,8 +55,8 @@ html {
 html[data-theme='light'] {
   --secondary-color: #{$secondary};
 
-  --bg: #{$white};
-  --bg-secondary: #{$zinc-200};
+  --bg: #{$zinc-100};
+  --bg-secondary: #{$white};
   --modal-bg: #{$zinc-100};
 
   --tint: #{$shade-light};
@@ -237,7 +237,6 @@ form {
   width: 100vw;
   display: flex;
   overflow: hidden;
-  border-top: 6px solid var(--primary-color);
 
   .card-list {
     display: flex;
@@ -251,7 +250,7 @@ form {
       align-items: center;
 
       &:not(.active):hover {
-        background-color: var(--tint-6);
+        background-color: var(--tint-10);
         cursor: pointer;
       }
 
@@ -316,11 +315,12 @@ body {
   position: relative;
   height: 100vh;
   width: 100vw;
+  min-width: 1280px;
   overflow: hidden;
   background-color: var(--bg);
 
   html[data-theme='dark'] & {
-    color: $zinc-300;
+    color: var(--tint-80);
 
     a,
     a:active,

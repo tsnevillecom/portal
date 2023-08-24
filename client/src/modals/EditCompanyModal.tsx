@@ -112,7 +112,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
   }
 
   return (
-    <Modal title="Edit Company">
+    <Modal title="Edit Company" fullscreen>
       <form onSubmit={handleSubmit}>
         <ModalBody>
           {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}

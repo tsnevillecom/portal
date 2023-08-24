@@ -1,5 +1,6 @@
 import Button from '@components/Button'
 import Page from '@components/Page'
+import './AdminLocation.scss'
 import { Company, Location } from '@types'
 import _ from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
@@ -55,10 +56,59 @@ const AdminLocation = () => {
   }
 
   return (
-    <Page
-      id="company-location"
-      title={location?.name}
-      actions={[
+    <div id="admin-location" className="details-panel">
+      <div className="details-header">
+        <h3>{location.name}</h3>
+      </div>
+
+      {location && (
+        <div key={location._id} className="location">
+          <div className="flex-table location-details">
+            <div className="flex-row">
+              <div className="flex-cell">
+                <strong>Tax ID:</strong>
+              </div>
+              <div className="flex-cell">{location.taxId}</div>
+            </div>
+            <div className="flex-row">
+              <div className="flex-cell">
+                <strong>Address:</strong>
+              </div>
+              <div className="flex-cell">
+                <div>
+                  <div className="location-address-1">{location.address1}</div>
+                  <div className="location-address-2">{location.address2}</div>
+                  <div className="location-city-state-zip">
+                    {location.city}, {location.state} {location.postalCode}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex-row">
+              <div className="flex-cell">
+                <strong>Phone:</strong>
+              </div>
+              <div className="flex-cell">{location.phone}</div>
+            </div>
+          </div>
+
+          {!!location.description && (
+            <>
+              <div className="location-description-label">
+                <strong>Description</strong>
+              </div>
+              <div
+                className="location-description"
+                dangerouslySetInnerHTML={{
+                  __html: formatText(location.description),
+                }}
+              />
+            </>
+          )}
+        </div>
+      )}
+
+      <div className="details-footer">
         <Button
           key="add-location"
           size="sm"
@@ -70,8 +120,9 @@ const AdminLocation = () => {
           }
         >
           <MdModeEditOutline size={16} />
-          Edit
-        </Button>,
+          Edit Location
+        </Button>
+
         <Button
           key="activate-location"
           size="sm"
@@ -96,52 +147,10 @@ const AdminLocation = () => {
           )}
 
           {location?.active ? 'Deactivate' : 'Reactivate'}
-        </Button>,
-      ]}
-    >
-      {location && (
-        <div key={location._id} className="location">
-          <div className="location-details">
-            <div className="location-tax-id">
-              <strong>Tax ID:</strong>
-              {location.taxId}
-            </div>
-
-            <div className="location-address">
-              <strong>Address:</strong>
-              <div>
-                <div className="location-address-1">{location.address1}</div>
-                <div className="location-address-2">{location.address2}</div>
-                <div className="location-city-state-zip">
-                  {location.city}, {location.state} {location.postalCode}
-                </div>
-              </div>
-            </div>
-
-            <div className="location-phone">
-              <strong>Phone:</strong>
-              {location.phone}
-            </div>
-          </div>
-
-          {!!location.description && (
-            <>
-              <div className="location-description-label">
-                <strong>Description</strong>
-              </div>
-              <div
-                className="location-description"
-                dangerouslySetInnerHTML={{
-                  __html: formatText(location.description),
-                }}
-              />
-            </>
-          )}
-        </div>
-      )}
-
+        </Button>
+      </div>
       {!location && <div className="not-found">Location not found</div>}
-    </Page>
+    </div>
   )
 }
 

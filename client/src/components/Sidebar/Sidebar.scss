@@ -6,14 +6,6 @@
   flex-direction: column;
   transition: margin-left 500ms $curve, margin-right 500ms $curve;
 
-  &.sidebar-right {
-    border-left: 1px solid var(--bg-secondary);
-  }
-
-  &.sidebar-left {
-    border-right: 1px solid var(--bg-secondary);
-  }
-
   &.open {
     margin-left: 0;
     margin-right: 0;

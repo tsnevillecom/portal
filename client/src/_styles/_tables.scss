@@ -52,30 +52,8 @@ table {
       }
 
       &:hover {
-        background-color: var(--primary-color-10);
+        background-color: var(--primary-color-20);
       }
     }
   }
-
-  // html[data-theme='light'] & {
-  //   thead {
-  //     tr {
-  //       border-bottom: 2px solid $zinc-400;
-  //     }
-  //   }
-
-  //   tbody {
-  //     tr {
-  //       border-bottom: 1px solid $zinc-400;
-
-  //       &:nth-child(even) {
-  //         background-color: $zinc-100;
-  //       }
-
-  //       &:hover {
-  //         background-color: var(--primary-color-20);
-  //       }
-  //     }
-  //   }
-  // }
 }

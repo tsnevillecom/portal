@@ -112,7 +112,7 @@ const EditLocationModal: React.FC<EditLocationModalProps> = ({
   }
 
   return (
-    <Modal title="Edit Location">
+    <Modal title="Edit Location" fullscreen>
       <form onSubmit={handleSubmit}>
         <ModalBody>
           {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}

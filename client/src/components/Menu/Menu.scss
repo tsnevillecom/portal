@@ -29,8 +29,6 @@
         > a {
           padding: 8px 16px;
           border-radius: 32px;
-          color: var(--tint-60);
-          background-color: var(--black-20);
           margin-bottom: 4px;
           display: flex;
           align-items: center;
@@ -45,17 +43,12 @@
           }
 
           &.active {
-            color: var(--tint);
-            background-color: var(--tint-30);
-
             span {
               font-weight: 600;
             }
           }
 
-          &:hover {
-            background-color: var(--black-30);
-
+          &:not(.active):hover {
             span {
               &:first-child {
                 width: 32px;
@@ -70,7 +63,6 @@
       display: flex;
       align-items: center;
       cursor: pointer;
-      border-top: 1px solid rgba($black, 0.2);
 
       span {
         display: flex;
@@ -92,7 +84,6 @@
     }
 
     &.sidebar-user-menu {
-      background-color: rgba($black, 0.2);
       overflow: hidden;
       height: 0;
       transition: height 170ms ease-out;
@@ -104,7 +95,6 @@
     }
 
     #admin-menu {
-      background-color: darken($zinc-800, 5%);
       border-radius: 16px;
       overflow: hidden;
       transition: height 170ms ease-out;
@@ -117,7 +107,6 @@
       #admin-menu-trigger {
         padding: 8px 16px;
         border-radius: 32px;
-        color: $zinc-400;
         display: flex;
         align-items: center;
         cursor: pointer;
@@ -142,7 +131,6 @@
 
         > a {
           padding: 8px 8px 8px 30px;
-          color: $zinc-400;
           display: flex;
           align-items: center;
 
@@ -158,16 +146,10 @@
           &.active {
             span {
               font-weight: 600;
-
-              &:last-child {
-                color: $white;
-              }
             }
           }
 
-          &:hover {
-            background-color: darken($zinc-900, 2%);
-
+          &:not(.active):hover {
             span {
               &:first-child {
                 width: 18px;
@@ -183,8 +165,6 @@
     }
 
     &.sidebar-theme {
-      border-top: 1px solid rgba($black, 0.2);
-      box-shadow: inset 0px 1px 1px rgba($white, 0.1);
       display: flex;
       align-items: center;
     }
@@ -192,6 +172,10 @@
 
   html[data-theme='dark'] & {
     > div {
+      &.sidebar-header {
+        border-bottom: 1px solid var(--black-10);
+      }
+
       &.sidebar-body {
         background-color: var(--black-10);
 
@@ -201,53 +185,49 @@
             background-color: var(--black-20);
 
             &.active {
-              color: var(--tint);
-              background-color: var(--black-30);
+              color: var(--white);
+              background-color: var(--primary-color);
             }
 
-            &:hover {
+            &:not(.active):hover {
               background-color: var(--black-30);
             }
           }
         }
       }
 
-      &.sidebar-user {
-        border-top: 1px solid rgba($black, 0.2);
-      }
-
       &.sidebar-user-menu {
-        background-color: rgba($black, 0.2);
+        background-color: var(--black-20);
       }
 
       #admin-menu {
-        background-color: darken($zinc-800, 5%);
+        background-color: var(--black-20);
 
         #admin-menu-trigger {
-          color: $zinc-400;
+          color: var(--tint-60);
         }
 
         #admin-menu-items {
           > a {
-            color: $zinc-400;
+            color: var(--tint-60);
 
             &.active {
               span {
                 &:last-child {
-                  color: $white;
+                  color: var(--white);
                 }
               }
             }
 
-            &:hover {
-              background-color: darken($zinc-900, 2%);
+            &:not(.active):hover {
+              background-color: var(--black-20);
             }
           }
         }
 
         &.sidebar-theme {
-          border-top: 1px solid rgba($black, 0.2);
-          box-shadow: inset 0px 1px 1px rgba($white, 0.1);
+          border-top: 1px solid var(--black-20);
+          box-shadow: inset 0px 1px 1px var(--white-10);
         }
       }
     }
@@ -255,62 +235,63 @@
 
   html[data-theme='light'] & {
     > div {
-      &.sidebar-body {
-        background-color: var(--black-10);
+      &.sidebar-header {
+        border-bottom: 1px solid var(--black-10);
+        background-color: var(--primary-color);
+      }
 
+      &.sidebar-body {
         nav {
           > a {
-            color: var(--tint-60);
-            background-color: var(--black-20);
+            color: var(--tint-80);
+            background-color: var(--primary-color-10);
 
             &.active {
-              color: var(--tint);
-              background-color: var(--tint-30);
+              color: var(--white);
+              background-color: var(--primary-color);
             }
 
-            &:hover {
-              background-color: var(--black-30);
+            &:not(.active):hover {
+              background-color: var(--primary-color-20);
             }
           }
         }
       }
 
-      &.sidebar-user {
-        border-top: 1px solid rgba($black, 0.2);
-      }
-
       &.sidebar-user-menu {
-        background-color: rgba($black, 0.2);
+        background-color: var(--black-20);
       }
 
       #admin-menu {
-        background-color: var(--primary-color);
+        background-color: var(--primary-color-10);
 
         #admin-menu-trigger {
-          color: $zinc-400;
+          color: var(--tint-80);
         }
 
         #admin-menu-items {
           > a {
-            color: $zinc-400;
+            color: var(--tint-80);
 
             &.active {
               span {
-                &:last-child {
-                  color: $white;
-                }
+                color: var(--white);
               }
             }
 
-            &:hover {
-              background-color: darken($zinc-900, 2%);
+            &.active {
+              background-color: var(--primary-color);
+            }
+
+            &:not(.active):hover {
+              background-color: var(--primary-color-20);
             }
           }
         }
 
         &.sidebar-theme {
-          border-top: 1px solid rgba($black, 0.2);
-          box-shadow: inset 0px 1px 1px rgba($white, 0.1);
+          border-top: 1px solid var(--black-20);
+          box-shadow: inset 0px 1px 1px var(--white-20);
         }
       }
     }

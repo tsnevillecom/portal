@@ -3,7 +3,7 @@
 .error-message {
   padding: 8px 12px;
   border-radius: 8px;
-  background-color: rgba($black, 0.2);
+  background-color: var(--black-20);
   margin-bottom: 16px;
   display: flex;
   border: 2px solid rgba($red, 0.6);

@@ -31,7 +31,7 @@ const AdminLocations = () => {
     <div id="company-locations">
       <div className="details">
         <div className="details-list">
-          <div className="details-list-header">
+          <div className="details-header">
             <h3>Office locations</h3>
             <Button
               key="add-location"
@@ -88,9 +88,14 @@ const AdminLocations = () => {
             })}
           </div>
         </div>
-        <div className="details-panel">
-          <Outlet context={{ company, getCompany }} />
-        </div>
+
+        <Outlet context={{ company, getCompany }} />
+
+        {!params.locationId && (
+          <div className="details-panel empty">
+            <div className="not-found">Select a location</div>
+          </div>
+        )}
       </div>
     </div>
   )
