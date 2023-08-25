@@ -33,7 +33,7 @@ const AdminCompanies = () => {
       title="Companies"
       isLoading={isLoading}
       actions={[
-        <Button size="sm" id="edit-company" key="edit">
+        <Button size="sm" id="new-company" key="new-company">
           <FaPlus size={16} />
           New Company
         </Button>,

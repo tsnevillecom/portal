@@ -11,8 +11,6 @@ import {
 } from 'react-router-dom'
 import { FaPlus } from 'react-icons/fa'
 import { ModalContext } from '@context/ModalProvider'
-import { IoIosCloseCircle } from 'react-icons/io'
-import { HiCheckCircle } from 'react-icons/hi'
 import { classNames } from '@utils/classNames.util'
 
 interface IContext {
@@ -35,6 +33,7 @@ const AdminLocations = () => {
             <Button
               key="add-location"
               size="sm"
+              disabled={!company.active}
               onClick={() =>
                 showModal({
                   name: 'NEW_LOCATION',

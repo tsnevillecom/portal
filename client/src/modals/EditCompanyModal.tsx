@@ -18,21 +18,36 @@ import React, {
 } from 'react'
 import ErrorMessage from '@components/ErrorMessage'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
+import CONSTANTS from '@constants/index'
 
 interface EditCompanyModalProps {
   company: Company
   onSuccess: () => void
 }
 
-type Option = {
+type CompanyTypeOption = {
   value: CompanyType
   label: string
 }
 
-const options: Option[] = [
+type StateOption = {
+  value: string
+  label: string
+}
+
+const companyTypeOptions: CompanyTypeOption[] = [
   { value: 'PRIVATE', label: 'Private Company' },
   { value: 'DSO', label: 'DSO' },
 ]
+
+const statesOptions: StateOption[] = Object.entries(CONSTANTS.STATES).map(
+  ([k, v]) => {
+    return {
+      value: k,
+      label: v,
+    }
+  }
+)
 
 const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
   company: originalCompany,
@@ -122,11 +137,14 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
     setCompany(updatedCompany)
   }
 
-  const handleSelect = (option: Option) => {
+  const handleOnSelect = (
+    name: string,
+    option: CompanyTypeOption | StateOption
+  ) => {
     const { value } = option
     if (submitError) setSubmitError(null)
-    if (errors.type) setErrors(_.omit(errors, 'type'))
-    const updatedCompany = { ...company, ...{ type: value } }
+    if (errors[name]) setErrors(_.omit(errors, name))
+    const updatedCompany = { ...company, ...{ [name]: value } }
     setCompany(updatedCompany)
   }
 
@@ -135,81 +153,112 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
       <form onSubmit={handleSubmit}>
         <ModalBody>
           {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
-          <FormControl
-            label="Name"
-            forRef={nameRef}
-            name="name"
-            value={company.name}
-            error={errors.name}
-            onChange={handleInputChange}
-          />
 
-          <div className="form-control">
-            <label className="label-default-semibold">
-              Company Type<span>*</span>
-            </label>
-            <Select
-              defaultValue={_.find(
-                options,
-                (option) => company.type === option.value
-              )}
-              onChange={handleSelect}
-              options={options}
-              className="react-select-container"
-              classNamePrefix="react-select"
-            />
+          <div className="grid">
+            <div className="col col-6 col-md">
+              <FormControl
+                label="Name"
+                forRef={nameRef}
+                name="name"
+                value={company.name}
+                error={errors.name}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col col-6 col-md">
+              <div className="form-control">
+                <label className="label-default-semibold">
+                  Company Type<span>*</span>
+                </label>
+                <Select
+                  defaultValue={_.find(
+                    companyTypeOptions,
+                    (option) => company.type === option.value
+                  )}
+                  onChange={(option) =>
+                    handleOnSelect('type', option as CompanyTypeOption)
+                  }
+                  options={companyTypeOptions}
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                />
+              </div>
+            </div>
+            <div className="col col-6 col-md">
+              <FormControl
+                label="Account ID"
+                name="accountId"
+                value={company.accountId}
+                error={errors.accountId}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col col-6 col-md">
+              <FormControl
+                label="Phone"
+                name="phone"
+                value={company.phone}
+                error={errors.phone}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col col-6 col-md">
+              <FormControl
+                label="Address 1"
+                name="address1"
+                value={company.address1}
+                error={errors.address1}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col col-6 col-md">
+              <FormControl
+                label="Address 2"
+                name="address2"
+                required={false}
+                value={company.address2}
+                error={errors.address2}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col col-6 col-md">
+              <FormControl
+                label="City"
+                name="city"
+                value={company.city}
+                error={errors.city}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col col-6 col-md">
+              <div className="form-control">
+                <label className="label-default-semibold">
+                  Company Type<span>*</span>
+                </label>
+                <Select
+                  defaultValue={_.find(
+                    statesOptions,
+                    (option) => company.state === option.value
+                  )}
+                  onChange={(option) =>
+                    handleOnSelect('state', option as StateOption)
+                  }
+                  options={statesOptions}
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                />
+              </div>
+            </div>
+            <div className="col col-6 col-md">
+              <FormControl
+                label="Postal Code"
+                name="postalCode"
+                value={company.postalCode}
+                error={errors.postalCode}
+                onChange={handleInputChange}
+              />
+            </div>
           </div>
-
-          <FormControl
-            label="Account ID"
-            name="accountId"
-            value={company.accountId}
-            error={errors.accountId}
-            onChange={handleInputChange}
-          />
-          <FormControl
-            label="Phone"
-            name="phone"
-            value={company.phone}
-            error={errors.phone}
-            onChange={handleInputChange}
-          />
-          <FormControl
-            label="Address 1"
-            name="address1"
-            value={company.address1}
-            error={errors.address1}
-            onChange={handleInputChange}
-          />
-          <FormControl
-            label="Address 2"
-            name="address2"
-            required={false}
-            value={company.address2}
-            error={errors.address2}
-            onChange={handleInputChange}
-          />
-          <FormControl
-            label="City"
-            name="city"
-            value={company.city}
-            error={errors.city}
-            onChange={handleInputChange}
-          />
-          <FormControl
-            label="State"
-            name="state"
-            value={company.state}
-            error={errors.state}
-            onChange={handleInputChange}
-          />
-          <FormControl
-            label="Postal Code"
-            name="postalCode"
-            value={company.postalCode}
-            error={errors.postalCode}
-            onChange={handleInputChange}
-          />
         </ModalBody>
         <ModalFooter>
           <Button style="muted" onClick={hideModal}>

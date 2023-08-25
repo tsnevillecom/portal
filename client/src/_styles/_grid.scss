@@ -1,262 +1,301 @@
-@use 'sass:math';
+////////////////////////
+// Flex Grid https://flexgridlite.elliotdahl.com/
+////////////////////////
 
-$flexgrid-breakpoints: (
-  xs: 320px,
-  sm: 576px,
-  md: 960px,
-  lg: 1280px,
-  xl: 1800px,
-);
+//Base unit used for spacing gutters
+$base-unit: 8px;
 
-$flexgrid-columns: 8;
+//Screen Sizes
+$screen-sm: 576px;
+$screen-md: 768px;
+$screen-lg: 992px;
+$screen-xl: 1200px;
 
-$flexgrid-gutters: (
-  xs: 16px,
-  sm: 16px,
-  md: 16px,
-  lg: 16px,
-);
+.grid {
+  box-sizing: border-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: -webkit-box;
+  display: flex;
+  -webkit-flex: 1 1 auto;
+  -ms-flex: 1 1 auto;
+  -webkit-box-flex: 0;
+  flex: 1 1 auto;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  flex-direction: row;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  margin: 0 ($base-unit * -1) 0 ($base-unit * -1);
 
-@mixin flexgrid-break($size) {
-  @media (min-width: map-get($flexgrid-breakpoints, $size)) {
-    @content;
+  //Use this modifier to remove gutters
+  &.grid-nogutter {
+    margin: 0;
+    & > .col {
+      padding: 0;
+    }
   }
 }
-
-/**
- * row
- *
- * This is the root element of a grid object. In it, we exhibit a few main
- * behaviours. The modifiers also help with certain behaviours.
- *
- * [0]  Safety net box sizing reset
- * [1]  All rows are flex containers
- * [2]  By default, they wrap cells to a new line for responsiveness
- * [3]  Rows can be applied to lists as well, thus the list resets
- * [4]  Changes the layout direction to columnar
- * [5]  Aligns flex items to the start of the flex line
- * [6]  Aligns flex items to the end of the flex line
- * [7]  Aligns flex items to the center of the flex line
- * [8]  Packs flex items around the center of the main axis
- * [9]  Packs flex items towards the end of the main axis
- * [10] Distributes space evenly on the main axis between flex items
- * [11] Distributes space evenly on the main axis around flex items
- *
- * Example HTML:
- *
- * <div class="row"></div>
- * <ul class="row"></ul>
- * <ol class="row"></ol>
- */
-
-.row {
-  box-sizing: border-box; /* 0 */
-  display: flex; /* 1 */
-  flex-flow: row wrap; /* 2 */
-  list-style: none; /* 3 */
-  margin: 0; /* 3 */
-  padding: 0; /* 3 */
-  width: 100%;
-}
-
-.row-column {
-  flex-direction: column; /* 4 */
-}
-
-.row-align-start {
-  align-items: flex-start; /* 5 */
-}
-
-.row-align-end {
-  align-items: flex-end; /*  6 */
-}
-
-.row-align-center {
-  align-items: center; /* 7 */
-}
-
-.row-justify-center {
-  justify-content: center; /* 8 */
-}
-
-.row-justify-end {
-  justify-content: flex-end; /* 9 */
-}
-
-.row-space-between {
-  justify-content: space-between; /* 10 */
-}
-
-.row-space-around {
-  justify-content: space-around; /* 11 */
-}
-
-/**
- * col
- *
- * Cols are the content containers that live inside of rows. By default,
- * they just fill the available space.
- *
- * Example HTML:
- *
- * <div class="row">
- *   <div class="col">...</div>
- *   <div class="col">...</div>
- *   ...
- * </div>
- */
 
 .col {
-  flex: 1;
+  box-sizing: border-box;
+  -webkit-flex: 0 0 auto;
+  -ms-flex: 0 0 auto;
+  flex: 0 0 auto;
+  -webkit-flex-grow: 1;
+  -ms-flex-positive: 1;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  -ms-flex-preferred-size: 0;
+  -webkit-flex-basis: 0;
+  flex-basis: 0;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0 $base-unit 0 $base-unit;
 }
 
-.col-auto {
-  flex: 0 1 auto;
+////////////////////////
+//Column Modifiers
+////////////////////////
+
+//Column Vertical Alignment Classes
+.col-align-top {
+  -webkit-align-self: flex-start;
+  -ms-flex-item-align: start;
+  align-self: flex-start;
 }
 
-/**
- * col-[size]
- * col-[size]-[span]
- * col-[size]-offset-[span]
- *
- * For the sake of the following documentation, let's assume that the breakpoint
- * sizes in the gridconfig remain:
- *
- * [xs, sm, md, lg, xl, xx]
- *
- * In this sequence of modifiers, there's a bit going on. We're iterating over
- * the breakpoints in the grid configuration, and applying modifiers to the
- * cols. We're also iterating over the number of columns in the grid
- * configuration, and appending more modifiers to cols. Let's look at
- * the two main modifier types:
- *
- * col-[size]
- *
- * These modifiers cause cols to break at a certain size, denoted above
- * by [size]. By default, they occupy 100% width, and then at a certain
- * breakpoint, they transform to fill the available space.
- *
- * Example HTML:
- *
- * <div class="row">
- *   <div class="col-sm"></div>
- *   <div class="col-sm"></div>
- *   <div class="col-sm"></div>
- *   ...
- * </div>
- *
- * col-[size]-[span]
- *
- * These modifiers are meant to be used declaratively, and chaining them
- * together in the markup determines how they behave at certain screen widths.
- * When building a grid system using these modifiers, the most important part
- * is the declarations at the smallest screen size. If these are left out, grid
- * cells will just auto fill whatever space they take up.
- *
- * Example HTML:
- *
- * <div class="row">
- *   <div class="col-xs-12 col-sm-4 col-lg-2"></div>
- *   <div class="col-xs-12 col-sm-4 col-lg-8"></div>
- *   <div class="col-xs-12 col-sm-4 col-lg-2"></div>
- * </div>
- *
- * col-[size]-offset-[span]
- *
- * These modifiers can also be used declaratively, and chaining them together
- * will add offsets to cols at various breakpoints. For example, at the
- * smallest breakpoint, you can have an offset of 0 columns, at a medium
- * breakpoint, an offset of 4 columns, and at a large breakpoint, an offset of
- * 2 columns. Offsets are from the left, as that's where the horizontal stacking
- * of columns begins. If at any point, you want the offset to go back to 0, you
- * can use the offset-0 modifier.
- *
- * Example HTML:
- *
- * <div class="row gutter-xl">
- *   <div class="col-xs-12 col-md-6 col-md-offset-6"></div>
- *   <div class="col-xs-12 col-md-8"></div>
- * </div>
- *
- * It's important to be careful that your offsets + cell spans don't overflow
- * outside the rows...a little bit of very basic math is required!
- */
+.col-align-bottom {
+  align-self: flex-end;
+}
 
-$flexgrid-cell-counter: 1;
+.col-align-middle {
+  -webkit-align-self: center;
+  -ms-flex-item-align: center;
+  align-self: center;
+}
 
-@each $key, $val in $flexgrid-breakpoints {
-  .col-#{$key} {
-    flex: 0 0 100%;
+//Column Content Alignment Classes
+.col-top {
+  justify-content: flex-start !important;
+  flex-direction: column;
+  display: flex;
+}
+
+.col-bottom {
+  justify-content: flex-end !important;
+  flex-direction: column;
+  display: flex;
+}
+
+.col-middle {
+  justify-content: center;
+  flex-direction: column;
+  display: flex;
+}
+
+//Horizontal Grid Alignment
+.grid-start {
+  -webkit-box-pack: start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+}
+
+.grid-center {
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+.grid-end {
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+}
+
+//Column Distribution
+.grid-around {
+  justify-content: space-around;
+}
+
+.grid-between {
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+}
+
+//Reordering Columns
+.col-first {
+  -webkit-box-ordinal-group: 0;
+  -ms-flex-order: -1;
+  order: -1;
+}
+
+.col-last {
+  -webkit-box-ordinal-group: 2;
+  -ms-flex-order: 1;
+  order: 1;
+}
+
+.grid-reverse {
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: reverse;
+  -ms-flex-direction: row-reverse;
+  flex-direction: row-reverse;
+}
+
+////////////////////////
+//Column Sizing Classes
+////////////////////////
+
+//Fixed Column Class
+.col-fixed {
+  flex: initial;
+}
+
+//Grow Based Columns
+@for $i from 2 through 11 {
+  .col-grow-#{$i} {
+    flex-grow: $i;
+  }
+}
+
+//Percent Based Columns
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    -ms-flex-preferred-size: calc(100% / 12) * $i;
+    -webkit-flex-basis: calc(100% / 12) * $i;
+    flex-basis: calc(100% / 12) * $i;
+    max-width: calc(100% / 12) * $i;
+  }
+}
+
+//////////////////
+//Media Queries
+//////////////////
+@media only screen and (max-width: $screen-sm) {
+  .grid-sm {
+    margin: 0;
+  }
+
+  .col-sm {
+    flex: 100%;
     max-width: 100%;
-
-    @include flexgrid-break($key) {
-      flex: 1;
-    }
+    padding: $base-unit * 2 0 $base-unit * 2;
   }
 
-  @for $i from 1 through $flexgrid-columns {
-    @if $flexgrid-cell-counter == 1 {
-      .col-#{$key}-#{$i} {
-        flex: 0 0 math.div($i, $flexgrid-columns) * 100%;
-        max-width: math.div($i, $flexgrid-columns) * 100%;
-      }
-    }
+  .col-sm-first {
+    -webkit-box-ordinal-group: 0;
+    -ms-flex-order: -1;
+    order: -1;
   }
 
-  @include flexgrid-break($key) {
-    @for $i from 1 through $flexgrid-columns {
-      .col-#{$key}-#{$i} {
-        flex: 0 0 math.div($i, $flexgrid-columns) * 100%;
-        max-width: math.div($i, $flexgrid-columns) * 100%;
-      }
-    }
+  .col-sm-last {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
   }
 
-  @include flexgrid-break($key) {
-    @for $i from 0 through $flexgrid-columns {
-      .col-#{$key}-offset-#{$i} {
-        margin-left: math.div($i, $flexgrid-columns) * 100%;
-      }
-    }
+  .grid-sm-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
-
-  $flexgrid-cell-counter: $flexgrid-cell-counter + 1;
 }
 
-/**
- * gutter-[size]
- *
- * Col gutters are used to give cols spacing between each other. They are
- * optional modifiers to the grid, and come in various sizes based on the
- * $flexgrid-gutters configuration.
- *
- * Example HTML:
- *
- * <div class="row gutter-xl">
- *   <div class="col"></div>
- *   <div class="col"></div>
- *   ...
- * </div>
- */
+@media only screen and (max-width: $screen-md) {
+  .grid-md {
+    margin: 0;
+  }
 
-@each $key, $val in $flexgrid-gutters {
-  .gutter-#{$key} {
-    &:not(:first-child) {
-      margin-top: -$val;
+  .col-md {
+    flex: 100%;
+    max-width: 100%;
+    padding: $base-unit * 2 0 $base-unit * 2;
+  }
 
-      > [class^='col'] {
-        padding-top: $val;
-      }
-    }
+  .col-md-first {
+    -webkit-box-ordinal-group: 0;
+    -ms-flex-order: -1;
+    order: -1;
+  }
 
-    > [class^='col'] {
-      &:not(:first-child) {
-        padding-left: 0;
+  .col-md-last {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
+  }
 
-        @include flexgrid-break($key) {
-          padding-left: $val;
-        }
-      }
-    }
+  .grid-md-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  }
+}
+
+@media only screen and (max-width: $screen-lg) {
+  .grid-lg {
+    margin: 0;
+  }
+
+  .col-lg {
+    flex: 100%;
+    max-width: 100%;
+    padding: $base-unit * 2 0 $base-unit * 2;
+  }
+
+  .col-lg-first {
+    -webkit-box-ordinal-group: 0;
+    -ms-flex-order: -1;
+    order: -1;
+  }
+
+  .col-lg-last {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
+  }
+
+  .grid-lg-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  }
+}
+
+@media only screen and (max-width: $screen-xl) {
+  .grid-xl {
+    margin: 0;
+  }
+
+  .col-xl {
+    flex: 100%;
+    max-width: 100%;
+    padding: $base-unit * 2 0 $base-unit * 2;
+  }
+
+  .col-xl-first {
+    -webkit-box-ordinal-group: 0;
+    -ms-flex-order: -1;
+    order: -1;
+  }
+
+  .col-xl-last {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
+  }
+
+  .grid-xl-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
   }
 }

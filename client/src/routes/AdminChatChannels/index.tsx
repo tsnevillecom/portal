@@ -1,8 +1,10 @@
+import Button from '@components/Button'
 import Page from '@components/Page'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import { Channel } from '@types'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
+import { FaPlus } from 'react-icons/fa'
 
 const AdminChatChannels = () => {
   const axiosPrivate = useAxiosPrivate()
@@ -25,7 +27,17 @@ const AdminChatChannels = () => {
   }
 
   return (
-    <Page id="admin-chat-channels" title="Chat Channels" isLoading={isLoading}>
+    <Page
+      id="admin-chat-channels"
+      title="Chat Channels"
+      isLoading={isLoading}
+      actions={[
+        <Button size="sm" id="new-chat-channel" key="new-chat-channel">
+          <FaPlus size={16} />
+          New Chat Channel
+        </Button>,
+      ]}
+    >
       <table>
         <thead>
           <tr>

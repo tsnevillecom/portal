@@ -15,6 +15,10 @@
       box-shadow: 0 0 5px var(--primary-color-20);
       border: 1px solid var(--primary-color);
     }
+
+    .react-select__input-container {
+      color: var(--tint);
+    }
   }
 
   .react-select__menu {
@@ -27,7 +31,8 @@
     background-color: var(--white);
     color: var(--secondary-color);
 
-    &:hover {
+    &:hover,
+    &.react-select__option--is-focused {
       background-color: var(--black-10);
       cursor: pointer;
     }

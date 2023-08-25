@@ -235,7 +235,7 @@ form {
   position: relative;
   height: 100vh;
   width: 100vw;
-  min-width: 1280px;
+  min-width: $app-max-width;
   display: flex;
   overflow: hidden;
 
@@ -289,7 +289,6 @@ body {
   position: relative;
   height: 100vh;
   width: 100vw;
-  min-width: 1280px;
   overflow: hidden;
   background-color: var(--bg);
 

@@ -1,8 +1,10 @@
+import Button from '@components/Button'
 import Page from '@components/Page'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import { User } from '@types'
 import _ from 'lodash'
 import React, { useEffect, useState } from 'react'
+import { FaPlus } from 'react-icons/fa'
 
 const AdminUsers = () => {
   const axiosPrivate = useAxiosPrivate()
@@ -25,7 +27,17 @@ const AdminUsers = () => {
   }
 
   return (
-    <Page id="admin-users" title="Users" isLoading={isLoading}>
+    <Page
+      id="admin-users"
+      title="Users"
+      isLoading={isLoading}
+      actions={[
+        <Button size="sm" id="new-user" key="new-user">
+          <FaPlus size={16} />
+          New User
+        </Button>,
+      ]}
+    >
       <table>
         <thead>
           <tr>

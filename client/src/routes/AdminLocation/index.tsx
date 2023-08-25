@@ -91,6 +91,7 @@ const AdminLocation = () => {
           <Button
             key="edit-location"
             size="sm"
+            disabled={!company.active || !location.active}
             onClick={() =>
               showModal({
                 name: 'EDIT_LOCATION',
