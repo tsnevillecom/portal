@@ -1,10 +1,12 @@
 import { User, Location } from './'
 
+export type CompanyType = 'DSO' | 'PRIVATE'
+
 export type Company = {
   _id: string
   name: string
   accountId: string
-  type: string
+  type: CompanyType
   phone: string
   address1: string
   address2: string

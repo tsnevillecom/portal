@@ -4,9 +4,10 @@ import Modal from '@components/Modal'
 import ModalBody from '@components/Modal/ModalBody'
 import ModalFooter from '@components/Modal/ModalFooter'
 import { ModalContext } from '@context/ModalProvider'
-import { Company, Errors, Rules } from '@types'
+import { Company, CompanyType, Errors, Rules } from '@types'
 import { trimObjValues } from '@utils/trimObjectValues'
 import { validateForm } from '@utils/validateForm.util'
+import Select from 'react-select'
 import _ from 'lodash'
 import React, {
   ReactNode,
@@ -22,6 +23,16 @@ interface EditCompanyModalProps {
   company: Company
   onSuccess: () => void
 }
+
+type Option = {
+  value: CompanyType
+  label: string
+}
+
+const options: Option[] = [
+  { value: 'PRIVATE', label: 'Private Company' },
+  { value: 'DSO', label: 'DSO' },
+]
 
 const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
   company: originalCompany,
@@ -107,8 +118,16 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
     const { name, value } = e.target
     if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
-    const updatedCompanu = { ...company, ...{ [name]: value } }
-    setCompany(updatedCompanu)
+    const updatedCompany = { ...company, ...{ [name]: value } }
+    setCompany(updatedCompany)
+  }
+
+  const handleSelect = (option: Option) => {
+    const { value } = option
+    if (submitError) setSubmitError(null)
+    if (errors.type) setErrors(_.omit(errors, 'type'))
+    const updatedCompany = { ...company, ...{ type: value } }
+    setCompany(updatedCompany)
   }
 
   return (
@@ -116,7 +135,6 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
       <form onSubmit={handleSubmit}>
         <ModalBody>
           {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
-
           <FormControl
             label="Name"
             forRef={nameRef}
@@ -126,6 +144,22 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             onChange={handleInputChange}
           />
 
+          <div className="form-control">
+            <label className="label-default-semibold">
+              Company Type<span>*</span>
+            </label>
+            <Select
+              defaultValue={_.find(
+                options,
+                (option) => company.type === option.value
+              )}
+              onChange={handleSelect}
+              options={options}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
+          </div>
+
           <FormControl
             label="Account ID"
             name="accountId"
@@ -133,7 +167,6 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             error={errors.accountId}
             onChange={handleInputChange}
           />
-
           <FormControl
             label="Phone"
             name="phone"
@@ -141,7 +174,6 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             error={errors.phone}
             onChange={handleInputChange}
           />
-
           <FormControl
             label="Address 1"
             name="address1"
@@ -149,7 +181,6 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             error={errors.address1}
             onChange={handleInputChange}
           />
-
           <FormControl
             label="Address 2"
             name="address2"
@@ -158,7 +189,6 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             error={errors.address2}
             onChange={handleInputChange}
           />
-
           <FormControl
             label="City"
             name="city"
@@ -166,7 +196,6 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             error={errors.city}
             onChange={handleInputChange}
           />
-
           <FormControl
             label="State"
             name="state"
@@ -174,7 +203,6 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             error={errors.state}
             onChange={handleInputChange}
           />
-
           <FormControl
             label="Postal Code"
             name="postalCode"

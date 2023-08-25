@@ -12,6 +12,7 @@ import { MdModeEditOutline } from 'react-icons/md'
 import { IoIosCloseCircle } from 'react-icons/io'
 import { HiCheckCircle } from 'react-icons/hi'
 import { ModalContext } from '@context/ModalProvider'
+import CONSTANTS from '@constants/index'
 
 const AdminCompany = () => {
   const params = useParams()
@@ -126,10 +127,18 @@ const AdminCompany = () => {
                   </div>
                   <div className="flex-row">
                     <div className="flex-cell">
+                      <strong>Company Type:</strong>
+                    </div>
+                    <div className="flex-cell">
+                      {CONSTANTS.COMPANY_TYPE[company.type]}
+                    </div>
+                  </div>
+                  <div className="flex-row">
+                    <div className="flex-cell">
                       <strong>Last updated:</strong>
                     </div>
                     <div className="flex-cell">
-                      {dayjs(company.updatedAt).format('MMMM D, YYYY h:mm A')}
+                      {dayjs(company.updatedAt).format('MMM D, YYYY h:mm A')}
                     </div>
                   </div>
                 </div>
