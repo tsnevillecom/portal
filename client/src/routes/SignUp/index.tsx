@@ -199,7 +199,7 @@ const SignUpForm = () => {
       <>
         {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
-        <Button style="secondary" onClick={() => googleRegister()}>
+        <Button style="dark" onClick={() => googleRegister()}>
           <BsGoogle size={16} />
           Continue with Google
         </Button>

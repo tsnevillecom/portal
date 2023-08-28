@@ -31,6 +31,7 @@ const AdminCompanies = () => {
     <Page
       id="admin-companies"
       title="Companies"
+      scrollable={false}
       isLoading={isLoading}
       actions={[
         <Button size="sm" id="new-company" key="new-company">
@@ -39,7 +40,7 @@ const AdminCompanies = () => {
         </Button>,
       ]}
     >
-      <div className="card">
+      <div className="table-fixed-head-wrapper">
         <table>
           <thead>
             <tr>

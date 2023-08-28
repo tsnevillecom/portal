@@ -5,10 +5,7 @@ section.page {
   width: 100%;
   display: flex;
   flex-direction: column;
-  flex: 1;
   position: relative;
-  overflow-y: hidden;
-  overflow-x: hidden;
   @include scrollbar();
 
   &.scrollable {
@@ -36,34 +33,6 @@ section.page {
     }
   }
 
-  .page-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 24px;
-
-    h1 {
-      margin-bottom: 0;
-      flex: 1;
-    }
-
-    > a {
-      display: flex;
-      margin-right: 6px;
-    }
-
-    .actions {
-      display: flex;
-
-      > *:not(:first-child) {
-        margin-left: 4px;
-      }
-    }
-
-    & + section.page.vertical {
-      border-top: 1px solid var(--tint-20);
-    }
-  }
-
   .page-disabled,
   .page-loader {
     display: flex;
@@ -71,5 +40,37 @@ section.page {
     height: 100%;
     justify-content: center;
     align-items: center;
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  width: 100%;
+
+  h1,
+  h2,
+  h3 {
+    margin-bottom: 0;
+    flex: 1;
+  }
+
+  > a {
+    display: flex;
+    margin-right: 6px;
+  }
+
+  .actions {
+    display: flex;
+    padding-left: 24px;
+
+    > *:not(:first-child) {
+      margin-left: 4px;
+    }
+  }
+
+  & + section.page.vertical {
+    border-top: 1px solid var(--tint-20);
   }
 }

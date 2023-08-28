@@ -7,6 +7,7 @@
   position: fixed;
   justify-content: center;
   align-items: center;
+  min-width: $app-min-width;
   top: 0;
   bottom: 0;
   right: 0;
@@ -53,9 +54,6 @@
 
     .modal-body {
       padding: 24px;
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
       @include scrollbar();
     }
 

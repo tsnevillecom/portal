@@ -236,7 +236,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
           />
         </ModalBody>
         <ModalFooter>
-          <Button style="muted" onClick={hideModal}>
+          <Button style="secondary" onClick={hideModal}>
             Cancel
           </Button>
           <Button style="primary" type="submit" loading={isSubmitting}>

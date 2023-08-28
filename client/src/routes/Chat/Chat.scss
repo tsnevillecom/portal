@@ -68,12 +68,9 @@
     }
 
     &-thread {
-      flex: 1;
       padding: 16px 8px;
       display: flex;
       flex-direction: column-reverse;
-      overflow-x: hidden;
-      overflow-y: auto;
       @include scrollbar();
     }
 

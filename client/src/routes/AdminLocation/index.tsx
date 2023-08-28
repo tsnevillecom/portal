@@ -66,7 +66,7 @@ const AdminLocation = () => {
             key="activate-location"
             size="sm"
             disabled={!company.active}
-            style="muted"
+            style="secondary"
             onClick={() =>
               showModal({
                 name: location?.active

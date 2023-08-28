@@ -6,10 +6,11 @@
 $base-unit: 8px;
 
 //Screen Sizes
+$screen-xs: 480px;
 $screen-sm: 576px;
 $screen-md: 768px;
 $screen-lg: 992px;
-$screen-xl: 1200px;
+$screen-xl: 1280px;
 
 .grid {
   box-sizing: border-box;
@@ -176,9 +177,60 @@ $screen-xl: 1200px;
 //////////////////
 //Media Queries
 //////////////////
+@media only screen and (max-width: $screen-xs) {
+  .grid-xs {
+    margin: 0;
+  }
+
+  .grid-nogutter-xs {
+    margin: 0;
+
+    & > .col {
+      padding: 0;
+    }
+  }
+
+  .col-xs {
+    flex: 100%;
+    max-width: 100%;
+    padding: 0 0 $base-unit * 2;
+
+    &:last-child {
+      padding: 0;
+    }
+  }
+
+  .col-xs-first {
+    -webkit-box-ordinal-group: 0;
+    -ms-flex-order: -1;
+    order: -1;
+  }
+
+  .col-xs-last {
+    -webkit-box-ordinal-group: 2;
+    -ms-flex-order: 1;
+    order: 1;
+  }
+
+  .grid-xs-reverse {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: reverse;
+    -ms-flex-direction: row-reverse;
+    flex-direction: row-reverse;
+  }
+}
+
 @media only screen and (max-width: $screen-sm) {
   .grid-sm {
     margin: 0;
+  }
+
+  .grid-nogutter-sm {
+    margin: 0;
+
+    & > .col {
+      padding: 0;
+    }
   }
 
   .col-sm {
@@ -216,6 +268,14 @@ $screen-xl: 1200px;
     margin: 0;
   }
 
+  .grid-nogutter-md {
+    margin: 0;
+
+    & > .col {
+      padding: 0;
+    }
+  }
+
   .col-md {
     flex: 100%;
     max-width: 100%;
@@ -251,6 +311,14 @@ $screen-xl: 1200px;
     margin: 0;
   }
 
+  .grid-nogutter-lg {
+    margin: 0;
+
+    & > .col {
+      padding: 0;
+    }
+  }
+
   .col-lg {
     flex: 100%;
     max-width: 100%;
@@ -284,6 +352,14 @@ $screen-xl: 1200px;
 @media only screen and (max-width: $screen-xl) {
   .grid-xl {
     margin: 0;
+  }
+
+  .grid-nogutter-xl {
+    margin: 0;
+
+    & > .col {
+      padding: 0;
+    }
   }
 
   .col-xl {

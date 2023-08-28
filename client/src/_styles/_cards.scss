@@ -1,31 +1,48 @@
-.card-list {
-  display: flex;
-  flex-direction: column;
+.card-list-scroller {
+  padding-right: 4px;
+  margin-right: -4px;
+  @include scrollbar();
 
-  .card {
-    border-radius: 8px;
-    background-color: var(--tint-4);
+  &::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  .card-list {
     display: flex;
-    margin-bottom: 4px;
-    align-items: center;
+    flex-direction: column;
 
-    &:not(.active):hover {
-      background-color: var(--tint-10);
-      cursor: pointer;
-    }
+    .card {
+      border-radius: 8px;
+      background-color: var(--tint-4);
+      display: flex;
+      margin-bottom: 4px;
+      align-items: center;
 
-    &.active {
-      background-color: var(--primary-color-20);
-    }
+      &:not(.active):hover {
+        background-color: var(--tint-10);
+        cursor: pointer;
+      }
 
-    .card-cell {
-      flex: 1 1 100%;
-      padding: 12px 12px;
+      &.active {
+        html[data-theme='dark'] & {
+          background-color: var(--tint-20);
+          color: var(--primary-color);
+        }
 
-      .card-sub-cell {
-        margin-top: 4px;
-        font-size: 14px;
-        color: var(--tint-60);
+        html[data-theme='light'] & {
+          background-color: var(--primary-color-20);
+        }
+      }
+
+      .card-cell {
+        flex: 1 1 100%;
+        padding: 12px 12px;
+
+        .card-sub-cell {
+          margin-top: 4px;
+          font-size: 14px;
+          color: var(--tint-60);
+        }
       }
     }
   }

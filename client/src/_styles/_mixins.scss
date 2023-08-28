@@ -23,8 +23,12 @@ $z-index: (
 }
 
 @mixin scrollbar() {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 8px;
   }
 
   &::-webkit-scrollbar-track {

@@ -150,7 +150,7 @@ const Login = () => {
 
         {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
 
-        <Button style="secondary" onClick={() => googleLogin()}>
+        <Button style="dark" onClick={() => googleLogin()}>
           <BsGoogle size={16} />
           Continue with Google
         </Button>

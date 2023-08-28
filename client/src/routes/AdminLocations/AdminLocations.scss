@@ -1,18 +1,19 @@
 @import '@styles/variables';
 
 #admin-locations {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   overflow: hidden;
-  min-height: 480px;
 
-  .card-cell.location-status {
-    display: flex;
-    align-items: center;
-    flex: 1 1 auto;
-    justify-content: flex-end;
-
-    svg {
-      margin-left: 4px;
+  .card-list-scroller {
+    .card-list {
+      .card {
+        .card-cell.location-status {
+          flex: 1 1 auto;
+          text-align: right;
+        }
+      }
     }
   }
 }

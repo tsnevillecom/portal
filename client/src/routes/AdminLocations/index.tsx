@@ -40,78 +40,73 @@ const AdminLocations = () => {
 
   return (
     <div id="admin-locations">
-      <div className="details">
-        <div className="details-list">
-          <div className="details-header">
-            <h3>Locations</h3>
-            <Button
-              key="add-location"
-              size="sm"
-              disabled={!company.active}
-              onClick={() =>
-                showModal({
-                  name: 'NEW_LOCATION',
-                  data: { companyId: company._id, onSuccess: getCompany },
-                })
-              }
-            >
-              <FaPlus size={16} />
-              New
-            </Button>
-            <Button
-              key="activate-all"
-              size="sm"
-              disabled={!company.active}
-              onClick={activateAll}
-            >
-              Activate All
-            </Button>
-          </div>
+      <div className="section-header">
+        <h3>Locations</h3>
+        <div className="actions">
+          <Button
+            key="activate-all"
+            size="sm"
+            style="secondary"
+            disabled={
+              !company.active ||
+              !_.some(company.locations, (location) => !location.active)
+            }
+            onClick={activateAll}
+          >
+            Activate All
+          </Button>
 
-          <div className="details-list-body">
-            <div className="card-list">
-              {_.map(company.locations, (location) => {
-                const cx = {
-                  card: true,
-                  active: location._id === params.locationId,
-                }
-
-                const cardClasses = classNames(cx)
-
-                return (
-                  <div
-                    className={cardClasses}
-                    key={location._id}
-                    onClick={() =>
-                      navigate(
-                        `/admin/companies/${company._id}/locations/${location._id}`,
-                        { replace: true }
-                      )
-                    }
-                  >
-                    <div className="card-cell">
-                      <div>
-                        <strong>{location.name}</strong>
-                      </div>
-                      <div className="card-sub-cell">{location.phone}</div>
-                    </div>
-                    <div className="card-cell location-status">
-                      {location.active ? 'Active' : 'Deactivated'}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-          </div>
+          <Button
+            key="add-location"
+            size="sm"
+            disabled={!company.active}
+            onClick={() =>
+              showModal({
+                name: 'NEW_LOCATION',
+                data: { companyId: company._id, onSuccess: getCompany },
+              })
+            }
+          >
+            <FaPlus size={16} />
+            New
+          </Button>
         </div>
+      </div>
 
-        <Outlet context={{ company, getCompany }} />
+      <div className="card-list-scroller">
+        <div className="card-list">
+          {_.map(company.locations, (location) => {
+            const cx = {
+              card: true,
+              active: location._id === params.locationId,
+            }
 
-        {!params.locationId && (
-          <div className="details-panel empty">
-            <div className="not-found">Select a location</div>
-          </div>
-        )}
+            const cardClasses = classNames(cx)
+
+            return (
+              <div
+                className={cardClasses}
+                key={location._id}
+                onClick={() =>
+                  navigate(
+                    `/admin/companies/${company._id}/locations/${location._id}`,
+                    { replace: true }
+                  )
+                }
+              >
+                <div className="card-cell">
+                  <div>
+                    <strong>{location.name}</strong>
+                  </div>
+                  <div className="card-sub-cell">{location.phone}</div>
+                </div>
+                <div className="card-cell location-status">
+                  {location.active ? 'Active' : 'Deactivated'}
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )

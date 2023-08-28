@@ -14,6 +14,7 @@
   line-height: 36px;
   user-select: none;
   position: relative;
+  white-space: nowrap;
 
   &.btn-md {
     font-size: 16px;
@@ -42,7 +43,7 @@
     }
   }
 
-  &.btn-secondary {
+  &.btn-dark {
     background-color: $black;
     color: $white;
     border-color: $black;
@@ -52,7 +53,7 @@
     }
   }
 
-  &.btn-muted {
+  &.btn-secondary {
     background-color: $zinc-700;
     color: $white;
     border-color: $zinc-700;

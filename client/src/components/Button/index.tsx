@@ -11,7 +11,7 @@ interface ButtonProps {
     | 'warning'
     | 'secondary'
     | 'link'
-    | 'muted'
+    | 'dark'
     | 'success'
   onClick?: (e: MouseEvent<HTMLButtonElement>) => void
   type?: 'submit' | 'reset' | 'button'

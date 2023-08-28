@@ -50,7 +50,7 @@ const Page: React.FC<IPage> = ({
       {!isLoading && !disabled && (
         <>
           {!!title && (
-            <div className="page-header">
+            <div className="section-header">
               {!!title && <h1>{title}</h1>}
               {actions && <div className="actions">{actions}</div>}
             </div>

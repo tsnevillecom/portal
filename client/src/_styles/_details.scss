@@ -12,9 +12,6 @@
     flex-direction: column;
 
     .details-list-body {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
       @include scrollbar();
       padding-right: 6px;
     }

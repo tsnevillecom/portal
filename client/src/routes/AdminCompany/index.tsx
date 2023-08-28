@@ -13,6 +13,7 @@ import { IoIosCloseCircle } from 'react-icons/io'
 import { HiCheckCircle } from 'react-icons/hi'
 import { ModalContext } from '@context/ModalProvider'
 import CONSTANTS from '@constants/index'
+import { useResponsive } from '@farfetch/react-context-responsive'
 
 const AdminCompany = () => {
   const params = useParams()
@@ -20,6 +21,7 @@ const AdminCompany = () => {
   const axiosPrivate = useAxiosPrivate()
   const [company, setCompany] = useState<Company | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const { is, greaterThan, lessThan } = useResponsive()
 
   useEffect(() => {
     getCompany()
@@ -54,6 +56,35 @@ const AdminCompany = () => {
     }
   }
 
+  const renderContactInfo = () => {
+    if (!company) return null
+
+    return (
+      <>
+        <div className="flex-row">
+          <div className="flex-cell">
+            <strong>Address:</strong>
+          </div>
+          <div className="flex-cell">
+            <div>
+              <div className="company-address-1">{company.address1}</div>
+              <div className="company-address-2">{company.address2}</div>
+              <div className="company-city-state-zip">
+                {company.city}, {company.state} {company.postalCode}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="flex-row">
+          <div className="flex-cell">
+            <strong>Phone:</strong>
+          </div>
+          <div className="flex-cell">{company.phone}</div>
+        </div>
+      </>
+    )
+  }
+
   return (
     <Page
       id="admin-company"
@@ -61,7 +92,7 @@ const AdminCompany = () => {
       isLoading={isLoading}
       actions={[
         <Button
-          style="muted"
+          style="secondary"
           size="sm"
           id="edit-company"
           key="delete"
@@ -99,10 +130,10 @@ const AdminCompany = () => {
     >
       {company && (
         <>
-          <div className="company">
-            <div className="row">
-              <div className="col-sm">
-                <div className="flex-table company-details">
+          <div className="container">
+            <div className="grid grid-nogutter-xl">
+              <div className="col col-md">
+                <div className="flex-table">
                   <div className="flex-row">
                     <div className="flex-cell">
                       <strong>Status:</strong>
@@ -141,36 +172,15 @@ const AdminCompany = () => {
                       {dayjs(company.updatedAt).format('MMM D, YYYY h:mm A')}
                     </div>
                   </div>
+
+                  {(is.md || lessThan.md) && renderContactInfo()}
                 </div>
               </div>
-              <div className="col-sm">
-                <div className="flex-table company-details">
-                  <div className="flex-row">
-                    <div className="flex-cell">
-                      <strong>Address:</strong>
-                    </div>
-                    <div className="flex-cell">
-                      <div>
-                        <div className="company-address-1">
-                          {company.address1}
-                        </div>
-                        <div className="company-address-2">
-                          {company.address2}
-                        </div>
-                        <div className="company-city-state-zip">
-                          {company.city}, {company.state} {company.postalCode}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex-row">
-                    <div className="flex-cell">
-                      <strong>Phone:</strong>
-                    </div>
-                    <div className="flex-cell">{company.phone}</div>
-                  </div>
+              {greaterThan.md && (
+                <div className="col col-md">
+                  <div className="flex-table">{renderContactInfo()}</div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 

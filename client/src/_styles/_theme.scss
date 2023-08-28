@@ -1,6 +1,6 @@
 @import '@styles/variables';
 
-$primary: $sky-600;
+$primary: $sky-500;
 $secondary: $zinc-800;
 
 $shade-dark: $white;
@@ -146,6 +146,12 @@ ul {
   }
 }
 
+.container {
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
 .container-slim {
   position: relative;
   border-radius: 16px;
@@ -235,7 +241,7 @@ form {
   position: relative;
   height: 100vh;
   width: 100vw;
-  // min-width: $app-max-width;
+  min-width: $app-min-width;
   display: flex;
   overflow: hidden;
 
@@ -295,6 +301,10 @@ body {
   html[data-theme='dark'] & {
     color: var(--tint-80);
 
+    .container {
+      background-color: var(--secondary-color);
+    }
+
     a,
     a:active,
     a:visited {
@@ -347,6 +357,10 @@ body {
       &:hover {
         color: var(--primary-color-dark-5);
       }
+    }
+
+    .container {
+      background-color: var(--primary-color-20);
     }
   }
 }

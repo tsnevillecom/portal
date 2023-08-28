@@ -3,8 +3,6 @@
 
 #admin-location {
   .location {
-    overflow-y: auto;
-    overflow-x: hidden;
     padding: 16px;
     height: 100%;
     @include scrollbar();
