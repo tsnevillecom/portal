@@ -1,6 +1,6 @@
 @import '@styles/variables';
 
-$primary: $sky-500;
+$primary: $sky-600;
 $secondary: $zinc-800;
 
 $shade-dark: $white;
@@ -235,7 +235,7 @@ form {
   position: relative;
   height: 100vh;
   width: 100vw;
-  min-width: $app-max-width;
+  // min-width: $app-max-width;
   display: flex;
   overflow: hidden;
 

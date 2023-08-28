@@ -15,6 +15,12 @@
     span {
       margin-left: 4px;
       opacity: 0.5;
+      width: 7px;
+      display: inline-block;
+
+      &.required {
+        color: $red-500;
+      }
     }
   }
 
@@ -27,53 +33,76 @@
     color: rgba($white, 0.4);
   }
 
-  input[type='text'],
-  input[type='password'],
-  input[type='email'],
-  textarea {
-    border-radius: 8px;
-    font-size: $base-font-size;
-    outline: none;
-    padding: 8px 10px;
-    width: 100%;
-    display: block;
-    border: 1px solid var(--tint-6);
-    background-color: var(--tint-4);
-    color: var(--tint);
+  .form-control-input {
+    input[type='text'],
+    input[type='password'],
+    input[type='email'],
+    textarea {
+      border-radius: 8px;
+      font-size: $base-font-size;
+      outline: none;
+      padding: 8px 10px;
+      width: 100%;
+      display: block;
+      border: 1px solid var(--tint-6);
+      background-color: var(--tint-4);
+      color: var(--tint);
 
-    &:focus {
-      box-shadow: 0 0 5px var(--primary-color-20);
-      border: 1px solid var(--primary-color);
+      &:focus {
+        box-shadow: 0 0 5px var(--primary-color-20);
+        border: 1px solid var(--primary-color);
+      }
+
+      &::placeholder {
+        color: var(--tint-40);
+        font-weight: 400;
+      }
     }
 
-    &::placeholder {
-      color: var(--tint-50);
-      font-weight: 400;
+    textarea {
+      font-family: 'Roboto', sans-serif;
+      resize: none;
+      line-height: 26px;
+      overflow-x: hidden;
     }
-  }
-
-  textarea {
-    font-family: 'Roboto', sans-serif;
-    resize: none;
-    line-height: 26px;
-    overflow-x: hidden;
   }
 
   &.error {
     html[data-theme='dark'] & {
-      input,
-      input:focus {
-        border: 1px solid $red;
-        box-shadow: 0 0 5px rgba($red, 0.5);
+      .form-control-input {
+        .react-select-container .react-select__control,
+        input,
+        input:focus {
+          border: 1px solid $red;
+          box-shadow: 0 0 5px rgba($red, 0.5);
+        }
       }
     }
 
     html[data-theme='light'] & {
-      input,
-      input:focus {
-        border: 1px solid $red;
-        box-shadow: none;
+      .form-control-input {
+        .react-select-container .react-select__control,
+        input,
+        input:focus {
+          border: 1px solid $red;
+          box-shadow: none;
+        }
       }
+    }
+  }
+
+  &.horizontal {
+    flex-direction: row;
+
+    label {
+      margin-bottom: 0;
+      flex: 1;
+      margin: 9px 16px 0 0;
+      text-align: end;
+    }
+
+    .form-control-input {
+      flex: 0 0 70%;
     }
   }
 }

@@ -76,6 +76,23 @@ class CompaniesController {
       res.status(500).json({ message: error.message })
     }
   }
+
+  public reactivateLocationsByCompany = async (req, res) => {
+    const companyId = req.params.companyId
+
+    try {
+      const locations = await Location.updateMany(
+        {
+          companyId,
+          active: false,
+        },
+        { $set: { active: true } }
+      ).exec()
+      res.send(locations)
+    } catch (error) {
+      res.status(500).json({ message: error.message })
+    }
+  }
 }
 
 export default CompaniesController

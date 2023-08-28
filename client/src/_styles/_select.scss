@@ -56,7 +56,10 @@
     }
   }
 
-  .react-select__placeholder,
+  .react-select__placeholder {
+    color: var(--tint-40);
+  }
+
   .react-select__single-value {
     color: var(--tint);
   }

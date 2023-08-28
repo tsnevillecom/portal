@@ -42,6 +42,11 @@ class LocationsRouter {
       this.authenticate,
       this.locationsController.reactivateLocation
     )
+    this.router.patch(
+      '/reactivate/:companyId',
+      this.authenticate,
+      this.locationsController.reactivateLocationsByCompany
+    )
   }
 }
 

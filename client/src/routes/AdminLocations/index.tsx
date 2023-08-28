@@ -12,6 +12,7 @@ import {
 import { FaPlus } from 'react-icons/fa'
 import { ModalContext } from '@context/ModalProvider'
 import { classNames } from '@utils/classNames.util'
+import { axiosPrivate } from '@api/axios'
 
 interface IContext {
   company: Company
@@ -23,6 +24,19 @@ const AdminLocations = () => {
   const { company, getCompany } = useOutletContext<IContext>()
   const { showModal } = useContext(ModalContext)
   const navigate = useNavigate()
+
+  const activateAll = async () => {
+    try {
+      const response = await axiosPrivate.patch(
+        `/locations/reactivate/${params.companyId}`
+      )
+      console.log(response)
+
+      getCompany()
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div id="admin-locations">
@@ -43,6 +57,14 @@ const AdminLocations = () => {
             >
               <FaPlus size={16} />
               New
+            </Button>
+            <Button
+              key="activate-all"
+              size="sm"
+              disabled={!company.active}
+              onClick={activateAll}
+            >
+              Activate All
             </Button>
           </div>
 

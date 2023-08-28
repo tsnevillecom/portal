@@ -184,7 +184,11 @@ $screen-xl: 1200px;
   .col-sm {
     flex: 100%;
     max-width: 100%;
-    padding: $base-unit * 2 0 $base-unit * 2;
+    padding: 0 0 $base-unit * 2;
+
+    &:last-child {
+      padding: 0;
+    }
   }
 
   .col-sm-first {
@@ -215,7 +219,11 @@ $screen-xl: 1200px;
   .col-md {
     flex: 100%;
     max-width: 100%;
-    padding: $base-unit * 2 0 $base-unit * 2;
+    padding: 0 0 $base-unit * 2;
+
+    &:last-child {
+      padding: 0;
+    }
   }
 
   .col-md-first {
@@ -246,7 +254,11 @@ $screen-xl: 1200px;
   .col-lg {
     flex: 100%;
     max-width: 100%;
-    padding: $base-unit * 2 0 $base-unit * 2;
+    padding: 0 0 $base-unit * 2;
+
+    &:last-child {
+      padding: 0;
+    }
   }
 
   .col-lg-first {
@@ -277,7 +289,11 @@ $screen-xl: 1200px;
   .col-xl {
     flex: 100%;
     max-width: 100%;
-    padding: $base-unit * 2 0 $base-unit * 2;
+    padding: 0 0 $base-unit * 2;
+
+    &:last-child {
+      padding: 0;
+    }
   }
 
   .col-xl-first {

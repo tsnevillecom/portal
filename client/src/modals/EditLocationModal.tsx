@@ -136,107 +136,107 @@ const EditLocationModal: React.FC<EditLocationModalProps> = ({
   }
 
   return (
-    <Modal title="Edit Location" fullscreen>
+    <Modal title="Edit Location">
       <form onSubmit={handleSubmit}>
         <ModalBody>
           {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
-          <div className="grid">
-            <div className="col col-6 col-md">
-              <FormControl
-                label="Name"
-                forRef={nameRef}
-                name="name"
-                value={location.name}
-                error={errors.name}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col col-6 col-md">
-              <FormControl
-                label="Tax ID"
-                name="taxId"
-                value={location.taxId}
-                error={errors.taxId}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col col-6 col-md">
-              <FormControl
-                label="Phone"
-                name="phone"
-                value={location.phone}
-                error={errors.phone}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col col-6 col-md">
-              <FormControl
-                label="Address 1"
-                name="address1"
-                value={location.address1}
-                error={errors.address1}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col col-6 col-md">
-              <FormControl
-                label="Address 2"
-                name="address2"
-                required={false}
-                value={location.address2}
-                error={errors.address2}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col col-6 col-md">
-              <FormControl
-                label="City"
-                name="city"
-                value={location.city}
-                error={errors.city}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col col-6 col-md">
-              <div className="form-control">
-                <label className="label-default-semibold">
-                  Company Type<span>*</span>
-                </label>
-                <Select
-                  defaultValue={_.find(
-                    statesOptions,
-                    (option) => location.state === option.value
-                  )}
-                  onChange={(option) =>
-                    handleOnSelect('state', option as StateOption)
-                  }
-                  options={statesOptions}
-                  className="react-select-container"
-                  classNamePrefix="react-select"
-                />
-              </div>
-            </div>
-            <div className="col col-6 col-md">
-              <FormControl
-                label="Postal Code"
-                name="postalCode"
-                value={location.postalCode}
-                error={errors.postalCode}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col col-12 col-md">
-              <FormControl
-                label="Description"
-                name="description"
-                textarea={true}
-                required={false}
-                value={location.description}
-                error={errors.description}
-                onChange={handleInputChange}
+
+          <FormControl
+            label="Name"
+            forRef={nameRef}
+            name="name"
+            value={location.name}
+            error={errors.name}
+            onChange={handleInputChange}
+            horizontal
+          />
+
+          <FormControl
+            label="Tax ID"
+            name="taxId"
+            value={location.taxId}
+            error={errors.taxId}
+            onChange={handleInputChange}
+            horizontal
+          />
+
+          <FormControl
+            label="Phone"
+            name="phone"
+            value={location.phone}
+            error={errors.phone}
+            onChange={handleInputChange}
+            horizontal
+          />
+
+          <FormControl
+            label="Address 1"
+            name="address1"
+            value={location.address1}
+            error={errors.address1}
+            onChange={handleInputChange}
+            horizontal
+          />
+
+          <FormControl
+            label="Address 2"
+            name="address2"
+            required={false}
+            value={location.address2}
+            error={errors.address2}
+            onChange={handleInputChange}
+            horizontal
+          />
+
+          <FormControl
+            label="City"
+            name="city"
+            value={location.city}
+            error={errors.city}
+            onChange={handleInputChange}
+            horizontal
+          />
+
+          <div className="form-control horizontal">
+            <label className="label-default-semibold">
+              Company Type<span>*</span>
+            </label>
+
+            <div className="form-control-input">
+              <Select
+                defaultValue={_.find(
+                  statesOptions,
+                  (option) => location.state === option.value
+                )}
+                onChange={(option) =>
+                  handleOnSelect('state', option as StateOption)
+                }
+                options={statesOptions}
+                className="react-select-container"
+                classNamePrefix="react-select"
               />
             </div>
           </div>
+
+          <FormControl
+            label="Postal Code"
+            name="postalCode"
+            value={location.postalCode}
+            error={errors.postalCode}
+            onChange={handleInputChange}
+            horizontal
+          />
+          <FormControl
+            label="Description"
+            name="description"
+            textarea={true}
+            required={false}
+            rows={6}
+            value={location.description}
+            error={errors.description}
+            onChange={handleInputChange}
+            horizontal
+          />
         </ModalBody>
         <ModalFooter>
           <Button style="muted" onClick={hideModal}>

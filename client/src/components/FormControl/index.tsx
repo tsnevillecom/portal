@@ -10,6 +10,7 @@ interface FormControlProps {
   disabled?: boolean
   error?: string
   hasError?: boolean
+  horizontal?: boolean
   forRef?: RefObject<HTMLInputElement | HTMLTextAreaElement> | null
   id?: string
   label?: string
@@ -36,6 +37,7 @@ const defaultProps: FormControlProps = {
   disabled: false,
   error: '',
   hasError: false,
+  horizontal: false,
   forRef: null,
   label: '',
   name: '',
@@ -56,6 +58,7 @@ const FormControl: React.FC<FormControlProps> = ({
   disabled,
   error,
   hasError,
+  horizontal,
   forRef,
   id,
   label,
@@ -123,6 +126,7 @@ const FormControl: React.FC<FormControlProps> = ({
     'form-control': true,
     error: !!error || !!hasError,
     round,
+    horizontal,
     focused: focused && textarea,
   }
 
@@ -138,7 +142,7 @@ const FormControl: React.FC<FormControlProps> = ({
       {!!label && (
         <label className="label-default-semibold" htmlFor={name}>
           {label}
-          {required && <span>*</span>}
+          {required ? <span className="required">*</span> : <span> </span>}
         </label>
       )}
 
@@ -147,46 +151,49 @@ const FormControl: React.FC<FormControlProps> = ({
           {viewPassword ? <FaEyeSlash /> : <FaEye />}
         </div>
       )}
-
-      {!textarea && (
-        <input
-          disabled={disabled}
-          ref={forRef as RefObject<HTMLInputElement> | null}
-          name={name}
-          {...(!_.isNull(placeholder) && { placeholder: placeholder || label })}
-          autoComplete={autoComplete}
-          value={inputValue}
-          type={inputType}
-          spellCheck={spellCheck}
-          onChange={(e) => handleOnChange(e)}
-          {...(type === 'number' && {
-            pattern: '[0-9]*',
-            inputMode: 'numeric',
-          })}
-          {...(maxLength && { maxLength })}
-        />
-      )}
-
-      {textarea && (
-        <div className="form-control--textarea">
-          <textarea
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
+      <div className="form-control-input">
+        {!textarea && (
+          <input
             disabled={disabled}
-            rows={rows}
-            ref={forRef as RefObject<HTMLTextAreaElement> | null}
+            ref={forRef as RefObject<HTMLInputElement> | null}
             name={name}
             {...(!_.isNull(placeholder) && {
               placeholder: placeholder || label,
             })}
+            autoComplete={autoComplete}
             value={inputValue}
+            type={inputType}
             spellCheck={spellCheck}
             onChange={(e) => handleOnChange(e)}
+            {...(type === 'number' && {
+              pattern: '[0-9]*',
+              inputMode: 'numeric',
+            })}
             {...(maxLength && { maxLength })}
           />
-        </div>
-      )}
-      {!!error && <FormError text={error} name={name} />}
+        )}
+
+        {textarea && (
+          <div className="form-control--textarea">
+            <textarea
+              onFocus={() => setFocused(true)}
+              onBlur={() => setFocused(false)}
+              disabled={disabled}
+              rows={rows}
+              ref={forRef as RefObject<HTMLTextAreaElement> | null}
+              name={name}
+              {...(!_.isNull(placeholder) && {
+                placeholder: placeholder || label,
+              })}
+              value={inputValue}
+              spellCheck={spellCheck}
+              onChange={(e) => handleOnChange(e)}
+              {...(maxLength && { maxLength })}
+            />
+          </div>
+        )}
+        {!!error && <FormError text={error} name={name} />}
+      </div>
     </div>
   )
 }

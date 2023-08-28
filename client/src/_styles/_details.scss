@@ -24,11 +24,16 @@
     display: flex;
     margin-bottom: 24px;
     padding-right: 6px;
+    align-items: center;
 
     h3 {
       margin: 0;
       flex: 1;
       word-break: break-word;
+    }
+
+    .btn {
+      margin-left: 4px;
     }
 
     .details-header-actions {
@@ -39,10 +44,6 @@
 
       .btn {
         flex: 1;
-
-        &:first-child {
-          margin-right: 8px;
-        }
       }
     }
   }
