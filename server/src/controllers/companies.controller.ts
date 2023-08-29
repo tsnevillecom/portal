@@ -72,7 +72,9 @@ class CompaniesController {
     try {
       const company = await Company.findByIdAndUpdate(id, req.body, {
         new: true,
-      }).exec()
+      })
+        .populate({ path: 'locations', options: { sort: { name: 1 } } })
+        .exec()
       res.send(company)
     } catch (error) {
       res.status(500).send(error)
@@ -82,17 +84,23 @@ class CompaniesController {
   public deactivateCompany = async (req, res) => {
     const id = req.params.id
     try {
-      const company = await Company.findOne({ _id: id, active: true }).exec()
-      company.active = false
-      await company.save()
-
       await Location.updateMany(
-        { _id: { $in: company.locations } },
+        { companyId: id },
         { $set: { active: false } },
         { multi: true }
       )
 
-      res.sendStatus(204)
+      const company = await Company.findByIdAndUpdate(
+        id,
+        { active: false },
+        {
+          new: true,
+        }
+      )
+        .populate({ path: 'locations', options: { sort: { name: 1 } } })
+        .exec()
+
+      res.send(company)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -100,11 +108,19 @@ class CompaniesController {
 
   public reactivateCompany = async (req, res) => {
     const id = req.params.id
+
     try {
-      const company = await Company.findOne({ _id: id, active: false }).exec()
-      company.active = true
-      await company.save()
-      res.sendStatus(204)
+      const company = await Company.findByIdAndUpdate(
+        id,
+        { active: true },
+        {
+          new: true,
+        }
+      )
+        .populate({ path: 'locations', options: { sort: { name: 1 } } })
+        .exec()
+
+      res.send(company)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }

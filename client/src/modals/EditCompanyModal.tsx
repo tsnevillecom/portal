@@ -22,7 +22,7 @@ import CONSTANTS from '@constants/index'
 
 interface EditCompanyModalProps {
   company: Company
-  onSuccess: () => void
+  onSuccess: (company: Company) => void
 }
 
 type CompanyTypeOption = {
@@ -118,8 +118,11 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
     setIsSubmitting(true)
 
     try {
-      await axiosPrivate.patch(`/companies/${company._id}`, data)
-      onSuccess()
+      const response = await axiosPrivate.patch(
+        `/companies/${company._id}`,
+        data
+      )
+      onSuccess(response.data)
       hideModal()
     } catch (error) {
       console.log(error)

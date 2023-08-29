@@ -3,25 +3,19 @@ import './AdminLocations.scss'
 import { Company } from '@types'
 import _ from 'lodash'
 import React, { useContext } from 'react'
-import {
-  Outlet,
-  useNavigate,
-  useOutletContext,
-  useParams,
-} from 'react-router-dom'
+import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import { FaPlus } from 'react-icons/fa'
 import { ModalContext } from '@context/ModalProvider'
-import { classNames } from '@utils/classNames.util'
 import { axiosPrivate } from '@api/axios'
 
 interface IContext {
   company: Company
-  getCompany: () => void
+  setCompany: (company: Company) => void
 }
 
 const AdminLocations = () => {
   const params = useParams()
-  const { company, getCompany } = useOutletContext<IContext>()
+  const { company, setCompany } = useOutletContext<IContext>()
   const { showModal } = useContext(ModalContext)
   const navigate = useNavigate()
 
@@ -30,9 +24,7 @@ const AdminLocations = () => {
       const response = await axiosPrivate.patch(
         `/locations/reactivate/${params.companyId}`
       )
-      console.log(response)
-
-      getCompany()
+      setCompany(response.data)
     } catch (error) {
       console.log(error)
     }
@@ -63,7 +55,7 @@ const AdminLocations = () => {
             onClick={() =>
               showModal({
                 name: 'NEW_LOCATION',
-                data: { companyId: company._id, onSuccess: getCompany },
+                data: { company, onSuccess: setCompany },
               })
             }
           >
@@ -76,21 +68,14 @@ const AdminLocations = () => {
       <div className="card-list-scroller">
         <div className="card-list">
           {_.map(company.locations, (location) => {
-            const cx = {
-              card: true,
-              active: location._id === params.locationId,
-            }
-
-            const cardClasses = classNames(cx)
-
             return (
               <div
-                className={cardClasses}
+                className="card"
                 key={location._id}
                 onClick={() =>
                   navigate(
                     `/admin/companies/${company._id}/locations/${location._id}`,
-                    { replace: true }
+                    { state: { company } }
                   )
                 }
               >

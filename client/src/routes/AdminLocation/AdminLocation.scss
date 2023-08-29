@@ -4,7 +4,6 @@
 #admin-location {
   .location {
     padding: 16px;
-    height: 100%;
     @include scrollbar();
 
     strong {

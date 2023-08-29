@@ -14,42 +14,34 @@ import { HiCheckCircle } from 'react-icons/hi'
 import { ModalContext } from '@context/ModalProvider'
 import CONSTANTS from '@constants/index'
 import { useResponsive } from '@farfetch/react-context-responsive'
+import { CompanyContext } from '@context/CompanyProvider'
 
 const AdminCompany = () => {
   const params = useParams()
   const { showModal } = useContext(ModalContext)
   const axiosPrivate = useAxiosPrivate()
-  const [company, setCompany] = useState<Company | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { is, greaterThan, lessThan } = useResponsive()
+  const { company, getCompany, setCompany } = useContext(CompanyContext)
 
   useEffect(() => {
-    getCompany()
+    init()
   }, [])
 
-  const getCompany = async () => {
+  const init = async () => {
     if (!isLoading) setIsLoading(true)
-
-    try {
-      const response = await axiosPrivate(`/companies/${params.companyId}`)
-      setCompany(response.data)
-    } catch (error) {
-      console.log(error)
-    }
-
+    await getCompany(params.companyId as string)
     setIsLoading(false)
   }
 
   const companyActivation = async () => {
-    setIsLoading(true)
-
     try {
-      await axiosPrivate.post(
+      const response = await axiosPrivate.patch(
         `/companies/${company?.active ? 'deactivate' : 'reactivate'}/${
           params.companyId
         }`
       )
-      await getCompany()
+      setCompany(response.data)
     } catch (error) {
       console.log(error)
       setIsLoading(false)
@@ -119,7 +111,7 @@ const AdminCompany = () => {
           onClick={() =>
             showModal({
               name: 'EDIT_COMPANY',
-              data: { company, onSuccess: getCompany },
+              data: { company, onSuccess: setCompany },
             })
           }
         >
@@ -184,7 +176,7 @@ const AdminCompany = () => {
             </div>
           </div>
 
-          <Outlet context={{ company, getCompany }} />
+          <Outlet context={{ company, setCompany }} />
         </>
       )}
 

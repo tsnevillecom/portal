@@ -4,7 +4,7 @@ import Modal from '@components/Modal'
 import ModalBody from '@components/Modal/ModalBody'
 import ModalFooter from '@components/Modal/ModalFooter'
 import { ModalContext } from '@context/ModalProvider'
-import { Errors, NewLocation, Rules } from '@types'
+import { Company, Errors, NewLocation, Rules } from '@types'
 import { trimObjValues } from '@utils/trimObjectValues'
 import { validateForm } from '@utils/validateForm.util'
 import Select from 'react-select'
@@ -22,8 +22,8 @@ import CONSTANTS from '@constants/index'
 import FormControlSelect from '@components/FormControlSelect'
 
 interface NewLocationModalProps {
-  companyId: string
-  onSuccess: () => void
+  company: Company
+  onSuccess: (company: Company) => void
 }
 
 type StateOption = {
@@ -52,7 +52,7 @@ const initialLocationState = {
 }
 
 const NewLocationModal: React.FC<NewLocationModalProps> = ({
-  companyId,
+  company,
   onSuccess,
 }) => {
   const axiosPrivate = useAxiosPrivate()
@@ -77,7 +77,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
 
     const data = {
       ...trimObjValues(location),
-      companyId,
+      companyId: company._id,
     }
 
     const rules: Rules = {
@@ -111,8 +111,8 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
     setIsSubmitting(true)
 
     try {
-      await axiosPrivate.post('/locations', data)
-      onSuccess()
+      const response = await axiosPrivate.post('/locations', data)
+      onSuccess(response.data)
       hideModal()
     } catch (error) {
       console.log(error)

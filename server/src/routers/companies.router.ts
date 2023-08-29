@@ -42,12 +42,12 @@ class CompaniessRouter {
       this.authenticate,
       this.companiesContoller.updateCompany
     )
-    this.router.post(
+    this.router.patch(
       '/deactivate/:id',
       this.authenticate,
       this.companiesContoller.deactivateCompany
     )
-    this.router.post(
+    this.router.patch(
       '/reactivate/:id',
       this.authenticate,
       this.companiesContoller.reactivateCompany

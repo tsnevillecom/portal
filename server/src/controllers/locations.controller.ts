@@ -2,7 +2,7 @@ import Company from '../models/company.model'
 import User from '../models/user.model'
 import Location from '../models/location.model'
 
-class CompaniesController {
+class LocationsController {
   public getAllLocations = async (req, res) => {
     try {
       const locations = await Location.find().exec()
@@ -28,14 +28,20 @@ class CompaniesController {
     const location = new Location(req.body)
 
     try {
-      const company = await Company.findById(companyId)
       const user = await User.findOne({ email: req.user.email }).exec()
       location.createdBy = user._id
       const newLocation = await location.save()
-      company.locations.push(newLocation._id)
-      company.save()
-      res.send(newLocation)
+      const company = await Company.findByIdAndUpdate(
+        companyId,
+        { $push: { locations: newLocation._id } },
+        { new: true }
+      )
+        .populate({ path: 'locations', options: { sort: { name: 1 } } })
+        .exec()
+
+      res.send(company)
     } catch (error) {
+      console.log(error)
       res.status(500).send(error)
     }
   }
@@ -56,10 +62,15 @@ class CompaniesController {
   public deactivateLocation = async (req, res) => {
     const id = req.params.id
     try {
-      const location = await Location.findOne({ _id: id, active: true }).exec()
-      location.active = false
-      await location.save()
-      res.sendStatus(204)
+      const location = await Location.findByIdAndUpdate(
+        id,
+        { active: false },
+        {
+          new: true,
+        }
+      ).exec()
+
+      res.send(location)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -68,10 +79,15 @@ class CompaniesController {
   public reactivateLocation = async (req, res) => {
     const id = req.params.id
     try {
-      const location = await Location.findOne({ _id: id, active: false }).exec()
-      location.active = true
-      await location.save()
-      res.sendStatus(204)
+      const location = await Location.findByIdAndUpdate(
+        id,
+        { active: true },
+        {
+          new: true,
+        }
+      ).exec()
+
+      res.send(location)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
@@ -81,18 +97,23 @@ class CompaniesController {
     const companyId = req.params.companyId
 
     try {
-      const locations = await Location.updateMany(
+      await Location.updateMany(
         {
           companyId,
           active: false,
         },
         { $set: { active: true } }
       ).exec()
-      res.send(locations)
+
+      const company = await Company.findById(companyId)
+        .populate({ path: 'locations', options: { sort: { name: 1 } } })
+        .exec()
+
+      res.send(company)
     } catch (error) {
       res.status(500).json({ message: error.message })
     }
   }
 }
 
-export default CompaniesController
+export default LocationsController

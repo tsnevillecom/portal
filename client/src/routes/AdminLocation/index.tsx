@@ -3,7 +3,7 @@ import './AdminLocation.scss'
 import { Company, Location } from '@types'
 import _ from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
-import { useOutletContext, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { MdModeEditOutline } from 'react-icons/md'
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { ModalContext } from '@context/ModalProvider'
@@ -12,99 +12,96 @@ import { formatText } from '@utils/formatText.util'
 import { IoIosCloseCircle } from 'react-icons/io'
 import { HiCheckCircle } from 'react-icons/hi'
 import dayjs from 'dayjs'
-
-interface IContext {
-  company: Company
-  getCompany: () => void
-}
+import Page from '@components/Page'
+import { CompanyContext } from '@context/CompanyProvider'
 
 const AdminLocation = () => {
   const params = useParams()
-  const { company, getCompany } = useOutletContext<IContext>()
   const axiosPrivate = useAxiosPrivate()
   const { showModal } = useContext(ModalContext)
-
-  const findLocation = (): Location => {
-    const location = _.find(
-      company.locations,
-      (location) => location._id === params.locationId
-    ) as Location
-
-    return location
-  }
-
-  const [location, setLocation] = useState<Location>(findLocation())
+  const [isLoading, setIsLoading] = useState(true)
+  const [location, setLocation] = useState<Location | null>(null)
+  const { company, getCompany } = useContext(CompanyContext)
 
   useEffect(() => {
-    const location = _.find(
-      company.locations,
-      (location) => location._id === params.locationId
-    ) as Location
+    init()
+  }, [])
 
-    setLocation(location)
-  }, [params])
+  const init = async () => {
+    if (!isLoading) setIsLoading(true)
+    if (!company && params.companyId) getCompany(params.companyId)
+
+    try {
+      const response = await axiosPrivate(`/locations/${params.locationId}`)
+      setLocation(response.data)
+    } catch (error) {
+      console.log(error)
+    }
+
+    setIsLoading(false)
+  }
 
   const locationActivation = async (location: Location) => {
     try {
-      await axiosPrivate.post(
+      const response = await axiosPrivate.post(
         `/locations/${location.active ? 'deactivate' : 'reactivate'}/${
           location._id
         }`
       )
-      await getCompany()
+      await setLocation(response.data)
     } catch (error) {
       console.log(error)
     }
   }
 
+  if (!location) return null
+
   return (
-    <div id="admin-location" className="details-panel">
-      <div className="details-header">
-        <h3>{location.name}</h3>
-        <div className="details-header-actions">
-          <Button
-            key="activate-location"
-            size="sm"
-            disabled={!company.active}
-            style="secondary"
-            onClick={() =>
-              showModal({
-                name: location?.active
-                  ? 'CONFIRM_DEACTIVATE'
-                  : 'CONFIRM_REACTIVATE',
-                data: {
-                  obj: location,
-                  onConfirm: () => locationActivation(location),
-                },
-              })
-            }
-          >
-            {location?.active ? (
-              <AiOutlineEyeInvisible size={16} />
-            ) : (
-              <AiOutlineEye size={16} />
-            )}
+    <Page
+      id="admin-location"
+      title={location.name}
+      isLoading={isLoading}
+      actions={[
+        <Button
+          key="activate-location"
+          size="sm"
+          style="secondary"
+          onClick={() =>
+            showModal({
+              name: location?.active
+                ? 'CONFIRM_DEACTIVATE'
+                : 'CONFIRM_REACTIVATE',
+              data: {
+                obj: location,
+                onConfirm: () => locationActivation(location),
+              },
+            })
+          }
+        >
+          {location?.active ? (
+            <AiOutlineEyeInvisible size={16} />
+          ) : (
+            <AiOutlineEye size={16} />
+          )}
 
-            {location?.active ? 'Deactivate' : 'Reactivate'}
-          </Button>
-
-          <Button
-            key="edit-location"
-            size="sm"
-            disabled={!company.active || !location.active}
-            onClick={() =>
-              showModal({
-                name: 'EDIT_LOCATION',
-                data: { location, onSuccess: getCompany },
-              })
-            }
-          >
-            <MdModeEditOutline size={16} />
-            Edit
-          </Button>
-        </div>
-      </div>
-
+          {location?.active ? 'Deactivate' : 'Reactivate'}
+        </Button>,
+        <Button
+          key="edit-location"
+          size="sm"
+          disabled={!location.active}
+          onClick={() =>
+            showModal({
+              name: 'EDIT_LOCATION',
+              data: { location, onSuccess: setLocation },
+            })
+          }
+        >
+          <MdModeEditOutline size={16} />
+          Edit
+        </Button>,
+      ]}
+    >
       {location && (
         <div key={location._id} className="location">
           <div className="flex-table location-details">
@@ -176,7 +173,7 @@ const AdminLocation = () => {
       </div>
 
       {!location && <div className="not-found">Location not found</div>}
-    </div>
+    </Page>
   )
 }
 

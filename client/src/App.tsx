@@ -29,6 +29,7 @@ import AdminCompany from '@routes/AdminCompany'
 import ModalRoot from './modals/ModalRoot'
 import AdminLocations from '@routes/AdminLocations'
 import AdminLocation from '@routes/AdminLocation'
+import { CompanyProvider } from '@context/CompanyProvider'
 
 const App = () => {
   useTheme()
@@ -73,15 +74,17 @@ const App = () => {
               }
             >
               <Route path="users" element={<AdminUsers />} />
-              <Route path="companies" element={<AdminCompanies />} />
-              <Route path="companies/:companyId" element={<AdminCompany />}>
-                <Route path="" element={<AdminLocations />}>
-                  <Route
-                    path="locations/:locationId"
-                    element={<AdminLocation />}
-                  />
+
+              <CompanyProvider>
+                <Route path="companies" element={<AdminCompanies />} />
+                <Route path="companies/:companyId" element={<AdminCompany />}>
+                  <Route path="" element={<AdminLocations />} />
                 </Route>
-              </Route>
+                <Route
+                  path="companies/:companyId/locations/:locationId"
+                  element={<AdminLocation />}
+                />
+              </CompanyProvider>
               <Route path="chat-channels" element={<AdminChatChannels />} />
             </Route>
           </Route>
