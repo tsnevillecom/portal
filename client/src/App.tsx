@@ -1,5 +1,5 @@
 import React from 'react'
-import { Route, Routes } from 'react-router-dom'
+import { Outlet, Route, Routes } from 'react-router-dom'
 
 import Login from '@routes/Login'
 import Missing from '@routes/Missing'
@@ -75,7 +75,13 @@ const App = () => {
             >
               <Route path="users" element={<AdminUsers />} />
 
-              <CompanyProvider>
+              <Route
+                element={
+                  <CompanyProvider>
+                    <Outlet />
+                  </CompanyProvider>
+                }
+              >
                 <Route path="companies" element={<AdminCompanies />} />
                 <Route path="companies/:companyId" element={<AdminCompany />}>
                   <Route path="" element={<AdminLocations />} />
@@ -84,7 +90,7 @@ const App = () => {
                   path="companies/:companyId/locations/:locationId"
                   element={<AdminLocation />}
                 />
-              </CompanyProvider>
+              </Route>
               <Route path="chat-channels" element={<AdminChatChannels />} />
             </Route>
           </Route>

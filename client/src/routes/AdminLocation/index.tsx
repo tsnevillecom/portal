@@ -66,6 +66,7 @@ const AdminLocation = () => {
           key="activate-location"
           size="sm"
           style="secondary"
+          disabled={!company?.active}
           onClick={() =>
             showModal({
               name: location?.active
@@ -89,7 +90,7 @@ const AdminLocation = () => {
         <Button
           key="edit-location"
           size="sm"
-          disabled={!location.active}
+          disabled={!location.active || !company?.active}
           onClick={() =>
             showModal({
               name: 'EDIT_LOCATION',
