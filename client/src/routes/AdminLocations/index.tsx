@@ -7,6 +7,33 @@ import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
 import { FaPlus } from 'react-icons/fa'
 import { ModalContext } from '@context/ModalProvider'
 import { axiosPrivate } from '@api/axios'
+import { motion } from 'framer-motion'
+
+const container = {
+  show: {
+    transition: {
+      staggerChildren: 0.02,
+      staggerDirection: -1,
+    },
+  },
+}
+
+const listItem = {
+  hidden: {
+    opacity: 0,
+    scale: 0.98,
+    y: 10,
+  },
+  show: {
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: {
+      type: 'spring',
+      stiffness: 200,
+    },
+  },
+}
 
 interface IContext {
   company: Company
@@ -66,10 +93,17 @@ const AdminLocations = () => {
       </div>
 
       <div className="card-list-scroller">
-        <div className="card-list">
+        <motion.div
+          className="card-list"
+          variants={container}
+          initial="hidden"
+          animate="show"
+        >
           {_.map(company.locations, (location) => {
             return (
-              <div
+              <motion.div
+                layout
+                variants={listItem}
                 className="card"
                 key={location._id}
                 onClick={() =>
@@ -79,19 +113,19 @@ const AdminLocations = () => {
                   )
                 }
               >
-                <div className="card-cell">
+                <motion.div layout className="card-cell">
                   <div>
                     <strong>{location.name}</strong>
                   </div>
                   <div className="card-sub-cell">{location.phone}</div>
-                </div>
-                <div className="card-cell location-status">
+                </motion.div>
+                <motion.div layout className="card-cell location-status">
                   {location.active ? 'Active' : 'Deactivated'}
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             )
           })}
-        </div>
+        </motion.div>
       </div>
     </div>
   )

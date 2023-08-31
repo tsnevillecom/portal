@@ -60,7 +60,6 @@ table {
       tr {
         th {
           position: relative;
-          background-color: var(--secondary-color);
 
           &:after {
             content: '';
@@ -71,6 +70,14 @@ table {
             left: 0;
             background-color: var(--tint-20);
             width: 100%;
+          }
+
+          html[data-theme='dark'] & {
+            background-color: var(--secondary-color);
+          }
+
+          html[data-theme='light'] & {
+            background-color: var(--bg);
           }
         }
       }
