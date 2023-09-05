@@ -6,6 +6,8 @@ export type User = {
   active: boolean
   online: boolean
   isVerified: boolean
-  role: string
+  role: UserRole
   updatedAt: string
 }
+
+export type UserRole = 'super-admin' | 'admin' | 'user' | 'guest'

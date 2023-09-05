@@ -1,17 +1,22 @@
 import React, { useState } from 'react'
 import './Menu.scss'
 import ThemeToggle from '@components/ThemeToggle'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import useAuth from '@hooks/useAuth'
 import { BiChat, BiHome, BiShield } from 'react-icons/bi'
 import { FaUserCircle } from 'react-icons/fa'
 import { RxCaretDown } from 'react-icons/rx'
 import Sidebar from '@components/Sidebar'
+import CONSTANTS from '@constants/index'
+import useLogout from '@hooks/useLogout'
 
 const Menu = () => {
   const { isAdmin, auth } = useAuth()
   const [openUserMenu, setOpenUserMenu] = useState(false)
   const [openAdmin, setOpenAdmin] = useState(true)
+  const { logout } = useLogout()
+
+  if (!auth.user) return null
 
   return (
     <Sidebar id="menu">
@@ -32,12 +37,10 @@ const Menu = () => {
       </div>
       <div className="sidebar-user-menu">
         <div className="sidebar-user-menu-items">
-          <div>Test</div>
-          <div>Test</div>
-          <div>Test</div>
-          <div>Test</div>
-          <div>Test</div>
-          <div>Test</div>
+          <div className="submenu-items">
+            <NavLink to="/profile">Profile</NavLink>
+            <a onClick={logout}>Sign Out</a>
+          </div>
         </div>
       </div>
       <div className="sidebar-body">
@@ -68,7 +71,7 @@ const Menu = () => {
                   <RxCaretDown size={24} />
                 </span>
               </div>
-              <div id="admin-menu-items">
+              <div className="submenu-items">
                 <NavLink to="/admin/users">
                   <span>•</span>
                   <span>Users</span>
@@ -86,9 +89,11 @@ const Menu = () => {
           )}
         </nav>
       </div>
+
       <div className="sidebar-theme">
         <ThemeToggle />
       </div>
+      <div className="sidebar-user-id">{auth.user._id}</div>
     </Sidebar>
   )
 }

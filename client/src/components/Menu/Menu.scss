@@ -91,7 +91,15 @@
       padding: 0;
 
       .sidebar-user-menu-items {
-        padding: 24px;
+        color: var(--muted);
+        font-size: 14px;
+        display: flex;
+        flex-direction: column;
+        padding: 16px 0;
+
+        > * {
+          margin-bottom: 8px;
+        }
       }
     }
 
@@ -125,43 +133,6 @@
           }
         }
       }
-
-      #admin-menu-items {
-        display: flex;
-        flex-direction: column;
-        padding: 0 8px;
-
-        > a {
-          padding: 8px 8px 8px 22px;
-          display: flex;
-          align-items: center;
-          border-radius: 32px;
-          margin-bottom: 4px;
-
-          span {
-            display: flex;
-
-            &:first-child {
-              width: 16px;
-              transition: width 120ms ease-out;
-            }
-          }
-
-          &.active {
-            span {
-              font-weight: 600;
-            }
-          }
-
-          &:not(.active):hover {
-            span {
-              &:first-child {
-                width: 18px;
-              }
-            }
-          }
-        }
-      }
     }
 
     &.sidebar-user.open + .sidebar-user-menu {
@@ -171,6 +142,50 @@
     &.sidebar-theme {
       display: flex;
       align-items: center;
+    }
+
+    &.sidebar-user-id {
+      color: var(--muted);
+      font-size: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .submenu-items {
+      display: flex;
+      flex-direction: column;
+      padding: 0 8px;
+
+      > a {
+        padding: 8px 8px 8px 22px;
+        display: flex;
+        align-items: center;
+        border-radius: 32px;
+        margin-bottom: 4px;
+
+        span {
+          display: flex;
+
+          &:first-child {
+            width: 16px;
+            transition: width 120ms ease-out;
+          }
+        }
+
+        &.active {
+          span {
+            font-weight: 600;
+          }
+        }
+
+        &:not(.active):hover {
+          span {
+            &:first-child {
+              width: 18px;
+            }
+          }
+        }
+      }
     }
   }
 
@@ -201,7 +216,7 @@
       }
 
       &.sidebar-user-menu {
-        background-color: var(--black-20);
+        background-color: var(--black-30);
       }
 
       #admin-menu {
@@ -210,33 +225,33 @@
         #admin-menu-trigger {
           color: var(--tint-60);
         }
+      }
 
-        #admin-menu-items {
-          > a {
-            color: var(--tint-60);
+      &.sidebar-theme {
+        border-top: 1px solid var(--black-20);
+        box-shadow: inset 0px 1px 1px var(--white-10);
+      }
 
-            &.active {
-              span {
-                &:last-child {
-                  color: var(--white);
-                }
+      .submenu-items {
+        > a {
+          color: var(--tint-60);
+
+          &.active {
+            span {
+              &:last-child {
+                color: var(--white);
               }
             }
-
-            &.active {
-              color: var(--white);
-              background-color: var(--primary-color);
-            }
-
-            &:not(.active):hover {
-              background-color: var(--black-20);
-            }
           }
-        }
 
-        &.sidebar-theme {
-          border-top: 1px solid var(--black-20);
-          box-shadow: inset 0px 1px 1px var(--white-10);
+          &.active {
+            color: var(--white);
+            background-color: var(--primary-color);
+          }
+
+          &:not(.active):hover {
+            background-color: var(--black-20);
+          }
         }
       }
     }
@@ -268,7 +283,7 @@
       }
 
       &.sidebar-user-menu {
-        background-color: var(--black-20);
+        background-color: var(--tint-4);
       }
 
       #admin-menu {
@@ -277,31 +292,31 @@
         #admin-menu-trigger {
           color: var(--tint-80);
         }
+      }
 
-        #admin-menu-items {
-          > a {
-            color: var(--tint-80);
+      &.sidebar-theme {
+        border-top: 1px solid var(--black-20);
+        box-shadow: inset 0px 1px 1px var(--white-20);
+      }
 
-            &.active {
-              span {
-                color: var(--white);
-              }
-            }
+      .submenu-items {
+        > a {
+          color: var(--tint-80);
 
-            &.active {
+          &.active {
+            span {
               color: var(--white);
-              background-color: var(--primary-color);
-            }
-
-            &:not(.active):hover {
-              background-color: var(--primary-color-20);
             }
           }
-        }
 
-        &.sidebar-theme {
-          border-top: 1px solid var(--black-20);
-          box-shadow: inset 0px 1px 1px var(--white-20);
+          &.active {
+            color: var(--white);
+            background-color: var(--primary-color);
+          }
+
+          &:not(.active):hover {
+            background-color: var(--primary-color-20);
+          }
         }
       }
     }

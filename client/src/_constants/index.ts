@@ -9,6 +9,13 @@ const CONSTANTS = {
   },
   STATES: STATES,
 
+  ROLES: {
+    'super-admin': 'Super-Admin',
+    admin: 'Admin',
+    user: 'User',
+    guest: 'Guest',
+  },
+
   BREAKPOINTS: {
     xs: '480px',
     sm: '576px',
