@@ -1,7 +1,7 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import useAuth from '@hooks/useAuth'
 import './Header.scss'
+import UserMenu from '@components/UserMenu'
 
 const Header = () => {
   const { auth } = useAuth()
@@ -12,11 +12,7 @@ const Header = () => {
     <header id="header">
       <div id="search"></div>
 
-      <div id="header-menu">
-        <Link to="/profile">
-          {`${auth.user?.firstName} ${auth.user?.lastName}`}
-        </Link>
-      </div>
+      <UserMenu />
     </header>
   )
 }

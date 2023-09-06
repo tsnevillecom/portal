@@ -65,6 +65,10 @@
       justify-content: center;
       color: var(--muted);
       font-size: 0.8rem;
+
+      svg {
+        margin-right: 8px;
+      }
     }
 
     &-thread {

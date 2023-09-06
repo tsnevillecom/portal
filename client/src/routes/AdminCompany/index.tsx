@@ -1,8 +1,6 @@
 import Page from '@components/Page'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import './AdminCompany.scss'
-import { Company } from '@types'
-import _ from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
 import { Outlet, useParams } from 'react-router-dom'
 import dayjs from 'dayjs'
@@ -176,7 +174,7 @@ const AdminCompany = () => {
             </div>
           </div>
 
-          <Outlet context={{ company, setCompany }} />
+          <Outlet />
         </>
       )}
 

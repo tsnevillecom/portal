@@ -19,3 +19,17 @@ export type Company = {
   active: boolean
   updatedAt: string
 }
+
+export type NewCompany = {
+  name: string
+  type: string
+  accountId: string
+  phone: string
+  address1: string
+  address2?: string
+  city: string
+  state: string
+  postalCode: string
+  countryCode?: string
+  active: boolean
+}

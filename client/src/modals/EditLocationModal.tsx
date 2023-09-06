@@ -202,11 +202,12 @@ const EditLocationModal: React.FC<EditLocationModalProps> = ({
 
           <div className="form-control horizontal">
             <label className="label-default-semibold">
-              Company Type<span>*</span>
+              State<span className="required">*</span>
             </label>
 
             <div className="form-control-input">
               <Select
+                menuPlacement="top"
                 defaultValue={_.find(
                   statesOptions,
                   (option) => location.state === option.value

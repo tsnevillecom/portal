@@ -1,6 +1,6 @@
 import Button from '@components/Button'
 import './AdminLocation.scss'
-import { Company, Location } from '@types'
+import { Location } from '@types'
 import _ from 'lodash'
 import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
@@ -29,9 +29,9 @@ const AdminLocation = () => {
 
   const init = async () => {
     if (!isLoading) setIsLoading(true)
-    if (!company && params.companyId) getCompany(params.companyId)
 
     try {
+      if (!company && params.companyId) await getCompany(params.companyId)
       const response = await axiosPrivate(`/locations/${params.locationId}`)
       setLocation(response.data)
     } catch (error) {

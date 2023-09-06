@@ -3,9 +3,6 @@
 
 #admin-location {
   .location {
-    padding: 16px;
-    @include scrollbar();
-
     strong {
       margin-right: 8px;
     }

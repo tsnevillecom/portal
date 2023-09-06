@@ -177,7 +177,6 @@ const Chat = () => {
       <Sidebar id="chat-channels" side="left">
         <div id="chat-channels-header">
           <h4>Channels</h4>
-          <Button>+</Button>
         </div>
 
         {_.map(channels, (channel, i) => {

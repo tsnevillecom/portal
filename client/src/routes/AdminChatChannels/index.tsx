@@ -38,28 +38,30 @@ const AdminChatChannels = () => {
         </Button>,
       ]}
     >
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Created by</th>
-            <th>Is active?</th>
-          </tr>
-        </thead>
-        <tbody>
-          {_.map(channels, (channel) => {
-            return (
-              <tr key={channel._id}>
-                <td>{channel.name}</td>
-                <td>
-                  {channel.createdBy.firstName} {channel.createdBy.lastName}
-                </td>
-                <td>{channel.active.toString()}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <div className="table-fixed-head-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Created by</th>
+              <th>Is active?</th>
+            </tr>
+          </thead>
+          <tbody>
+            {_.map(channels, (channel) => {
+              return (
+                <tr key={channel._id}>
+                  <td>{channel.name}</td>
+                  <td>
+                    {channel.createdBy.firstName} {channel.createdBy.lastName}
+                  </td>
+                  <td>{channel.active.toString()}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </Page>
   )
 }

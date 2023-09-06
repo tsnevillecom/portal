@@ -12,6 +12,7 @@ table {
         color: var(--tint);
         text-align: left;
         padding: 12px 0 12px 18px;
+        white-space: nowrap;
 
         &:last-child {
           padding-right: 24px;
@@ -36,6 +37,7 @@ table {
       td {
         text-align: left;
         padding: 12px 0 12px 18px;
+        white-space: nowrap;
 
         &:last-child {
           padding-right: 24px;
@@ -51,6 +53,7 @@ table {
 
 .table-fixed-head-wrapper {
   @include scrollbar();
+  overflow-x: auto;
 
   table {
     thead {

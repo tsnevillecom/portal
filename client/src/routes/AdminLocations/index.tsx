@@ -1,19 +1,19 @@
 import Button from '@components/Button'
 import './AdminLocations.scss'
-import { Company } from '@types'
 import _ from 'lodash'
 import React, { useContext } from 'react'
-import { useNavigate, useOutletContext, useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { FaPlus } from 'react-icons/fa'
 import { ModalContext } from '@context/ModalProvider'
 import { axiosPrivate } from '@api/axios'
 import { motion } from 'framer-motion'
+import { CompanyContext } from '@context/CompanyProvider'
 
 const container = {
   show: {
     transition: {
       staggerChildren: 0.02,
-      staggerDirection: -1,
+      staggerDirection: 1,
     },
   },
 }
@@ -21,28 +21,19 @@ const container = {
 const listItem = {
   hidden: {
     opacity: 0,
-    scale: 0.98,
+    scale: 0.99,
     y: 10,
   },
   show: {
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 200,
-    },
   },
-}
-
-interface IContext {
-  company: Company
-  setCompany: (company: Company) => void
 }
 
 const AdminLocations = () => {
   const params = useParams()
-  const { company, setCompany } = useOutletContext<IContext>()
+  const { company, setCompany } = useContext(CompanyContext)
   const { showModal } = useContext(ModalContext)
   const navigate = useNavigate()
 
@@ -56,6 +47,8 @@ const AdminLocations = () => {
       console.log(error)
     }
   }
+
+  if (!company) return null
 
   return (
     <div id="admin-locations">

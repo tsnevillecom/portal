@@ -5,6 +5,7 @@ $z-index: (
   toast: 1000,
   modal: 905,
   modal-bg: 900,
+  dropdown: 200,
   media-player: 200,
   navigation: 100,
   footer: 90,
@@ -13,6 +14,11 @@ $z-index: (
   below: -1,
   bottomless-pit: -9000,
 );
+
+@mixin box-shadow($shadow...) {
+  -webkit-box-shadow: $shadow;
+  box-shadow: $shadow;
+}
 
 @function z-index($key) {
   @return map-get($z-index, $key);

@@ -38,30 +38,32 @@ const AdminUsers = () => {
         </Button>,
       ]}
     >
-      <table>
-        <thead>
-          <tr>
-            <th>Last Name</th>
-            <th>First Name</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Is active?</th>
-          </tr>
-        </thead>
-        <tbody>
-          {_.map(users, (user) => {
-            return (
-              <tr key={user._id}>
-                <td>{user.lastName}</td>
-                <td>{user.firstName}</td>
-                <td>{user.email}</td>
-                <td>{user.role}</td>
-                <td>{user.active.toString()}</td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </table>
+      <div className="table-fixed-head-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Last Name</th>
+              <th>First Name</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Is active?</th>
+            </tr>
+          </thead>
+          <tbody>
+            {_.map(users, (user) => {
+              return (
+                <tr key={user._id}>
+                  <td>{user.lastName}</td>
+                  <td>{user.firstName}</td>
+                  <td>{user.email}</td>
+                  <td>{user.role}</td>
+                  <td>{user.active.toString()}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+      </div>
     </Page>
   )
 }

@@ -171,13 +171,15 @@ const ChatForm = React.forwardRef<HTMLTextAreaElement, ChatFormProps>(
     return (
       <div id="chat-channel-control">
         <div id="chat-form--input" className="form-control">
-          <TextareaAutosize
-            maxRows={4}
-            onChange={typingHandler}
-            className='className="form-control--textarea"'
-            ref={ref}
-            placeholder="Type something..."
-          />
+          <div className="form-control-input">
+            <TextareaAutosize
+              maxRows={4}
+              onChange={typingHandler}
+              className="form-control--textarea"
+              ref={ref}
+              placeholder="Type something..."
+            />
+          </div>
         </div>
         <div id="chat-form--submit">
           <Button onClick={submit} disabled={disabledSubmit}>

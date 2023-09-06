@@ -3,6 +3,7 @@
 #menu {
   background-color: var(--bg-secondary);
   color: var(--tint);
+  user-select: none;
 
   > div {
     padding: 24px;
@@ -27,9 +28,9 @@
         display: flex;
         flex-direction: column;
 
-        > a {
+        a {
           padding: 8px 16px;
-          border-radius: 32px;
+          border-radius: 8px;
           margin-bottom: 4px;
           display: flex;
           align-items: center;
@@ -60,132 +61,42 @@
       }
     }
 
-    &.sidebar-user {
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-
-      span {
-        display: flex;
-        align-items: center;
-
-        &:first-child {
-          width: 30px;
-        }
-
-        &.sidebar-user-name {
-          flex: 1;
-        }
-
-        &.sidebar-user-avatar,
-        &.caret {
-          opacity: 0.5;
-        }
-      }
-    }
-
-    &.sidebar-user-menu {
-      overflow: hidden;
-      height: 0;
-      transition: height 170ms ease-out;
-      padding: 0;
-
-      .sidebar-user-menu-items {
-        color: var(--muted);
-        font-size: 14px;
-        display: flex;
-        flex-direction: column;
-        padding: 16px 0;
-
-        > * {
-          margin-bottom: 8px;
-        }
-      }
-    }
-
-    #admin-menu {
-      border-radius: 16px;
-      overflow: hidden;
-      transition: height 170ms ease-out;
-      height: 40px;
-
-      &.open {
-        height: 162px;
-      }
-
-      #admin-menu-trigger {
-        padding: 8px 16px;
-        border-radius: 32px;
-        display: flex;
-        align-items: center;
-        cursor: pointer;
-
-        span {
-          display: flex;
-
-          &:first-child {
-            width: 30px;
-            transition: width 120ms ease-out;
-          }
-
-          &#admin-menu-trigger-text {
-            flex: 1;
-          }
-        }
-      }
-    }
-
-    &.sidebar-user.open + .sidebar-user-menu {
-      height: 200px;
-    }
-
     &.sidebar-theme {
       display: flex;
       align-items: center;
     }
+  }
 
-    &.sidebar-user-id {
-      color: var(--muted);
-      font-size: 14px;
-      padding: 12px;
-      text-align: center;
+  .menu-group {
+    border-radius: 8px;
+    margin-bottom: 4px;
+    overflow: hidden;
+
+    .menu-group-header {
+      padding: 8px 16px;
+      border-radius: 32px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+
+      span {
+        display: flex;
+
+        &:first-child {
+          width: 30px;
+          transition: width 120ms ease-out;
+        }
+
+        &.menu-group-header-text {
+          flex: 1;
+        }
+      }
     }
 
-    .submenu-items {
+    .menu-group-items {
       display: flex;
       flex-direction: column;
       padding: 0 8px;
-
-      > a {
-        padding: 8px 8px 8px 22px;
-        display: flex;
-        align-items: center;
-        border-radius: 32px;
-        margin-bottom: 4px;
-
-        span {
-          display: flex;
-
-          &:first-child {
-            width: 16px;
-            transition: width 120ms ease-out;
-          }
-        }
-
-        &.active {
-          span {
-            font-weight: 600;
-          }
-        }
-
-        &:not(.active):hover {
-          span {
-            &:first-child {
-              width: 18px;
-            }
-          }
-        }
-      }
     }
   }
 
@@ -199,7 +110,7 @@
         background-color: var(--black-10);
 
         nav {
-          > a {
+          a {
             color: var(--tint-60);
             background-color: var(--black-20);
 
@@ -212,47 +123,30 @@
               background-color: var(--black-30);
             }
           }
-        }
-      }
 
-      &.sidebar-user-menu {
-        background-color: var(--black-30);
-      }
+          .menu-group {
+            background-color: var(--black-20);
 
-      #admin-menu {
-        background-color: var(--black-20);
+            a {
+              &:not(.active):hover {
+                background-color: var(--black-30);
+              }
 
-        #admin-menu-trigger {
-          color: var(--tint-60);
+              &:not(.active) {
+                background-color: transparent;
+              }
+            }
+
+            .menu-group-header {
+              color: var(--tint);
+            }
+          }
         }
       }
 
       &.sidebar-theme {
         border-top: 1px solid var(--black-20);
         box-shadow: inset 0px 1px 1px var(--white-10);
-      }
-
-      .submenu-items {
-        > a {
-          color: var(--tint-60);
-
-          &.active {
-            span {
-              &:last-child {
-                color: var(--white);
-              }
-            }
-          }
-
-          &.active {
-            color: var(--white);
-            background-color: var(--primary-color);
-          }
-
-          &:not(.active):hover {
-            background-color: var(--black-20);
-          }
-        }
       }
     }
   }
@@ -266,7 +160,7 @@
 
       &.sidebar-body {
         nav {
-          > a {
+          a {
             color: var(--tint-80);
             background-color: var(--primary-color-10);
 
@@ -279,45 +173,30 @@
               background-color: var(--primary-color-20);
             }
           }
-        }
-      }
 
-      &.sidebar-user-menu {
-        background-color: var(--tint-4);
-      }
+          .menu-group {
+            background-color: var(--primary-color-10);
 
-      #admin-menu {
-        background-color: var(--primary-color-10);
+            a {
+              &:not(.active):hover {
+                background-color: var(--primary-color-20);
+              }
 
-        #admin-menu-trigger {
-          color: var(--tint-80);
+              &:not(.active) {
+                background-color: transparent;
+              }
+            }
+
+            .menu-group-header {
+              color: var(--tint);
+            }
+          }
         }
       }
 
       &.sidebar-theme {
         border-top: 1px solid var(--black-20);
         box-shadow: inset 0px 1px 1px var(--white-20);
-      }
-
-      .submenu-items {
-        > a {
-          color: var(--tint-80);
-
-          &.active {
-            span {
-              color: var(--white);
-            }
-          }
-
-          &.active {
-            color: var(--white);
-            background-color: var(--primary-color);
-          }
-
-          &:not(.active):hover {
-            background-color: var(--primary-color-20);
-          }
-        }
       }
     }
   }

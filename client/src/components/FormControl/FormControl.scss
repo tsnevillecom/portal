@@ -14,12 +14,11 @@
 
     span {
       margin-left: 4px;
-      opacity: 0.5;
       width: 7px;
       display: inline-block;
 
       &.required {
-        color: $red-500;
+        color: var(--primary-color);
       }
     }
   }

@@ -169,7 +169,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
 
           <div className="form-control horizontal">
             <label className="label-default-semibold">
-              Company Type<span>*</span>
+              Company Type<span className="required">*</span>
             </label>
 
             <div className="form-control-input">
@@ -236,10 +236,11 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
 
           <div className="form-control horizontal">
             <label className="label-default-semibold">
-              State<span>*</span>
+              State<span className="required">*</span>
             </label>
             <div className="form-control-input">
               <Select
+                menuPlacement="top"
                 defaultValue={_.find(
                   statesOptions,
                   (option) => company.state === option.value

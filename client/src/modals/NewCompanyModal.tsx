@@ -4,7 +4,7 @@ import Modal from '@components/Modal'
 import ModalBody from '@components/Modal/ModalBody'
 import ModalFooter from '@components/Modal/ModalFooter'
 import { ModalContext } from '@context/ModalProvider'
-import { Company, Errors, NewLocation, Rules } from '@types'
+import { Company, Errors, NewCompany, Rules } from '@types'
 import { trimObjValues } from '@utils/trimObjectValues'
 import { validateForm } from '@utils/validateForm.util'
 import Select from 'react-select'
@@ -21,8 +21,7 @@ import useAxiosPrivate from '@hooks/useAxiosPrivate'
 import CONSTANTS from '@constants/index'
 import FormControlSelect from '@components/FormControlSelect'
 
-interface NewLocationModalProps {
-  company: Company
+interface NewCompanyModalProps {
   onSuccess: (company: Company) => void
 }
 
@@ -40,9 +39,10 @@ const statesOption: StateOption[] = Object.entries(CONSTANTS.STATES).map(
   }
 )
 
-const initialLocationState = {
+const initialCompanyState = {
   name: '',
-  taxId: '',
+  type: '',
+  accountId: '',
   phone: '',
   address1: '',
   city: '',
@@ -51,17 +51,14 @@ const initialLocationState = {
   active: true,
 }
 
-const NewLocationModal: React.FC<NewLocationModalProps> = ({
-  company,
-  onSuccess,
-}) => {
+const NewCompanyModal: React.FC<NewCompanyModalProps> = ({ onSuccess }) => {
   const axiosPrivate = useAxiosPrivate()
   const { hideModal } = useContext(ModalContext)
 
   const nameRef = useRef<HTMLInputElement>(null)
 
   const [errors, setErrors] = useState<Errors>({})
-  const [location, setLocation] = useState<NewLocation>(initialLocationState)
+  const [company, setCompany] = useState<NewCompany>(initialCompanyState)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<ReactNode | string | null>(
     null
@@ -75,8 +72,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
     e.preventDefault()
 
     const data = {
-      ...trimObjValues(location),
-      companyId: company._id,
+      ...trimObjValues(company),
     }
 
     const rules: Rules = {
@@ -110,12 +106,12 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
     setIsSubmitting(true)
 
     try {
-      const response = await axiosPrivate.post('/locations', data)
+      const response = await axiosPrivate.post('/companies', data)
       onSuccess(response.data)
       hideModal()
     } catch (error) {
       console.log(error)
-      setSubmitError('Could not create new location. Try again.')
+      setSubmitError('Could not create new company. Try again.')
     } finally {
       setIsSubmitting(false)
     }
@@ -125,20 +121,20 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
     const { name, value } = e.target
     if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
-    const updatedLocation = { ...location, ...{ [name]: value } }
-    setLocation(updatedLocation)
+    const updatedCompany = { ...company, ...{ [name]: value } }
+    setCompany(updatedCompany)
   }
 
   const handleOnSelect = (name: string, option: StateOption) => {
     const { value } = option
     if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
-    const updatedLocation = { ...location, ...{ [name]: value } }
-    setLocation(updatedLocation)
+    const updatedCompany = { ...company, ...{ [name]: value } }
+    setCompany(updatedCompany)
   }
 
   return (
-    <Modal title="New Location">
+    <Modal title="New Company">
       <form onSubmit={handleSubmit}>
         <ModalBody>
           {!!submitError && <ErrorMessage>{submitError}</ErrorMessage>}
@@ -147,23 +143,31 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
             label="Name"
             forRef={nameRef}
             name="name"
-            value={location.name}
+            value={company.name}
             error={errors.name}
             onChange={handleInputChange}
             horizontal
           />
           <FormControl
-            label="Tax ID"
-            name="taxId"
-            value={location.taxId}
-            error={errors.taxId}
+            label="Account ID"
+            name="accountId"
+            value={company.accountId}
+            error={errors.accountId}
+            onChange={handleInputChange}
+            horizontal
+          />
+          <FormControl
+            label="Company Type"
+            name="type"
+            value={company.type}
+            error={errors.type}
             onChange={handleInputChange}
             horizontal
           />
           <FormControl
             label="Phone"
             name="phone"
-            value={location.phone}
+            value={company.phone}
             error={errors.phone}
             onChange={handleInputChange}
             horizontal
@@ -171,7 +175,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
           <FormControl
             label="Address 1"
             name="address1"
-            value={location.address1}
+            value={company.address1}
             error={errors.address1}
             onChange={handleInputChange}
             horizontal
@@ -180,7 +184,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
             label="Address 2"
             name="address2"
             required={false}
-            value={location.address2}
+            value={company.address2}
             error={errors.address2}
             onChange={handleInputChange}
             horizontal
@@ -188,7 +192,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
           <FormControl
             label="City"
             name="city"
-            value={location.city}
+            value={company.city}
             error={errors.city}
             onChange={handleInputChange}
             horizontal
@@ -204,7 +208,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
               menuPlacement="top"
               defaultValue={_.find(
                 statesOption,
-                (option) => location.state === option.value
+                (option) => company.state === option.value
               )}
               onChange={(option) =>
                 handleOnSelect('state', option as StateOption)
@@ -218,19 +222,8 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
           <FormControl
             label="Postal Code"
             name="postalCode"
-            value={location.postalCode}
+            value={company.postalCode}
             error={errors.postalCode}
-            onChange={handleInputChange}
-            horizontal
-          />
-          <FormControl
-            label="Description"
-            name="description"
-            textarea={true}
-            required={false}
-            rows={6}
-            value={location.description}
-            error={errors.description}
             onChange={handleInputChange}
             horizontal
           />
@@ -248,4 +241,4 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
   )
 }
 
-export default NewLocationModal
+export default NewCompanyModal
