@@ -4,7 +4,7 @@ import Modal from '@components/Modal'
 import ModalBody from '@components/Modal/ModalBody'
 import ModalFooter from '@components/Modal/ModalFooter'
 import { ModalContext } from '@context/ModalProvider'
-import { Company, Errors, NewCompany, Rules } from '@types'
+import { Company, Errors, NewCompany, Option, Rules } from '@types'
 import { trimObjValues } from '@utils/trimObjectValues'
 import { validateForm } from '@utils/validateForm.util'
 import Select from 'react-select'
@@ -18,32 +18,19 @@ import React, {
 } from 'react'
 import ErrorMessage from '@components/ErrorMessage'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
-import CONSTANTS from '@constants/index'
 import FormControlSelect from '@components/FormControlSelect'
+import { companyTypeOptions, statesOptions } from '@constants/options'
 
 interface NewCompanyModalProps {
   onSuccess: (company: Company) => void
 }
 
-type StateOption = {
-  value: string
-  label: string
-}
-
-const statesOption: StateOption[] = Object.entries(CONSTANTS.STATES).map(
-  ([k, v]) => {
-    return {
-      value: k,
-      label: v,
-    }
-  }
-)
-
 const initialCompanyState = {
   name: '',
-  type: '',
+  type: 'PRIVATE',
   accountId: '',
   phone: '',
+  fax: '',
   address1: '',
   city: '',
   state: '',
@@ -125,7 +112,7 @@ const NewCompanyModal: React.FC<NewCompanyModalProps> = ({ onSuccess }) => {
     setCompany(updatedCompany)
   }
 
-  const handleOnSelect = (name: string, option: StateOption) => {
+  const handleOnSelect = (name: string, option: Option) => {
     const { value } = option
     if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
@@ -148,6 +135,7 @@ const NewCompanyModal: React.FC<NewCompanyModalProps> = ({ onSuccess }) => {
             onChange={handleInputChange}
             horizontal
           />
+
           <FormControl
             label="Account ID"
             name="accountId"
@@ -156,19 +144,41 @@ const NewCompanyModal: React.FC<NewCompanyModalProps> = ({ onSuccess }) => {
             onChange={handleInputChange}
             horizontal
           />
-          <FormControl
+
+          <FormControlSelect
             label="Company Type"
             name="type"
-            value={company.type}
             error={errors.type}
-            onChange={handleInputChange}
             horizontal
-          />
+          >
+            <Select
+              menuPortalTarget={document.body}
+              menuPlacement="auto"
+              defaultValue={_.find(
+                companyTypeOptions,
+                (option) => company.type === option.value
+              )}
+              onChange={(option) => handleOnSelect('type', option as Option)}
+              options={companyTypeOptions}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
+          </FormControlSelect>
+
           <FormControl
             label="Phone"
             name="phone"
             value={company.phone}
             error={errors.phone}
+            onChange={handleInputChange}
+            horizontal
+          />
+          <FormControl
+            label="Fax"
+            name="fax"
+            required={false}
+            value={company.fax}
+            error={errors.fax}
             onChange={handleInputChange}
             horizontal
           />
@@ -205,15 +215,14 @@ const NewCompanyModal: React.FC<NewCompanyModalProps> = ({ onSuccess }) => {
             horizontal
           >
             <Select
-              menuPlacement="top"
+              menuPortalTarget={document.body}
+              menuPlacement="auto"
               defaultValue={_.find(
-                statesOption,
+                statesOptions,
                 (option) => company.state === option.value
               )}
-              onChange={(option) =>
-                handleOnSelect('state', option as StateOption)
-              }
-              options={statesOption}
+              onChange={(option) => handleOnSelect('state', option as Option)}
+              options={statesOptions}
               className="react-select-container"
               classNamePrefix="react-select"
             />

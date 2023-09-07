@@ -112,7 +112,10 @@ const AdminLocations = () => {
                   </div>
                   <div className="card-sub-cell">{location.phone}</div>
                 </motion.div>
-                <motion.div layout className="card-cell location-status">
+                <motion.div
+                  layout="position"
+                  className="card-cell location-status"
+                >
                   {location.active ? 'Active' : 'Deactivated'}
                 </motion.div>
               </motion.div>

@@ -30,6 +30,8 @@ import ModalRoot from './modals/ModalRoot'
 import AdminLocations from '@routes/AdminLocations'
 import AdminLocation from '@routes/AdminLocation'
 import { CompanyProvider } from '@context/CompanyProvider'
+import AdminOrgs from '@routes/AdminOrgs'
+import AdminSettings from '@routes/AdminSettings'
 
 const App = () => {
   useTheme()
@@ -92,6 +94,8 @@ const App = () => {
                 />
               </Route>
               <Route path="chat-channels" element={<AdminChatChannels />} />
+              <Route path="orgs" element={<AdminOrgs />} />
+              <Route path="settings" element={<AdminSettings />} />
             </Route>
           </Route>
         </Route>

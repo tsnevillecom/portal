@@ -47,6 +47,11 @@
       background-color: var(--tint-4);
       color: var(--tint);
 
+      &:disabled {
+        color: var(--tint-40);
+        cursor: not-allowed;
+      }
+
       &:focus {
         box-shadow: 0 0 5px var(--primary-color-20);
         border: 1px solid var(--primary-color);

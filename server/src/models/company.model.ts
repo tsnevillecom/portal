@@ -25,6 +25,11 @@ const CompanySchema = new Schema(
       required: true,
       trim: true,
     },
+    fax: {
+      type: String,
+      required: false,
+      trim: true,
+    },
     address1: {
       type: String,
       required: true,

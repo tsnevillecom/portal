@@ -8,6 +8,7 @@ export type Company = {
   accountId: string
   type: CompanyType
   phone: string
+  fax: string
   address1: string
   address2: string
   city: string
@@ -25,6 +26,7 @@ export type NewCompany = {
   type: string
   accountId: string
   phone: string
+  fax: string
   address1: string
   address2?: string
   city: string

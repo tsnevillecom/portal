@@ -4,7 +4,7 @@ import Modal from '@components/Modal'
 import ModalBody from '@components/Modal/ModalBody'
 import ModalFooter from '@components/Modal/ModalFooter'
 import { ModalContext } from '@context/ModalProvider'
-import { Company, Errors, NewLocation, Rules } from '@types'
+import { Company, Errors, NewLocation, Option, Rules } from '@types'
 import { trimObjValues } from '@utils/trimObjectValues'
 import { validateForm } from '@utils/validateForm.util'
 import Select from 'react-select'
@@ -18,27 +18,13 @@ import React, {
 } from 'react'
 import ErrorMessage from '@components/ErrorMessage'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
-import CONSTANTS from '@constants/index'
 import FormControlSelect from '@components/FormControlSelect'
+import { statesOptions } from '@constants/options'
 
 interface NewLocationModalProps {
   company: Company
   onSuccess: (company: Company) => void
 }
-
-type StateOption = {
-  value: string
-  label: string
-}
-
-const statesOption: StateOption[] = Object.entries(CONSTANTS.STATES).map(
-  ([k, v]) => {
-    return {
-      value: k,
-      label: v,
-    }
-  }
-)
 
 const initialLocationState = {
   name: '',
@@ -129,7 +115,7 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
     setLocation(updatedLocation)
   }
 
-  const handleOnSelect = (name: string, option: StateOption) => {
+  const handleOnSelect = (name: string, option: Option) => {
     const { value } = option
     if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
@@ -201,15 +187,14 @@ const NewLocationModal: React.FC<NewLocationModalProps> = ({
             horizontal
           >
             <Select
-              menuPlacement="top"
+              menuPortalTarget={document.body}
+              menuPlacement="auto"
               defaultValue={_.find(
-                statesOption,
+                statesOptions,
                 (option) => location.state === option.value
               )}
-              onChange={(option) =>
-                handleOnSelect('state', option as StateOption)
-              }
-              options={statesOption}
+              onChange={(option) => handleOnSelect('state', option as Option)}
+              options={statesOptions}
               className="react-select-container"
               classNamePrefix="react-select"
             />

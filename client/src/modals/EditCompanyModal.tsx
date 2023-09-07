@@ -4,7 +4,7 @@ import Modal from '@components/Modal'
 import ModalBody from '@components/Modal/ModalBody'
 import ModalFooter from '@components/Modal/ModalFooter'
 import { ModalContext } from '@context/ModalProvider'
-import { Company, CompanyType, Errors, Rules } from '@types'
+import { Company, Errors, Option, Rules } from '@types'
 import { trimObjValues } from '@utils/trimObjectValues'
 import { validateForm } from '@utils/validateForm.util'
 import Select from 'react-select'
@@ -18,36 +18,13 @@ import React, {
 } from 'react'
 import ErrorMessage from '@components/ErrorMessage'
 import useAxiosPrivate from '@hooks/useAxiosPrivate'
-import CONSTANTS from '@constants/index'
+import FormControlSelect from '@components/FormControlSelect'
+import { companyTypeOptions, statesOptions } from '@constants/options'
 
 interface EditCompanyModalProps {
   company: Company
   onSuccess: (company: Company) => void
 }
-
-type CompanyTypeOption = {
-  value: CompanyType
-  label: string
-}
-
-type StateOption = {
-  value: string
-  label: string
-}
-
-const companyTypeOptions: CompanyTypeOption[] = [
-  { value: 'PRIVATE', label: 'Private Company' },
-  { value: 'DSO', label: 'DSO' },
-]
-
-const statesOptions: StateOption[] = Object.entries(CONSTANTS.STATES).map(
-  ([k, v]) => {
-    return {
-      value: k,
-      label: v,
-    }
-  }
-)
 
 const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
   company: originalCompany,
@@ -140,10 +117,7 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
     setCompany(updatedCompany)
   }
 
-  const handleOnSelect = (
-    name: string,
-    option: CompanyTypeOption | StateOption
-  ) => {
+  const handleOnSelect = (name: string, option: Option) => {
     const { value } = option
     if (submitError) setSubmitError(null)
     if (errors[name]) setErrors(_.omit(errors, name))
@@ -167,30 +141,30 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             horizontal
           />
 
-          <div className="form-control horizontal">
-            <label className="label-default-semibold">
-              Company Type<span className="required">*</span>
-            </label>
-
-            <div className="form-control-input">
-              <Select
-                defaultValue={_.find(
-                  companyTypeOptions,
-                  (option) => company.type === option.value
-                )}
-                onChange={(option) =>
-                  handleOnSelect('type', option as CompanyTypeOption)
-                }
-                options={companyTypeOptions}
-                className="react-select-container"
-                classNamePrefix="react-select"
-              />
-            </div>
-          </div>
+          <FormControlSelect
+            label="Company Type"
+            name="type"
+            error={errors.type}
+            horizontal
+          >
+            <Select
+              menuPortalTarget={document.body}
+              menuPlacement="auto"
+              defaultValue={_.find(
+                companyTypeOptions,
+                (option) => company.type === option.value
+              )}
+              onChange={(option) => handleOnSelect('type', option as Option)}
+              options={companyTypeOptions}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
+          </FormControlSelect>
 
           <FormControl
             label="Account ID"
             name="accountId"
+            disabled={true}
             value={company.accountId}
             error={errors.accountId}
             onChange={handleInputChange}
@@ -202,6 +176,15 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             name="phone"
             value={company.phone}
             error={errors.phone}
+            onChange={handleInputChange}
+            horizontal
+          />
+
+          <FormControl
+            label="Fax"
+            name="fax"
+            value={company.fax}
+            error={errors.fax}
             onChange={handleInputChange}
             horizontal
           />
@@ -234,27 +217,25 @@ const EditCompanyModal: React.FC<EditCompanyModalProps> = ({
             horizontal
           />
 
-          <div className="form-control horizontal">
-            <label className="label-default-semibold">
-              State<span className="required">*</span>
-            </label>
-            <div className="form-control-input">
-              <Select
-                menuPlacement="top"
-                defaultValue={_.find(
-                  statesOptions,
-                  (option) => company.state === option.value
-                )}
-                onChange={(option) =>
-                  handleOnSelect('state', option as StateOption)
-                }
-                options={statesOptions}
-                className="react-select-container"
-                classNamePrefix="react-select"
-                menuShouldScrollIntoView={true}
-              />
-            </div>
-          </div>
+          <FormControlSelect
+            label="State"
+            name="state"
+            error={errors.state}
+            horizontal
+          >
+            <Select
+              menuPortalTarget={document.body}
+              menuPlacement="auto"
+              defaultValue={_.find(
+                statesOptions,
+                (option) => company.state === option.value
+              )}
+              onChange={(option) => handleOnSelect('state', option as Option)}
+              options={statesOptions}
+              className="react-select-container"
+              classNamePrefix="react-select"
+            />
+          </FormControlSelect>
 
           <FormControl
             label="Postal Code"

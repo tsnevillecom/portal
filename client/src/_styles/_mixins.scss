@@ -3,6 +3,7 @@
 // z-index
 $z-index: (
   toast: 1000,
+  select-menu: 980,
   modal: 905,
   modal-bg: 900,
   dropdown: 200,
@@ -15,6 +16,10 @@ $z-index: (
   bottomless-pit: -9000,
 );
 
+@function if-important($important) {
+  @return #{if($important, '!important', '')};
+}
+
 @mixin box-shadow($shadow...) {
   -webkit-box-shadow: $shadow;
   box-shadow: $shadow;
@@ -24,8 +29,8 @@ $z-index: (
   @return map-get($z-index, $key);
 }
 
-@mixin z-index($key) {
-  z-index: z-index($key);
+@mixin z-index($key, $important: false) {
+  z-index: z-index($key) if-important($important);
 }
 
 @mixin scrollbar() {
