@@ -94,6 +94,12 @@ const App = () => {
                 />
               </Route>
               <Route path="chat-channels" element={<AdminChatChannels />} />
+            </Route>
+
+            <Route
+              path="admin"
+              element={<AuthenticatedRoute allowedRoles={['super-admin']} />}
+            >
               <Route path="orgs" element={<AdminOrgs />} />
               <Route path="settings" element={<AdminSettings />} />
             </Route>

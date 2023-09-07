@@ -1,16 +1,16 @@
+import Page from '@components/Page'
 import React from 'react'
-import { Link } from 'react-router-dom'
 import './Unauthorized.scss'
+import { Link } from 'react-router-dom'
 
 const Unauthorized = () => {
   return (
-    <section id="unauthorized-route">
-      <div>
-        <h1>Unauthorized</h1>
+    <Page id="admin-orgs" title="Unauthorized">
+      <>
         <p>You do not have access to the requested page.</p>
         <Link to="/">Home</Link>
-      </div>
-    </section>
+      </>
+    </Page>
   )
 }
 
